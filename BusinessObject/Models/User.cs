@@ -16,6 +16,7 @@ namespace BusinessObject.Models
         public string Password { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public int RoleId { get; set; }
+        public int Status { get; set; }
 
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }
