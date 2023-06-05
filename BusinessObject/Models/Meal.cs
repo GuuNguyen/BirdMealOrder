@@ -15,6 +15,7 @@ namespace BusinessObject.Models
         public string MealDescription { get; set; } = null!;
         public double Price { get; set; }
         public int FeedbackId { get; set; }
+        public string? MealImage { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
