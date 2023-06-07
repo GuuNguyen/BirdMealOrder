@@ -39,10 +39,10 @@ namespace Repositories.Repositories.OrderRepositories
                 }
                 else if (cartItem.MealId != null)
                 {
-                    var meal = MealDAO.GetMealById((int)cartItem.MealId);
+                    var meal = MealDAO.GetMeal((int)cartItem.MealId);
                     orderDetail.UnitPrice = meal.Price;
                     meal.QuantityAvailable -= cartItem.Quantity;
-                    MealDAO.UpdateMeal(meal);                    
+                    MealDAO.Update(meal);                    
                 }
                 newOrder.OrderDetails.Add(orderDetail);
                 OrderDetailDAO.CreateOrderDetail(orderDetail);                

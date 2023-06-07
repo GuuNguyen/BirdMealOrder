@@ -9,7 +9,7 @@ namespace DataAccess.DAOs
 {
     public class MealDAO
     {
-        public static Meal GetMealById(int id)
+        public static Meal GetMeal(int id)
         {
             try
             {
@@ -22,14 +22,14 @@ namespace DataAccess.DAOs
                 throw  new Exception(ex.Message);
             }
         }
-        public static void UpdateMeal(Meal meal)
+        public static void Update(Meal meal)
         {
             try
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
                     _context.Meals.Update(meal);
-                    _context.SaveChanges()
+                    _context.SaveChanges();
                 }
             }
             catch (Exception ex)
