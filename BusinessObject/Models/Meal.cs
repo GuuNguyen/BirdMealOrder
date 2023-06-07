@@ -13,8 +13,8 @@ namespace BusinessObject.Models
         public int MealId { get; set; }
         public string MealName { get; set; } = null!;
         public string MealDescription { get; set; } = null!;
-        public double Price { get; set; }
-        public int FeedbackId { get; set; }
+        public decimal Price { get; set; }
+        public int QuantityAvailable { get; set; }
         public string? MealImage { get; set; }
         public int MealStatus { get; set; }
 

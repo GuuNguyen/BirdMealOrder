@@ -95,11 +95,11 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.MealId).HasColumnName("MealID");
 
-                entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
-
                 entity.Property(e => e.MealDescription).HasMaxLength(200);
 
                 entity.Property(e => e.MealName).HasMaxLength(50);
+
+                entity.Property(e => e.Price).HasColumnType("money");
             });
 
             modelBuilder.Entity<MealProduct>(entity =>
@@ -131,9 +131,11 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.OrderDate).HasMaxLength(50);
+                entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
-                entity.Property(e => e.TotalPrice).HasMaxLength(50);
+                entity.Property(e => e.ShipDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TotalPrice).HasColumnType("money");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -155,6 +157,8 @@ namespace BusinessObject.Models
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("money");
 
                 entity.HasOne(d => d.Meal)
                     .WithMany(p => p.OrderDetails)
@@ -180,6 +184,8 @@ namespace BusinessObject.Models
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.Price).HasColumnType("money");
 
                 entity.Property(e => e.ProductName).HasMaxLength(50);
             });

@@ -15,7 +15,7 @@ namespace BusinessObject.Models
         public int? ProductId { get; set; }
         public int? MealId { get; set; }
         public int Quantity { get; set; }
-        public double UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         public virtual Meal? Meal { get; set; }
         public virtual Order Order { get; set; } = null!;
