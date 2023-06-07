@@ -13,7 +13,7 @@ namespace BusinessObject.Models
         public int ProductId { get; set; }
         public string ProductName { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int QuantityAvailable { get; set; }
         public string? ProductImage { get; set; }
         public int ProductStatus { get; set; }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
-using Repositories.DTOs;
-using Repositories.ViewModel;
+using Repositories.DTOs.MealDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace Repositories.Helper
         public MappingProfile()
         {
             //CreateMap<T, TDTO>().ReverseMap();
-            CreateMap<Meal, CreateMeal>().ReverseMap();
+            CreateMap<Meal, CreateMealDTO>().ReverseMap();
             CreateMap<Meal, MealDTO>().ReverseMap();
         }
     }

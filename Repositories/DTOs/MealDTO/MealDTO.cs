@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.ViewModel
+namespace Repositories.DTOs.MealDTO
 {
-    public class CreateMeal
+    public class MealDTO
     {
+        public int MealId { get; set; }
         public string MealName { get; set; } = null!;
         public string MealDescription { get; set; } = null!;
         public double Price { get; set; }

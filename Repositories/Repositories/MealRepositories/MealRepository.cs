@@ -1,6 +1,7 @@
-﻿using BusinessObject.Models;
-using Repositories.DTOs;
-using Repositories.ViewModel;
+﻿using AutoMapper;
+using BusinessObject.Models;
+using DataAccess.DAOs;
+using Repositories.DTOs.MealDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,31 +10,39 @@ using System.Threading.Tasks;
 
 namespace Repositories.Repositories.MealRepositories
 {
-    internal class MealRepository : IMealRepositories
+    public class MealRepository : IMealRepository
     {
-        public void CreateMeal(CreateMeal createMeal)
-        {
+        private readonly IMapper _mapper;
 
+        public MealRepository(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+        public void CreateMeal(CreateMealDTO createMeal)
+        {
+            var meal = _mapper.Map<Meal>(createMeal);
+            MealDAO.Create(meal);
         }
 
         public void DeleteMeal(int id)
         {
-            throw new NotImplementedException();
+            MealDAO.Delete(id);
         }
 
         public List<Meal> GetAllMeals()
         {
-            throw new NotImplementedException();
+            return MealDAO.GetAllMeals();
         }
 
         public Meal GetMeal(int id)
         {
-            throw new NotImplementedException();
+            return MealDAO.GetMeal(id);
         }
 
         public void UpdateMeal(MealDTO mealDTO)
         {
-            throw new NotImplementedException();
+            var meal = _mapper.Map<Meal>(mealDTO);
+            MealDAO.Update(meal);
         }
     }
 }

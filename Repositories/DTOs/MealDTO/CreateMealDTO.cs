@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.DTOs
+namespace Repositories.DTOs.MealDTO
 {
-    public class MealDTO
+    public class CreateMealDTO
     {
-        public int MealId { get; set; }
         public string MealName { get; set; } = null!;
         public string MealDescription { get; set; } = null!;
-        public double Price { get; set; }
+        public decimal Price { get; set; }
+        public int QuantityAvailable { get; set; }
         public string? MealImage { get; set; }
-        public int MealStatus { get; set; }
     }
 }

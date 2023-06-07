@@ -1,6 +1,5 @@
 ﻿using BusinessObject.Models;
-using Repositories.DTOs;
-using Repositories.ViewModel;
+using Repositories.DTOs.MealDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Repositories.Repositories.MealRepositories
 {
-    public interface IMealRepositories
+    public interface IMealRepository
     {
         List<Meal> GetAllMeals();
         Meal GetMeal(int id);
-        void CreateMeal(CreateMeal createMeal);
+        void CreateMeal(CreateMealDTO createMeal);
         void UpdateMeal(MealDTO mealDTO);
         void DeleteMeal(int id);
     }

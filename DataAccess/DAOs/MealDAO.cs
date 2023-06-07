@@ -62,6 +62,7 @@ namespace DataAccess.DAOs
                 {
                     var m = context.Meals.Find(id);
                     context.Remove(m);
+                    context.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -77,6 +78,7 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     context.Meals.Update(mealUpdate);
+                    context.SaveChanges();
                 }
             }
             catch (Exception e)
