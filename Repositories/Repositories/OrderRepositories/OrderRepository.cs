@@ -10,7 +10,7 @@ namespace Repositories.Repositories.OrderRepositories
         public List<Order> GetOrders() => OrderDAO.GetOrders();
 
         public bool CreateOrder(CreateOrderDTO order)
-        {           
+        {
             if (order == null) return false;
             decimal total = 0;
             var newOrder = new Order
@@ -42,10 +42,10 @@ namespace Repositories.Repositories.OrderRepositories
                     var meal = MealDAO.GetMeal((int)cartItem.MealId);
                     orderDetail.UnitPrice = meal.Price;
                     meal.QuantityAvailable -= cartItem.Quantity;
-                    MealDAO.Update(meal);                    
+                    MealDAO.Update(meal);
                 }
                 newOrder.OrderDetails.Add(orderDetail);
-                OrderDetailDAO.CreateOrderDetail(orderDetail);                
+                OrderDetailDAO.CreateOrderDetail(orderDetail);
             }
             foreach (var i in newOrder.OrderDetails)
             {
