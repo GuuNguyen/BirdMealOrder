@@ -7,30 +7,29 @@ using System.Threading.Tasks;
 
 namespace DataAccess.DAOs
 {
-    public class ProductDAO
+    public class MealDAO
     {
-        public static Product GetProductById(int id)
+        public static Meal GetMealById(int id)
         {
             try
             {
-                using (var _context = new BirdMealOrderDBContext())
+                using(var _context = new BirdMealOrderDBContext())
                 {
-                    return _context.Products.Find(id);
+                    return _context.Meals.Find(id);
                 }
-            }
-            catch (Exception ex)
+            }catch(Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw  new Exception(ex.Message);
             }
         }
-        public static void UpdateProduct(Product product)
+        public static void UpdateMeal(Meal meal)
         {
             try
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
-                    _context.Products.Update(product);
-                    _context.SaveChanges();
+                    _context.Meals.Update(meal);
+                    _context.SaveChanges()
                 }
             }
             catch (Exception ex)
