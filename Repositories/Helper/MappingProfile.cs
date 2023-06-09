@@ -2,6 +2,7 @@
 using BusinessObject.Models;
 using Repositories.DTOs.MealDTO;
 using Repositories.DTOs.OrderDTO;
+using Repositories.DTOs.ProductDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace Repositories.Helper
             CreateMap<Meal, CreateMealDTO>().ReverseMap();
             CreateMap<Meal, MealDTO>().ReverseMap();
             CreateMap<Order, UpdateOrderDTO>().ReverseMap();
+            CreateMap<Product, CreateProductDTO>().ReverseMap();
+            CreateMap<Product, ProductDTO>().ReverseMap();
         }
     }
 }

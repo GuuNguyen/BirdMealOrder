@@ -16,8 +16,14 @@ namespace BusinessObject.Models
         public decimal Price { get; set; }
         public int QuantityAvailable { get; set; }
         public string? MealImage { get; set; }
-        public int MealStatus { get; set; }
+        public MealStatus MealStatus { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+    }
+
+    public enum MealStatus
+    {
+        Unavailable,
+        Available
     }
 }

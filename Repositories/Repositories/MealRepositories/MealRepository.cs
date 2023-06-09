@@ -21,6 +21,7 @@ namespace Repositories.Repositories.MealRepositories
         public void CreateMeal(CreateMealDTO createMeal)
         {
             var meal = _mapper.Map<Meal>(createMeal);
+            meal.MealStatus = MealStatus.Available;
             MealDAO.Create(meal);
         }
 

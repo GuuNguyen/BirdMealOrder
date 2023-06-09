@@ -1,15 +1,14 @@
-﻿using System;
+﻿using BusinessObject.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessObject.Models
+namespace Repositories.DTOs.ProductDTO
 {
-    public partial class Product
+    public class ProductDTO
     {
-        public Product()
-        {
-            OrderDetails = new HashSet<OrderDetail>();
-        }
-
         public int ProductId { get; set; }
         public string ProductName { get; set; } = null!;
         public string Description { get; set; } = null!;
@@ -17,12 +16,5 @@ namespace BusinessObject.Models
         public int QuantityAvailable { get; set; }
         public string? ProductImage { get; set; }
         public ProductStatus ProductStatus { get; set; }
-
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-    }
-    public enum ProductStatus
-    {
-        Unavailable,
-        Available
     }
 }
