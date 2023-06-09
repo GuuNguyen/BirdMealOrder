@@ -1,6 +1,7 @@
 using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories.MealRepositories;
+using Repositories.Repositories.OrderRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddDbContext<BirdMealOrderDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"));
