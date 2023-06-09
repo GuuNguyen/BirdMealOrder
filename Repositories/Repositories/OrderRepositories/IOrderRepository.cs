@@ -12,5 +12,7 @@ namespace Repositories.Repositories.OrderRepositories
     {
         List<Order> GetOrders();
         bool CreateOrder(CreateOrderDTO order);
+        bool UpdateOrder(UpdateOrderDTO order);
+        bool DeleteOrder(int id);
     }
 }

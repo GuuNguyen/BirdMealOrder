@@ -1,4 +1,5 @@
-﻿using BusinessObject.Models;
+﻿using AutoMapper;
+using BusinessObject.Models;
 using DataAccess.DAOs;
 using Repositories.DTOs.OrderDTO;
 
@@ -7,6 +8,10 @@ namespace Repositories.Repositories.OrderRepositories
 {
     public class OrderRepository : IOrderRepository
     {
+        private readonly IMapper _mapper;
+
+        public OrderRepository(IMapper mapper) => _mapper = mapper;
+
         public List<Order> GetOrders() => OrderDAO.GetOrders();
 
         public bool CreateOrder(CreateOrderDTO order)
@@ -18,7 +23,7 @@ namespace Repositories.Repositories.OrderRepositories
                 UserId = order.UserId,
                 OrderDate = DateTime.Now,
                 ShipDate = null,
-                Status = 0,
+                Status = OrderStatus.Pending,
                 OrderDetails = new List<OrderDetail>()
             };
             foreach (var cartItem in order.CartItems)
@@ -53,6 +58,22 @@ namespace Repositories.Repositories.OrderRepositories
             }
             newOrder.TotalPrice = total;
             OrderDAO.CreateOrder(newOrder);
+            return true;
+        }
+
+        public bool UpdateOrder(UpdateOrderDTO order)
+        {
+            if(order == null) return false;
+            var updateOrder = _mapper.Map<Order>(order);
+            OrderDAO.Update(updateOrder);
+            return true;
+        }
+
+        public bool DeleteOrder(int id)
+        {
+            var order = OrderDAO.GetOrder(id);
+            if (order == null) return false;
+            OrderDAO.DeleteOrder(id);
             return true;
         }
     }
