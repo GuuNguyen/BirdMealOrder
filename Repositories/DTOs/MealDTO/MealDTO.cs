@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,6 @@ namespace Repositories.DTOs.MealDTO
         public string MealDescription { get; set; } = null!;
         public double Price { get; set; }
         public string? MealImage { get; set; }
-        public int MealStatus { get; set; }
+        public MealStatus MealStatus { get; set; }
     }
 }
