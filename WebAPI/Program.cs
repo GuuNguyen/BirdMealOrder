@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.Repositories.MealRepositories;
 using Repositories.Repositories.OrderRepositories;
 using Repositories.Repositories.ProductRepositories;
+using Repositories.Repositories.UserRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IMealRepository, MealRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddDbContext<BirdMealOrderDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"));
