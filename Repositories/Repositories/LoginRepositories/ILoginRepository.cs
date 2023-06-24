@@ -10,6 +10,6 @@ namespace Repositories.Repositories.LoginRepositories
 {
     public interface ILoginRepository
     {
-        User Login(AccountDTO account);
+        object Login(AccountDTO account);
     }
 }
