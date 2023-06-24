@@ -4,8 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Meal</h1>
+<style>
+    body {
+        background-image: url('https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/v546batch3-mynt-34-badgewatercolor_1.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=89288ef4b47127f7f34a5998b50e4470');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .product-img{
+        border-radius: 20px;
+    }
+</style>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -34,32 +43,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MealName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MealDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityAvailable)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MealImage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MealStatus)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MealId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MealName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MealDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityAvailable)
+                </td>
+                <td>
+                    <img class="product-img" src="@item.MealImage" width="150" height="150" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MealStatus)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.MealId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
