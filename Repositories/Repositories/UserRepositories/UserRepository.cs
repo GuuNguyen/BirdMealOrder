@@ -30,8 +30,8 @@ namespace Repositories.Repositories.UserRepositories
                 if(!UserDAO.isExitedUserName(userDTO.FullName) && !UserDAO.isExitedPhoneNumber(userDTO.PhoneNumber))
                 {
                     var newUser = _mapper.Map<User>(userDTO);
-                    newUser.RoleId = 2;
-                    newUser.Status = 1;
+                    newUser.RoleId = 3;
+                    newUser.Status = UserStatus.Active;
                     UserDAO.Create(newUser);
                     return true;
                 }
@@ -52,7 +52,13 @@ namespace Repositories.Repositories.UserRepositories
 
         public bool DeleteUser(int id)
         {
-            throw new NotImplementedException();
-        }       
+            var user = UserDAO.GetUser(id);
+            if(user != null)
+            {
+                UserDAO.Delete(id);
+                return true;
+            }
+            return false;
+        }
     }
 }
