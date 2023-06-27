@@ -12,7 +12,7 @@ namespace Repositories.Repositories.MealRepositories
     {
         List<Meal> GetAllMeals();
         Meal GetMeal(int id);
-        void CreateMeal(CreateMealDTO createMeal);
+        string CreateMeal(CreateMealDTO createMeal);
         void UpdateMeal(MealDTO mealDTO);
         void DeleteMeal(int id);
     }

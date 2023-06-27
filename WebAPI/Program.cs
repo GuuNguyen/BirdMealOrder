@@ -1,5 +1,6 @@
 using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Repositories.BirdRepositories;
 using Repositories.Repositories.MealRepositories;
 using Repositories.Repositories.OrderRepositories;
 using Repositories.Repositories.ProductRepositories;
@@ -16,6 +17,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IMealRepository, MealRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 builder.Services.AddDbContext<BirdMealOrderDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"));

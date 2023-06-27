@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
 using DataAccess.DAOs;
+using Microsoft.IdentityModel.Tokens;
 using Repositories.DTOs.MealDTO;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,37 @@ namespace Repositories.Repositories.MealRepositories
         {
             _mapper = mapper;
         }
-        public void CreateMeal(CreateMealDTO createMeal)
+        public string CreateMeal(CreateMealDTO createMeal)
         {
+            foreach (ProductRequired productRequired in createMeal.ProductOptions)
+            {
+                string mess = MealProductDAO.CheckQuantityProductAvailable(productRequired.ProductId, productRequired.QuantityRequired);
+                if (!mess.IsNullOrEmpty())
+                {
+                    return mess;
+                }
+            }
             var meal = _mapper.Map<Meal>(createMeal);
             meal.MealStatus = MealStatus.Available;
-            MealDAO.Create(meal);
+            int mealId = MealDAO.Create(meal);
+            if (mealId > 0)
+            {
+                var birdMeals = createMeal.BirdIds.Select(id => new BirdMeal
+                {
+                    BirdId = id,
+                    MealId = mealId
+                }).ToList();
+                BirdMealDAO.CreateRange(birdMeals);
+
+                var mealProducts = createMeal.ProductOptions.Select(productRequired => new MealProduct
+                {
+                    ProductId = productRequired.ProductId,
+                    QuantityRequired = productRequired.QuantityRequired,
+                    MealId = mealId
+                }).ToList();
+                MealProductDAO.CreateRange(mealProducts);
+            }
+            return string.Empty;
         }
 
         public void DeleteMeal(int id)

@@ -39,7 +39,7 @@ namespace DataAccess.DAOs
             }
         }
 
-        public static void Create(Meal meal)
+        public static int Create(Meal meal)
         {
             try
             {
@@ -47,6 +47,8 @@ namespace DataAccess.DAOs
                 {
                     context.Meals.Add(meal);
                     context.SaveChanges();
+
+                    return meal.MealId; // Trả về ID của bữa ăn vừa tạo
                 }
             }
             catch (Exception ex)
@@ -54,6 +56,7 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
 
         public static void Delete(int id)
         {
