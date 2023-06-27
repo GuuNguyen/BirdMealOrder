@@ -10,6 +10,7 @@
     <Folder Include="Views\Cart\" />
     <Folder Include="Views\User\" />
     <Folder Include="Views\Order\" />
+    <Folder Include="wwwroot\Admin\" />
   </ItemGroup>
 
   <ItemGroup>

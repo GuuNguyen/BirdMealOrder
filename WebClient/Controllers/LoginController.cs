@@ -53,10 +53,10 @@ namespace WebClient.Controllers
                 var userId = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
                 var parseUserId = Int32.Parse(userId);
 
-                if (roleString == "admin")
+                if (roleString == "Admin")
                 {
                     HttpContext.Session.SetInt32("userID", parseUserId);
-                    return RedirectToAction("Index", "");
+                    return RedirectToAction("Product_Index", "Admin");
                 }
                 else
                 {
