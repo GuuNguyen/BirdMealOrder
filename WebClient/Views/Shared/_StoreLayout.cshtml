@@ -1,0 +1,199 @@
+﻿@{
+    var name = Context.Session.GetString("userName");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebClient</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebClient.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/storeStyle.css" />
+</head>
+<body>
+    <header>
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-2">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#" style="min-width:180px"><img style="height:64px" src="~/asset/bird_logo.png" alt="new logo" ezimgfmt="rs rscb1 src ng ngcb1" class=" ezlazyloaded" data-ezsrc="" ezoid="0.6068713656392648"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav text-nav">
+                        <li class="nav-item"><a class="nav-link mx-2" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" href="#">Shop</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" asp-area="" asp-controller="Home" asp-action="Meal">Meals</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" href="#">Products</a></li>
+                    </ul>                   
+                    <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
+                        <li class="nav-item mx-2 text-nav" style="margin: auto;">
+                            <div class="inner-form">
+                                <div class="input-field">
+                                    <div class="choices" data-type="text" aria-haspopup="true" aria-expanded="false" dir="ltr">
+                                        <div class="choices__inner">
+                                            <input type="text" class="choices__input choices__input--cloned" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Type to search...">
+                                        </div>
+                                    </div>
+                                    <button class="btn-search" type="button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item mx-2 text-nav">
+                            <a class="nav-link" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
+                                </svg>
+                                <span class="ms-1 align-middle">Cart</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-2 text-nav">
+                            @if(name != null)
+                            {
+                                <div class="action">
+                                    <a class="nav-link " onclick="menuToggle();" href="#">
+                                        <span style="font-size: 20px"><i class="fa-regular fa-user"></i></span>
+                                        <span class="ms-1 align-texttop">@name</span>
+                                    </a>
+                                    <div class="menu">
+                                        <h3>Bird Meal Store<br /><span>Website Order</span></h3>
+                                        <ul>
+                                            <li class="dropdown-list-item">
+                                                <i class="fa-regular fa-address-card"></i>
+                                                <a href="#">My profile</a>
+                                            </li>
+                                            <li class="dropdown-list-item">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                                <a href="#">Edit profile</a>
+                                            </li>
+                                            <li class="dropdown-list-item">
+                                                <i class="fa-solid fa-gear"></i>
+                                                <a href="#">Setting</a>
+                                            </li>
+                                            <li class="dropdown-list-item">
+                                                <i class="fa-regular fa-circle-question"></i>
+                                                <a href="#">Help</a>
+                                            </li>
+                                            <li class="dropdown-list-item">
+                                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                                <a href="/Login/Logout">Logout</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>                       
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="/Login/Login">
+                                    <span style="font-size: 20px"><i class="fa-regular fa-user"></i></span>
+                                    <span class="ms-1 align-texttop">Login</span>
+                                </a>
+                            }                   
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="kilimanjaro_area">
+        <!-- Top Footer Area Start -->
+        <div class="foo_top_header_one section_padding_100_70">
+            <div>
+                <div class="d-flex justify-content-around">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="kilimanjaro_part">
+                            <h5>About Us</h5>
+                            <p>
+                                At Bird Meal Store, we are passionate about providing premium bird food for your feathered companions.
+                                Our carefully curated selection of nutritionally balanced meals is designed to promote optimal health
+                                and happiness for your birds. 
+                            </p>
+                            <p>
+                                With a commitment to quality, we source the finest ingredients to ensure
+                                that your birds receive only the best.
+                            </p>
+                        </div>
+                        <div class="kilimanjaro_part m-top-15">
+                            <h5>Social Links</h5>
+                            <ul class="kilimanjaro_social_links">
+                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i> Facebook</a></li>
+                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter</a></li>
+                                <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i> Pinterest</a></li>
+                                <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i> YouTube</a></li>
+                                <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i> Linkedin</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="kilimanjaro_part">
+                            <h5>Tags Widget</h5>
+                            <ul class=" kilimanjaro_widget">
+                                <li><a href="#">Classy</a></li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Creative</a></li>
+                                <li><a href="#">One Page</a></li>
+                                <li><a href="#">Multipurpose</a></li>
+                                <li><a href="#">Minimal</a></li>
+                                <li><a href="#">Classic</a></li>
+                                <li><a href="#">Medical</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="kilimanjaro_part m-top-15">
+                            <h5>Important Links</h5>
+                            <ul class="kilimanjaro_links">
+                                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Terms & Conditions</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>About Licences</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Help & Support</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Careers</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Privacy Policy</a></li>
+                                <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Community & Forum</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <div class="kilimanjaro_part">
+                            <h5>Quick Contact</h5>
+                            <div class="kilimanjaro_single_contact_info">
+                                <h5>Phone:</h5>
+                                <p>+255 255 54 53 52 <br> +255 255 53 52 51</p>
+                            </div>
+                            <div class="kilimanjaro_single_contact_info">
+                                <h5>Email:</h5>
+                                <p>support@email.com <br> company@email.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer Bottom Area Start -->
+        <div class=" kilimanjaro_bottom_header_one section_padding_50 text-center">
+            <div>
+                <div>
+                    <div class="col-12">
+                        <p>© All Rights Reserved by <a href="#">D2f<i class="fa fa-love"></i></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://kit.fontawesome.com/13e30f44eb.js" crossorigin="anonymous"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+

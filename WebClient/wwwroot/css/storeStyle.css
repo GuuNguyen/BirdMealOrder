@@ -1,0 +1,466 @@
+﻿body {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/*============================= breadcrumb =======================*/
+.breadcrumb {
+    list-style: none;
+    padding: 0;
+    margin: 50px 0 10px 0;
+}
+
+.breadcrumb li {
+    display: inline;
+}
+
+.breadcrumb li:not(:last-child):after {
+    content: "/";
+    margin: 0 5px;
+    color: #999999;
+}
+
+.breadcrumb li a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.breadcrumb li a:hover {
+    text-decoration: underline;
+}
+
+/*============================= Banner 1 =======================*/
+
+.banner-text {
+    width: 35rem;
+    position: absolute;
+    top: 35%;
+    left: 28%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 20px;
+}
+
+.banner-text p{
+    font-weight: 300;
+}
+
+.title {
+    font-size: 50px;
+    margin-bottom: 40px;
+    font-weight: bolder;
+}
+
+.banner-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+}
+
+.banner-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+
+
+.button.outlined--white {
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 40px;
+    color: white;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+
+/*============================= body container =======================*/
+
+.button.outlined--white:hover {
+  background-color: white;
+  color: #538a50;
+}
+
+.container-body{
+    padding: 0 10em 5em 10em;
+}
+.item-text {
+    padding: 60px 0 10px 0;
+}
+.item-text p {
+    font-size: 30px;
+    font-weight: bold;
+}
+/*============================= grid bird =======================*/
+
+.grid-view-bird {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 20px;
+    height: 90%;
+}
+
+.grid-item-bird {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.grid-item-bird img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-content-bird {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grid-item-bird:hover img {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+    z-index: 1;
+    cursor: pointer;
+}
+
+
+/*============================= grid meal =======================*/
+
+.grid-view-meal {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+}
+
+.grid-item-meal {
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.grid-item-meal:hover {
+   transform: scale(1.02)
+}
+.item-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.item-details {
+    padding: 10px 0 0 10px;
+}
+.item-details h5{
+    font-weight: bolder;
+}
+.item-details p{
+    margin: 0;
+    font-weight: 600;
+}
+
+/*============================= banner 2 =======================*/
+
+.banner-text-second {
+    width: 35rem;
+    position: absolute;
+    top: 40%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    color: black;
+    font-size: 20px;
+}
+
+.banner-text-second p {
+    font-weight: 300;
+}
+
+.button.outlined--black {
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 40px;
+    color: black;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.button.outlined--black:hover {
+   background-color: black;
+   color: white;
+}
+
+
+/*============================= banner 3 =======================*/
+.banner-container-small{
+    padding: 0 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8em;
+}
+.banner-image-small {
+    display: block;
+    width: 50%;
+    height: auto;
+}
+.banner-image-small img { 
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.banner-text-small{
+    width: 50%;
+    height: auto;
+    
+}
+.banner-text-small p{
+    font-size: 20px;
+}
+
+/*============================= Btn add to cart =======================*/
+.button {
+    --background: #362a89;
+    --text: #fff;
+    --cart: #fff;
+    --tick: var(--background);
+    position: relative;
+    border: none;
+    background: none;
+    padding: 8px 28px;
+    margin: 10px 0 5px 5px;
+    border-radius: 8px;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+    min-width: 144px;
+    color: var(--text);
+    background: var(--background);
+    transform: scale(var(--scale, 1));
+    transition: transform 0.4s cubic-bezier(0.36, 1.01, 0.32, 1.27);
+}
+
+.button:active {
+    --scale: 0.95;
+}
+
+.button span {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    position: relative;
+    padding-left: 24px;
+    margin-left: -8px;
+    line-height: 26px;
+    transform: translateY(var(--span-y, 0));
+    transition: transform 0.7s ease;
+}
+
+.button span:before,
+.button span:after {
+    content: '';
+    width: var(--w, 2px);
+    height: var(--h, 14px);
+    border-radius: 1px;
+    position: absolute;
+    left: var(--l, 8px);
+    top: var(--t, 6px);
+    background: currentColor;
+    transform: scale(0.75) rotate(var(--icon-r, 0deg)) translateY(var(--icon-y, 0));
+    transition: transform 0.65s ease 0.05s;
+}
+
+.button span:after {
+    --w: 14px;
+    --h: 2px;
+    --l: 2px;
+    --t: 12px;
+}
+
+.button .cart {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -13px 0 0 -18px;
+    transform-origin: 12px 23px;
+    transform: translateX(-120px) rotate(-18deg);
+}
+
+.button .cart:before,
+.button .cart:after {
+    content: '';
+    position: absolute;
+}
+
+.button .cart:before {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px var(--cart);
+    bottom: 0;
+    left: 9px;
+    filter: drop-shadow(11px 0 0 var(--cart));
+}
+
+.button .cart:after {
+    width: 16px;
+    height: 9px;
+    background: var(--cart);
+    left: 9px;
+    bottom: 7px;
+    transform-origin: 50% 100%;
+    transform: perspective(4px) rotateX(-6deg) scaleY(var(--fill, 0));
+    transition: transform 1.2s ease var(--fill-d);
+}
+
+.button .cart svg {
+    z-index: 1;
+    width: 36px;
+    height: 26px;
+    display: block;
+    position: relative;
+    fill: none;
+    stroke: var(--cart);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.button .cart svg polyline:last-child {
+    stroke: var(--tick);
+    stroke-dasharray: 10px;
+    stroke-dashoffset: var(--offset, 10px);
+    transition: stroke-dashoffset 0.4s ease var(--offset-d);
+}
+
+.button.loading {
+    --scale: 0.95;
+    --span-y: -32px;
+    --icon-r: 180deg;
+    --fill: 1;
+    --fill-d: 0.8s;
+    --offset: 0;
+    --offset-d: 1.73s;
+}
+
+.button.loading .cart {
+    animation: cart 3.4s linear forwards 0.2s;
+}
+
+@keyframes cart {
+    12.5% {
+        transform: translateX(-60px) rotate(-18deg);
+    }
+
+    25%,
+    45%,
+    55%,
+    75% {
+        transform: none;
+    }
+
+    50% {
+        transform: scale(0.9);
+    }
+
+    44%,
+    56% {
+        transform-origin: 12px 23px;
+    }
+
+    45%,
+    55% {
+        transform-origin: 50% 50%;
+    }
+
+    87.5% {
+        transform: translateX(70px) rotate(-18deg);
+    }
+
+    100% {
+        transform: translateX(140px) rotate(-18deg);
+    }
+}
+
+/*========================================= Meal page =========================================*/
+
+.page-container{
+    margin-top: 7em;
+}
+
+.item-text-page {
+    padding: 0;
+}
+
+.hero-content{
+    margin-bottom: 2em;
+}
+
+.item-text-page p {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.desc-text p{
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.hero-filter{
+    margin: 3.5em 0;
+}
+
+.btn-filter {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.btn-filter p{
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+}
+.btn-filter i{
+    font-size: 20px;
+}
+
+#filterTable {
+    left: 0;
+    padding: 10px 0 10px 10em;
+    width: 100%;
+    margin-top: 10px;
+    position: absolute;
+    background-color: #fff;
+    z-index: 2;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.btn-filter:hover {
+    cursor: pointer;
+}
+
+#filterTable h4 {
+  margin-top: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+#applyFilterButton {
+  margin-top: 10px;
+}

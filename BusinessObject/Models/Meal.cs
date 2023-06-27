@@ -20,7 +20,6 @@ namespace BusinessObject.Models
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
-
     public enum MealStatus
     {
         Unavailable,

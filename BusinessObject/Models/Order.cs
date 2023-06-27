@@ -20,7 +20,6 @@ namespace BusinessObject.Models
         public virtual User User { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
-
     public enum OrderStatus
     {
         Pending,

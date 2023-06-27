@@ -40,6 +40,7 @@ namespace Repositories.Repositories.LoginRepositories
                     {
                         new Claim(ClaimTypes.Sid, user.UserId.ToString()),
                         new Claim(ClaimTypes.Role, roleString),
+                        new Claim("FullName", user.FullName)
                     };
 
                     var token = new JwtSecurityToken(
