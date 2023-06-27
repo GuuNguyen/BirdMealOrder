@@ -9,15 +9,16 @@ namespace DataAccess.DAOs
 {
     public class BirdDAO
     {
-        public static List<Bird> GetBirds()
+        public static List<Bird> GetAllBirds()
         {
             try
             {
-                using(var context = new BirdMealOrderDBContext())
+                using (var context = new BirdMealOrderDBContext())
                 {
                     return context.Birds.ToList();
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

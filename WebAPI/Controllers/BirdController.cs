@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Repositories.BirdRepositories;
+using Repositories.Repositories.MealRepositories;
 
 namespace WebAPI.Controllers
 {
@@ -8,14 +9,16 @@ namespace WebAPI.Controllers
     [ApiController]
     public class BirdController : ControllerBase
     {
-        private readonly IBirdRepository _repo;
+        private readonly IBirdRepository _birdRepo;
 
-        public BirdController(IBirdRepository repo) => _repo = repo;
-
-        [HttpGet]
-        public IActionResult GetAll()
+        public BirdController(IBirdRepository birdRepository)
         {
-            return Ok(_repo.GetAll());
+            _birdRepo = birdRepository;
+        }
+        [HttpGet]
+        public IActionResult GetAllBirds()
+        {
+            return Ok(_birdRepo.GetAllBirds());
         }
     }
 }

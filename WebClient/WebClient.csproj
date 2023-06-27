@@ -10,10 +10,13 @@
     <Folder Include="Views\Cart\" />
     <Folder Include="Views\User\" />
     <Folder Include="Views\Order\" />
-    <Folder Include="Views\Product\" />
+    <Folder Include="wwwroot\Admin\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    <PackageReference Include="Google.Apis.Auth" Version="1.61.0" />
+    <PackageReference Include="Google.Cloud.Storage.V1" Version="4.6.0" />
     <None Include="wwwroot\asset\bird_logo.png" />
   </ItemGroup>
 
@@ -24,6 +27,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -28,6 +28,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 
+builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 builder.Services.AddDbContext<BirdMealOrderDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"));

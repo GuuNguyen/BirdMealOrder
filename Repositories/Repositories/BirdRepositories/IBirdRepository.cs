@@ -9,6 +9,6 @@ namespace Repositories.Repositories.BirdRepositories
 {
     public interface IBirdRepository
     {
-        List<Bird> GetAll();
+        List<Bird> GetAllBirds();
     }
 }

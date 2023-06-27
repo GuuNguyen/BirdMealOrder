@@ -10,6 +10,9 @@ namespace Repositories.Repositories.BirdRepositories
 {
     public class BirdRepository : IBirdRepository
     {
-        public List<Bird> GetAll() => BirdDAO.GetBirds();
+        public List<Bird> GetAllBirds()
+        {
+            return BirdDAO.GetAllBirds();
+        }
     }
 }

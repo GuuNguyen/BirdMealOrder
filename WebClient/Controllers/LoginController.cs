@@ -64,7 +64,7 @@ namespace WebClient.Controllers
                 if (roleString == "Admin")
                 {
                     HttpContext.Session.SetInt32("userID", parseUserId);
-                    return RedirectToAction("Index", "");
+                    return RedirectToAction("Product_Index", "Admin");
                 }
                 else if(roleString == "Staff")
                 {
