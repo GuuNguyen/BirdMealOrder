@@ -7,5 +7,6 @@ namespace BusinessObject.Models
     {
         public int BirdId { get; set; }
         public string BirdName { get; set; } = null!;
+        public string? BirdImage { get; set; }
     }
 }

@@ -1,0 +1,76 @@
+﻿@model WebClient.ViewModels.MealViewModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewData["Title"] = "View";
+}
+
+<div class="container-body page-container">
+    <ul class="breadcrumb">
+        @foreach (var item in Model.Breadcrumbs)
+        {
+            <li><a href="@item.Url">@item.Text</a></li>
+        }
+    </ul>
+    <div class="best_seller-container">
+        <div class="hero-content">
+            <div class="item-text-page">
+                <p>Meals</p>
+            </div>
+            <div class="desc-text">
+                <p>
+                    Our Meal is specifically designed to meet the diverse nutritional needs of different bird species.
+                    We ensure a balanced blend of essential nutrients such as protein, fiber, vitamins, and minerals to support overall development,
+                    good health, and flourishing vitality in your cherished feathered companions.
+                </p>
+            </div>
+            <div class="hero-filter d-flex align-items-center justify-content-between">
+                <div>
+                    <div id="filterButton" class="btn-filter">
+                        <i class="fa-solid fa-filter"></i>
+                        <p>FILTER</p>
+                    </div>
+                    <div id="filterTable" style="display: none;">
+                        <h4>FILTER BY</h4>
+                        <label><input type="checkbox" name="price" value="0-50"> $0 - $50</label><br>
+                        <label><input type="checkbox" name="price" value="50-100"> $50 - $100</label><br>
+                        <label><input type="checkbox" name="price" value="100-200"> $100 - $200</label><br>
+                        <label><input type="checkbox" name="price" value="200+"> $200+</label><br>
+                        <button class="btn" style="background-color: #362a89; color: white" id="applyFilterButton">Apply Filter</button>
+                    </div>
+                </div>
+                <div>
+                    <div class ="btn-filter">
+                        <p>SORT BY</p>
+                        <i class="fa-solid fa-arrow-down-wide-short"></i>
+                    </div>
+                </div>
+            </div>
+            
+        </div>       
+        <div class="grid-view-meal">
+            @foreach (var item in Model.Meals)
+            {
+                <div class="grid-item-meal">
+                    <div class="item-image">
+                        <img src="@item.MealImage" alt="@item.MealName" />
+                    </div>
+                    <div class="item-details">
+                        <h5>@item.MealName</h5>
+                        <p>$@item.Price.ToString("#,##0")</p>
+                    </div>
+                    <button class="button">
+                        <span>Add to cart</span>
+                        <div class="cart">
+                            <svg viewBox="0 0 36 26">
+                                <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
+                                <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

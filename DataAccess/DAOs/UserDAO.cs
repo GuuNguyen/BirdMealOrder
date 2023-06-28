@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    return context.Users.ToList();
+                    return context.Users.Include(u => u.Role).ToList();
                 }
             }
             catch (Exception ex)
@@ -30,7 +31,7 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    return context.Users.Find(id);
+                    return context.Users.Include(u => u.Role).Where( u => u.UserId == id).SingleOrDefault();
                 }
             }
             catch (Exception ex)

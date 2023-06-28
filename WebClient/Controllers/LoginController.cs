@@ -51,6 +51,14 @@ namespace WebClient.Controllers
 
                 var roleString = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Role).Value;
                 var userId = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
+                var userFullName = jwtSecurityToken.Claims.First(claim => claim.Type == "FullName").Value;
+                string splipedName = "Name";
+                int lastSpaceIndex = userFullName.LastIndexOf(' ');                
+                if (lastSpaceIndex != -1 && lastSpaceIndex < userFullName.Length - 1)
+                {
+                    splipedName = userFullName.Substring(lastSpaceIndex + 1);
+                }
+                HttpContext.Session.SetString("userName", splipedName);
                 var parseUserId = Int32.Parse(userId);
 
                 if (roleString == "Admin")
@@ -58,15 +66,20 @@ namespace WebClient.Controllers
                     HttpContext.Session.SetInt32("userID", parseUserId);
                     return RedirectToAction("Product_Index", "Admin");
                 }
+                else if(roleString == "Staff")
+                {
+                    HttpContext.Session.SetInt32("userID", parseUserId);
+                    return RedirectToAction("Index", "");
+                }
                 else
                 {
                     HttpContext.Session.SetInt32("userID", parseUserId);
                     var cart = new List<CartItem>();
                     HttpContext.Session.SetString("cart", JsonSerializer.Serialize(cart));
-                    return RedirectToAction("Index", "");
+                    return RedirectToAction("Index", "Home");
                 }
             }
-            ModelState.AddModelError(String.Empty, "Your login is fail!");
+            ViewBag.ErrorMessage = "Your login has failed!"; 
             return View();
         }
 
@@ -83,9 +96,16 @@ namespace WebClient.Controllers
             HttpResponseMessage response = await _client.PostAsync(UserAPIUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Login", "Login");
+                return Redirect("/Login/Login");
             }
-            return View(user);
+            return View();
         }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
