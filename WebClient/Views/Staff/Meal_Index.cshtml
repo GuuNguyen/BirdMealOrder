@@ -53,7 +53,7 @@
                                         <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.MealStatus)
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold">
+                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
                                             Action
                                         </th>
                                     </tr>
@@ -85,9 +85,16 @@
                                                 @Html.DisplayFor(modelItem => item.MealStatus)
                                             </td>
                                             <td>
-                                                <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a> |
-                                                <a asp-action="Details" asp-route-id="@item.MealId">Details</a> |
-                                                <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
+                                                <div class="dropdown">
+                                                    <div onclick="toggleDropdown(this)">
+                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                    </div>
+                                                    <div class="dropdown-content">
+                                                        <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a>
+                                                        <a asp-action="Details" asp-route-id="@item.MealId">Details</a>
+                                                        <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     }
@@ -100,3 +107,66 @@
         </div>
     </div>
 </div>
+
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+        .dropdown > div {
+            cursor: pointer;
+        }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 12px 16px;
+        z-index: 1;
+        right: 0;
+        left: auto;
+    }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 0;
+            color: black; /* Màu chữ mặc định */
+            transition: color 0.3s;
+        }
+
+            .dropdown-content a:hover {
+                color: #538a50; /* Màu chữ khi rê chuột vào */
+            }
+</style>
+
+<script>
+    var activeDropdown = null;
+
+    function toggleDropdown(dots) {
+        var dropdownContent = dots.nextElementSibling;
+        if (activeDropdown !== dropdownContent) {
+            closeActiveDropdown();
+            dropdownContent.style.display = 'block';
+            activeDropdown = dropdownContent;
+        } else {
+            closeActiveDropdown();
+        }
+    }
+
+    function closeActiveDropdown() {
+        if (activeDropdown) {
+            activeDropdown.style.display = 'none';
+            activeDropdown = null;
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+        var targetElement = event.target;
+        if (!targetElement.closest('.dropdown')) {
+            closeActiveDropdown();
+        }
+    });
+</script>
