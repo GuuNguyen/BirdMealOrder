@@ -5,14 +5,14 @@ using System.Text.Json;
 
 namespace WebClient.Controllers
 {
-    public class AdminController : Controller
+    public class StaffController : Controller
     {
         private readonly HttpClient client;
         private string ProductApiUrl = "";
         private string UserApiUrl = "";
         private string MealApiUrl = "";
 
-        public AdminController()
+        public StaffController()
         {
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
