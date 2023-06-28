@@ -97,5 +97,19 @@ namespace WebClient.Controllers
             }
             return RedirectToAction("Create");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int mealId)
+        {
+
+            HttpResponseMessage respone = await client.DeleteAsync(MealApiUrl + "/" + mealId);
+            if (respone.IsSuccessStatusCode)
+            {
+                TempData["SuccMessage"] = "Delete Successfull!";
+                return RedirectToAction("Index", "Meal");
+            }
+            TempData["ErrMessage"] = "Delete Failed!";
+            return View();
+        }
     }
 }

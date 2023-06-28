@@ -65,7 +65,7 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     var m = context.Meals.Find(id);
-                    context.Remove(m);
+                    context.Meals.Remove(m);
                     context.SaveChanges();
                 }
             }
@@ -81,7 +81,13 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    context.Meals.Update(mealUpdate);
+                    var meal = context.Meals.FirstOrDefault(m => m.MealId == mealUpdate.MealId);
+                    meal.MealName = mealUpdate.MealName;
+                    meal.MealDescription = mealUpdate.MealDescription;
+                    meal.Price = mealUpdate.Price;
+                    meal.MealStatus = mealUpdate.MealStatus;
+                    meal.QuantityAvailable = mealUpdate.QuantityAvailable;
+                    meal.MealImage = mealUpdate.MealImage;
                     context.SaveChanges();
                 }
             }

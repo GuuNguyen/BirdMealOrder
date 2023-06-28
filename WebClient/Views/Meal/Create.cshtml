@@ -155,7 +155,7 @@
     </div>
     <div class="mb-3" id="selected-birds-container" style="margin-top: 10px;"></div>
     <div class="mb-3">
-        <input type="text" id="bird-input" oninput="showMatchingBirds()" onblur="clearBirdName()" placeholder="Enter bird name" class="form-control">
+        <input type="text" id="bird-input" oninput="showMatchingBirds()"     placeholder="Enter bird name" class="form-control">
     </div>
 
     <div id="bird-list-container" style="max-height: 150px; overflow-y: auto; display: none; border: 1px solid #538a50; padding: 10px;">
@@ -319,10 +319,10 @@
                 button.style.backgroundColor = "#538a50";
             });
         }
-        function clearBirdName() {
-            var birdInput = document.getElementById("bird-input");
-            birdInput.value = "";
-        }
+        //function clearBirdName() {
+        //    var birdInput = document.getElementById("bird-input");
+        //    birdInput.value = "";
+        //}
         setTimeout(function () {
             var notification = document.getElementById('notification');
             if (notification) {
@@ -352,19 +352,37 @@
         function toggleAllBirds() {
             var allBirdsCheckbox = document.getElementById("allBirdsCheckbox");
             var birdCheckboxes = document.querySelectorAll("input[name='BirdIds[]']");
-
+            var selectedBirdsContainer = document.getElementById("selected-birds-container");
+            var birdInput = document.getElementById("bird-input");
             if (allBirdsCheckbox.checked) {
+                selectedBirdsContainer.innerHTML = "";
+                birdInput.disabled = true;
                 // Chọn tất cả các checkbox chim
                 birdCheckboxes.forEach(function (checkbox) {
                     checkbox.checked = true;
                 });
             } else {
+                birdInput.disabled = false;
+                selectedBirdsContainer.innerHTML = "";
                 // Bỏ chọn tất cả các checkbox chim
                 birdCheckboxes.forEach(function (checkbox) {
                     checkbox.checked = false;
                 });
             }
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            var birdInput = document.getElementById("bird-input");
+            var birdListContainer = document.getElementById("bird-list-container");
+
+            // Xử lý sự kiện khi click ra ngoài vùng input
+            document.addEventListener("click", function (event) {
+                var target = event.target;
+                if (!birdInput.contains(target) && !birdListContainer.contains(target)) {
+                    birdInput.value = ""; // Xóa text trong input
+                    birdListContainer.style.display = "none"; // Ẩn ô gợi ý
+                }
+            });
+        });
 
     </script>
 }
