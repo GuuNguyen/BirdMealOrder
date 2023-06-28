@@ -1,0 +1,98 @@
+﻿@model IEnumerable<BusinessObject.Models.User>
+
+@{
+    ViewData["Title"] = "User_Index";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<div class="preloader">
+    <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+    </div>
+</div>
+<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+     data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="margin-bottom: 0px" class="white-box">
+                        <div class="container">
+                            <div style="display: flex; align-items: center" class="row">
+                                <div class="col-md-6">
+                                    <h3 style="font-size: 30px" class="box-title">User</h3>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
+                                        Create new user
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted"></p>
+
+                        <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
+                            <table class="table text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.FullName)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.UserName)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.Password)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.PhoneNumber)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.Status)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.Role)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FullName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Password)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Status)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Role.RoleName)
+                                            </td>
+                                            <td>
+                                                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                                                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                                                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
