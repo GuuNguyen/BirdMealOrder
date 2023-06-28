@@ -23,7 +23,7 @@ namespace Repositories.Repositories.MealRepositories
         {
             foreach (ProductRequired productRequired in createMeal.ProductOptions)
             {
-                string mess = MealProductDAO.CheckQuantityProductAvailable(productRequired.ProductId, productRequired.QuantityRequired);
+                string mess = MealProductDAO.CheckQuantityProductAvailable(productRequired.ProductId, productRequired.QuantityRequired * createMeal.QuantityAvailable);
                 if (!mess.IsNullOrEmpty())
                 {
                     return mess;
@@ -47,7 +47,7 @@ namespace Repositories.Repositories.MealRepositories
                     QuantityRequired = productRequired.QuantityRequired,
                     MealId = mealId
                 }).ToList();
-                MealProductDAO.CreateRange(mealProducts);
+                MealProductDAO.CreateRange(mealProducts, createMeal.QuantityAvailable);
             }
             return string.Empty;
         }

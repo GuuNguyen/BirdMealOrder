@@ -27,7 +27,7 @@ namespace DataAccess.DAOs
             }
         }
 
-        public static void CreateRange(List<MealProduct> mealProducts)
+        public static void CreateRange(List<MealProduct> mealProducts, int quantityMeal)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace DataAccess.DAOs
                         var query = $"INSERT INTO MealProduct (ProductId, MealId, QuantityRequired) VALUES ({mealProduct.ProductId}, {mealProduct.MealId}, {mealProduct.QuantityRequired});";
                         context.Database.ExecuteSqlRaw(query);
                         var product = context.Products.Find(mealProduct.ProductId);
-                        product.QuantityAvailable = product.QuantityAvailable - mealProduct.QuantityRequired;
+                        product.QuantityAvailable = product.QuantityAvailable - mealProduct.QuantityRequired * quantityMeal;
                         context.Update(product);
                         context.SaveChanges();
                     }
@@ -59,7 +59,7 @@ namespace DataAccess.DAOs
 
                 if (quantityRequired > product.QuantityAvailable)
                 {
-                    return $"The quantity required of '{product.ProductName}' is greater than the available quantity!";
+                    return $"The quantity required of '{product.ProductName}' is greater than the available quantity({product.QuantityAvailable})!";
                 }
             }
 
