@@ -52,7 +52,11 @@ namespace Repositories.Repositories.UserRepositories
 
         public bool DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            var check = UserDAO.GetUser(id);
+            if(check == null) return false;
+            UserDAO.Delete(id);
+            return true;
+            
         }       
     }
 }
