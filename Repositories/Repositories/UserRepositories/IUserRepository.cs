@@ -13,6 +13,7 @@ namespace Repositories.Repositories.UserRepositories
         List<User> GetUsers();
         User GetUser(int id);
         bool CreateUser(CreateUserDTO userDTO);
+        bool CreateUserFull(CreateUserDTOFull userDTOFull);
         bool UpdateUser(UpdateUserDTO userDTO);
         bool DeleteUser(int id);    
     }

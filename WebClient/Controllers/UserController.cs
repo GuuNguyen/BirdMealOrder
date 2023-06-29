@@ -46,27 +46,46 @@ namespace WebClient.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> CreateUser(User user)
+        //{
+        //    string jsonStr = JsonSerializer.Serialize(user);
+        //    var contentData = new StringContent(jsonStr, System.Text.Encoding.UTF8, "application/json");
+        //    HttpResponseMessage respone = await _client.PostAsync(UserAPIUrl, contentData);
+
+        //    if (respone.IsSuccessStatusCode)
+        //    {
+                
+
+        //        TempData["SuccMessage"] = "Create Successfull!";
+        //        return RedirectToAction("CreateUser", "User");
+        //    }
+        //    ModelState.AddModelError(String.Empty, "Failed to call API");
+        //    return RedirectToAction("CreateUser", "User");
+        //}
+
+        
         [HttpPost]
-        public async Task<IActionResult> CreateUser(User user)
+        public async Task<IActionResult> CreateUserFull(User user)
         {
             string jsonStr = JsonSerializer.Serialize(user);
             var contentData = new StringContent(jsonStr, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage respone = await _client.PostAsync(UserAPIUrl, contentData);
+            HttpResponseMessage respone = await _client.PostAsync(UserAPIUrl + "/" +"StaffCreateUser", contentData);
 
             if (respone.IsSuccessStatusCode)
             {
-                //if (HttpContext.Session.GetString("role") == null)
-                //{
-                //    ViewBag.Message = "Create successfully!";
-                //    return RedirectToAction("Index", "User");
-                //}
-
                 TempData["SuccMessage"] = "Create Successfull!";
                 return RedirectToAction("CreateUser", "User");
             }
             ModelState.AddModelError(String.Empty, "Failed to call API");
             return RedirectToAction("CreateUser", "User");
         }
+        
+
+
+
+
+
 
         public async Task<IActionResult> DeleteUser(int id)
         {

@@ -34,6 +34,15 @@ namespace WebAPI.Controllers
             return newUser ? Ok(newUser) : BadRequest();
         }
 
+
+        [HttpPost("StaffCreateUser")]
+        public IActionResult CreateFull(CreateUserDTOFull userDTOFull)
+        {
+            var newUser = _userRepository.CreateUserFull(userDTOFull);
+            return newUser ? Ok(newUser) : BadRequest();
+        }
+
+
         [HttpPut]
         public IActionResult Update(UpdateUserDTO userDTO)
         {
