@@ -101,9 +101,9 @@
                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                                     </div>
                                                     <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a>
-                                                        <a asp-action="Details" asp-route-id="@item.MealId">Details</a>
-                                                        <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
+                                                        <a asp-action="Edit" asp-route-id="@item.MealId"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
+                                                        <a asp-action="Details" asp-route-id="@item.MealId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
+                                                        <a class="delete-link" asp-action="Delete" asp-route-id="@item.MealId"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -120,9 +120,10 @@
 </div>
 
 <style>
-    .labelCheck{
+    .labelCheck {
         margin: 0;
     }
+
     .checkbox-wrapper-5 .check {
         --size: 40px;
         position: relative;
@@ -225,6 +226,7 @@
     .dropdown-content {
         text-align: left
     }
+
     .dropdown {
         position: relative;
         display: inline-block;
@@ -238,7 +240,7 @@
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        min-width: 160px;
+        min-width: 120px;
         box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         padding: 12px 16px;
         z-index: 1;
@@ -256,6 +258,14 @@
             .dropdown-content a:hover {
                 color: #538a50; /* Màu chữ khi rê chuột vào */
             }
+
+            .dropdown-content a.delete-link {
+                color: #e34f59 /* Màu chữ mặc định cho link Delete trong dropdown */
+            }
+
+                .dropdown-content a.delete-link:hover {
+                    color: #ff6600 /* Màu hover của chữ trong link Delete trong dropdown */;
+                }
 </style>
 
 
@@ -294,10 +304,10 @@
                 type: "put",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function(result){
+                success: function (result) {
 
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     console.log(xhr)
                 }
             });
