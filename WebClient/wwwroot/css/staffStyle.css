@@ -1,0 +1,324 @@
+﻿.labelCheck {
+    margin: 0;
+}
+
+.checkbox-wrapper-5 .check {
+    --size: 40px;
+    position: relative;
+    background: linear-gradient(90deg, #a6d6a3, #538a50);
+    line-height: 0;
+    perspective: 400px;
+    font-size: var(--size);
+}
+
+    .checkbox-wrapper-5 .check input[type="checkbox"],
+    .checkbox-wrapper-5 .check label,
+    .checkbox-wrapper-5 .check label::before,
+    .checkbox-wrapper-5 .check label::after,
+    .checkbox-wrapper-5 .check {
+        appearance: none;
+        display: inline-block;
+        border-radius: var(--size);
+        border: 0;
+        transition: .35s ease-in-out;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+        .checkbox-wrapper-5 .check label {
+            width: calc(2.2 * var(--size));
+            height: var(--size);
+            background: #d7d7d7;
+            overflow: hidden;
+        }
+
+        .checkbox-wrapper-5 .check input[type="checkbox"] {
+            position: absolute;
+            z-index: 1;
+            width: calc(.8 * var(--size));
+            height: calc(.8 * var(--size));
+            top: calc(.1 * var(--size));
+            left: calc(.1 * var(--size));
+            background: linear-gradient(45deg, #dedede, #ffffff);
+            box-shadow: 0 6px 7px rgba(0,0,0,0.3);
+            outline: none;
+            margin: 0;
+        }
+
+            .checkbox-wrapper-5 .check input[type="checkbox"]:checked {
+                left: calc(1.3 * var(--size));
+            }
+
+                .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label {
+                    background: transparent;
+                }
+
+        .checkbox-wrapper-5 .check label::before,
+        .checkbox-wrapper-5 .check label::after {
+            content: "· ·";
+            position: absolute;
+            overflow: hidden;
+            left: calc(.15 * var(--size));
+            top: calc(.5 * var(--size));
+            height: var(--size);
+            letter-spacing: calc(-0.04 * var(--size));
+            color: #9b9b9b;
+            font-family: "Times New Roman", serif;
+            z-index: 2;
+            font-size: calc(.6 * var(--size));
+            border-radius: 0;
+            transform-origin: 0 0 calc(-0.5 * var(--size));
+            backface-visibility: hidden;
+        }
+
+        .checkbox-wrapper-5 .check label::after {
+            content: "●";
+            top: calc(.65 * var(--size));
+            left: calc(.2 * var(--size));
+            height: calc(.1 * var(--size));
+            width: calc(.35 * var(--size));
+            font-size: calc(.2 * var(--size));
+            transform-origin: 0 0 calc(-0.4 * var(--size));
+        }
+
+        .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::before,
+        .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
+            left: calc(1.55 * var(--size));
+            top: calc(.4 * var(--size));
+            line-height: calc(.1 * var(--size));
+            transform: rotateY(360deg);
+        }
+
+        .checkbox-wrapper-5 .check input[type="checkbox"]:checked + label::after {
+            height: calc(.16 * var(--size));
+            top: calc(.55 * var(--size));
+            left: calc(1.6 * var(--size));
+            font-size: calc(.6 * var(--size));
+            line-height: 0;
+        }
+
+.option {
+    text-align: center;
+}
+
+.dropdown-content {
+    text-align: left
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+    .dropdown > div {
+        cursor: pointer;
+    }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    right: 0;
+    left: auto;
+}
+
+    .dropdown-content a {
+        display: block;
+        padding: 8px 0;
+        color: black; /* Màu chữ mặc định */
+        transition: color 0.3s;
+    }
+
+        .dropdown-content a:hover {
+            color: #538a50; /* Màu chữ khi rê chuột vào */
+        }
+
+        .dropdown-content a.delete-link {
+            color: #e34f59 /* Màu chữ mặc định cho link Delete trong dropdown */
+        }
+
+            .dropdown-content a.delete-link:hover {
+                color: #ff6600 /* Màu hover của chữ trong link Delete trong dropdown */;
+            }
+
+.modal-confirm {
+    color: #636363;
+    width: 400px;
+}
+
+    .modal-confirm .modal-content {
+        padding: 20px;
+        border-radius: 5px;
+        border: none;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .modal-confirm .modal-header {
+        border-bottom: none;
+        position: relative;
+    }
+
+    .modal-confirm h4 {
+        text-align: center;
+        font-size: 26px;
+        margin: 30px 0 -10px;
+    }
+
+    .modal-confirm .close {
+        position: absolute;
+        top: -5px;
+        right: -2px;
+    }
+
+    .modal-confirm .modal-body {
+        color: #999;
+    }
+
+    .modal-confirm .modal-footer {
+        border: none;
+        text-align: center;
+        border-radius: 5px;
+        font-size: 13px;
+        padding: 10px 15px 25px;
+    }
+
+        .modal-confirm .modal-footer a {
+            color: #999;
+        }
+
+    .modal-confirm .icon-box {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto;
+        border-radius: 50%;
+        z-index: 9;
+        text-align: center;
+        border: 3px solid #f15e5e;
+    }
+
+        .modal-confirm .icon-box i {
+            color: #f15e5e;
+            font-size: 46px;
+            display: inline-block;
+            margin-top: 13px;
+        }
+
+    .modal-confirm .btn,
+    .modal-confirm .btn:active {
+        color: #fff;
+        border-radius: 4px;
+        background: #60c7c1;
+        text-decoration: none;
+        transition: all 0.4s;
+        line-height: normal;
+        min-width: 120px;
+        border: none;
+        min-height: 40px;
+        border-radius: 3px;
+        margin: 0 5px;
+    }
+
+    .modal-confirm .btn-secondary {
+        background: #c1c1c1;
+    }
+
+        .modal-confirm .btn-secondary:hover,
+        .modal-confirm .btn-secondary:focus {
+            background: #a8a8a8;
+        }
+
+    .modal-confirm .btn-danger {
+        background: #f15e5e;
+    }
+
+        .modal-confirm .btn-danger:hover,
+        .modal-confirm .btn-danger:focus {
+            background: #ee3535;
+        }
+<<<<<<< HEAD
+
+/*style in Product detail*/
+.product-item_field dd:nth-child(1) {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.product-item_field dd:nth-child(2) {
+}
+
+.product-item_field dd:nth-child(3) {
+    font-size: 50px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.product-item_field dd:nth-child(5) {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    gap: 5px;
+}
+
+.product-item_field dd:nth-child(6) {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    gap: 5px;
+}
+
+.product-container {
+    background-color: #f1f1f1;
+}
+
+.product-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 25px 20px 0 0;
+}
+
+.product-item {
+    height: 450px;
+    width: 450px;
+    background-color: white;
+    padding: 30px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+}
+
+.product_detail {
+    height: 652px;
+    margin-left: 240px;
+    background-color: white;
+    padding: 75px;
+}
+
+.product-image {
+    width: 400px;
+    height: 500px;
+    object-fit: cover;
+}
+
+.image {
+    padding: 0 30px;
+    display: flex;
+    justify-content: center;
+    background-color: #e4e4e6;
+    border: 1px solid #e4e4e6;
+}
+/*end style in Product detail*/
+=======
+.meal-image {
+    width: 100px;
+    height: 100px;
+}
+>>>>>>> 76cc6b3841280ffa82a19b471f612cfe257f1dd4

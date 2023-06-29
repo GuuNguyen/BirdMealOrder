@@ -32,6 +32,7 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true
             };
             List<Product> listProduct = JsonSerializer.Deserialize<List<Product>>(strData, options);
+
             return View(listProduct);
         }
 

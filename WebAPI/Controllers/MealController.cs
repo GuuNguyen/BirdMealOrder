@@ -1,4 +1,5 @@
 ﻿
+using DataAccess.DAOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -53,6 +54,23 @@ namespace WebAPI.Controllers
             if (meal == null) return NotFound();
             _mealRepo.UpdateMeal(mealDTO);
             return Ok("Update Successfull!");
+        }
+
+        [HttpPut("ChangeStatus/{mealId}")]
+        public IActionResult ChangeStatus(int mealId)
+        {
+            var meal = _mealRepo.GetMeal(mealId);
+            if (meal == null) return NotFound();
+            _mealRepo.ChangeStatus(mealId);
+            return Ok("Change Successfull!");
+        }
+
+        [HttpGet("GetMealIncludeBird&Product/{mealId}")]
+        public IActionResult GetMealIncludeBirdAndProduct(int mealId)
+        {
+            var meal = _mealRepo.GetMeal(mealId);
+            if (meal == null) return NotFound();
+            return Ok(_mealRepo.GetMealInclueBirdAndProduct(mealId));
         }
     }
 }
