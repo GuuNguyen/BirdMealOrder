@@ -20,6 +20,12 @@ namespace Repositories.Repositories.MealRepositories
         {
             _mapper = mapper;
         }
+
+        public void ChangeStatus(int mealId)
+        {
+            MealDAO.ChangeStatus(mealId);
+        }
+
         public string CreateMeal(CreateMealDTO createMeal)
         {
             foreach (ProductRequired productRequired in createMeal.ProductOptions)
