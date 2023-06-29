@@ -64,5 +64,13 @@ namespace WebAPI.Controllers
             _mealRepo.ChangeStatus(mealId);
             return Ok("Change Successfull!");
         }
+
+        [HttpGet("GetMealIncludeBird&Product/{mealId}")]
+        public IActionResult GetMealIncludeBirdAndProduct(int mealId)
+        {
+            var meal = _mealRepo.GetMeal(mealId);
+            if (meal == null) return NotFound();
+            return Ok(_mealRepo.GetMealInclueBirdAndProduct(mealId));
+        }
     }
 }
