@@ -1,4 +1,5 @@
-﻿using BusinessObject.Enums;
+﻿using Azure;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Firebase.Storage;
@@ -107,11 +108,21 @@ namespace WebClient.Controllers
             HttpResponseMessage respone = await client.DeleteAsync(MealApiUrl + "/" + mealId);
             if (respone.IsSuccessStatusCode)
             {
-                TempData["SuccMessage"] = "Delete Successfull!";
-                return RedirectToAction("Index", "Meal");
+                return RedirectToAction("Meal_Index", "Staff");
             }
-            TempData["ErrMessage"] = "Delete Failed!";
-            return View();
+            return RedirectToAction("Meal_Index", "Staff");
+        }
+
+        public async Task<IActionResult> Details(int mealId)
+        {
+            HttpResponseMessage respone = await client.GetAsync(MealApiUrl + "/" + mealId);
+            string strData = await respone.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            Meal? meal = JsonSerializer.Deserialize<Meal>(strData, options);
+            return View(meal);
         }
     }
 }
