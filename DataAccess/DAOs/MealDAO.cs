@@ -97,12 +97,37 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     var meal = context.Meals.FirstOrDefault(m => m.MealId == mealUpdate.MealId);
+                    meal.MealCode = mealUpdate.MealCode;
                     meal.MealName = mealUpdate.MealName;
                     meal.MealDescription = mealUpdate.MealDescription;
                     meal.Price = mealUpdate.Price;
                     meal.MealStatus = mealUpdate.MealStatus;
                     meal.QuantityAvailable = mealUpdate.QuantityAvailable;
                     meal.MealImage = mealUpdate.MealImage;
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static void ChangeStatus(int mealId)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    var meal = context.Meals.Find(mealId);
+                    if (meal.MealStatus == 0)
+                    {
+                        meal.MealStatus = 1;
+                    }
+                    else
+                    {
+                        meal.MealStatus = 0;
+                    }
                     context.SaveChanges();
                 }
             }
