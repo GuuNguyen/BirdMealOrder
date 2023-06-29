@@ -52,5 +52,11 @@ namespace Repositories.Repositories.ProductRepositories
             ProductDAO.Delete(id);
             return true;
         }
+
+        public bool ChangeProductStatus(int id)
+        {   
+            ProductDAO.ChangeProductStatus(id);
+            return true;
+        }
     }
 }

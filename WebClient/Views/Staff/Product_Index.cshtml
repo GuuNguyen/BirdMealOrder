@@ -38,6 +38,9 @@
                                 <thead>
                                     <tr>
                                         <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.ProductCode)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.ProductImage)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
@@ -62,6 +65,9 @@
                                     {
                                         <tr>
                                             <td>
+                                                @Html.DisplayFor(modelItem => item.ProductCode)
+                                            </td>
+                                            <td>
                                                 @if (string.IsNullOrEmpty(item.ProductImage))
                                                 {
                                                     <img class="product-img" src="~/Admin/plugins/images/no-image.png" width="100" height="100" />
@@ -83,14 +89,14 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.ProductStatus)
                                             </td>
-                                            <td>
+                                            <td class = "option">
                                                 <div class="dropdown">
                                                     <div onclick="toggleDropdown(this)">
                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                                     </div>
                                                     <div class="dropdown-content">
                                                         <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                                                        <a asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId">Details</a>
                                                         <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
                                                     </div>
                                                 </div>
@@ -108,6 +114,9 @@
 </div>
 
 <style>
+    .option{
+        text-align: center
+    }
     .dropdown {
         position: relative;
         display: inline-block;
@@ -127,6 +136,7 @@
         z-index: 1;
         right: 0;
         left: auto;
+        text-align: left
     }
 
         .dropdown-content a {

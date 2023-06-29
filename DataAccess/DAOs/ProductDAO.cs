@@ -107,5 +107,32 @@ namespace DataAccess.DAOs
                 throw new Exception(e.Message);
             }
         }
+
+        public static void ChangeProductStatus(int id)
+        {
+            try
+            {
+                using (var _context = new BirdMealOrderDBContext())
+                {
+                    var product = _context.Products.Find(id);
+                    if (product != null)
+                    {
+                        if (product.ProductStatus == 0)
+                        {
+                            product.ProductStatus = 1;
+                        }
+                        else
+                        {
+                            product.ProductStatus = 0;
+                        }
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
