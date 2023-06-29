@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Repositories.DTOs.UserDTO;
@@ -30,8 +31,8 @@ namespace Repositories.Repositories.UserRepositories
                 if(!UserDAO.isExitedUserName(userDTO.FullName) && !UserDAO.isExitedPhoneNumber(userDTO.PhoneNumber))
                 {
                     var newUser = _mapper.Map<User>(userDTO);
-                    newUser.RoleId = 2;
-                    newUser.Status = 1;
+                    newUser.RoleId = 3;
+                    newUser.Status = (int)UserStatus.Active;
                     UserDAO.Create(newUser);
                     return true;
                 }
@@ -52,11 +53,13 @@ namespace Repositories.Repositories.UserRepositories
 
         public bool DeleteUser(int id)
         {
-            var check = UserDAO.GetUser(id);
-            if(check == null) return false;
-            UserDAO.Delete(id);
-            return true;
-            
-        }       
+            var user = UserDAO.GetUser(id);
+            if(user != null)
+            {
+                UserDAO.Delete(id);
+                return true;
+            }
+            return false;
+        }
     }
 }

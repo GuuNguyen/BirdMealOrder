@@ -39,14 +39,13 @@ namespace DataAccess.DAOs
             }
         }
 
-        public static void Create(Meal meal)
+        public static Meal GetMealByCode(string code)
         {
             try
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    context.Meals.Add(meal);
-                    context.SaveChanges();
+                    return context.Meals.Where(m => m.MealCode == code).SingleOrDefault();
                 }
             }
             catch (Exception ex)
@@ -55,6 +54,25 @@ namespace DataAccess.DAOs
             }
         }
 
+        public static int Create(Meal meal)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    context.Meals.Add(meal);
+                    context.SaveChanges();
+
+                    return meal.MealId; // Trả về ID của bữa ăn vừa tạo
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
         public static void Delete(int id)
         {
             try
@@ -62,7 +80,7 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     var m = context.Meals.Find(id);
-                    context.Remove(m);
+                    context.Meals.Remove(m);
                     context.SaveChanges();
                 }
             }
@@ -78,7 +96,13 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    context.Meals.Update(mealUpdate);
+                    var meal = context.Meals.FirstOrDefault(m => m.MealId == mealUpdate.MealId);
+                    meal.MealName = mealUpdate.MealName;
+                    meal.MealDescription = mealUpdate.MealDescription;
+                    meal.Price = mealUpdate.Price;
+                    meal.MealStatus = mealUpdate.MealStatus;
+                    meal.QuantityAvailable = mealUpdate.QuantityAvailable;
+                    meal.MealImage = mealUpdate.MealImage;
                     context.SaveChanges();
                 }
             }

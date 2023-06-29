@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Repositories.DTOs.MealDTO;
 using Repositories.Repositories.MealRepositories;
 
@@ -40,7 +41,8 @@ namespace WebAPI.Controllers
         [HttpPost]
         public IActionResult CreateMeal(CreateMealDTO mealDTO)
         {
-            _mealRepo.CreateMeal(mealDTO);
+            var check = _mealRepo.CreateMeal(mealDTO);
+            if (!check.IsNullOrEmpty()) return Conflict(check);
             return Ok("Create Successfull!");
         }
 

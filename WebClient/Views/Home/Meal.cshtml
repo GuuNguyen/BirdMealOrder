@@ -1,0 +1,51 @@
+﻿@model WebClient.ViewModels.MealViewModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewData["Title"] = "View";
+}
+
+<div class="container-body page-container">
+    @Html.Partial("_BreadCrumb")
+    <div class="best_seller-container">
+        <div class="hero-content">
+            <div class="item-text-page">
+                <p>Meal</p>
+            </div>
+            <div class="desc-text">
+                <p>
+                    Our Meal is specifically designed to meet the diverse nutritional needs of different bird species.
+                    We ensure a balanced blend of essential nutrients such as protein, fiber, vitamins, and minerals to support overall development,
+                    good health, and flourishing vitality in your cherished feathered companions.
+                </p>
+            </div>
+            @Html.Partial("_TopContainer")
+        </div>
+        <div class="grid-view-meal">
+            @foreach (var item in Model.Meals)
+            {
+                <div class="grid-item-meal">
+                    <a class="a-text-link" asp-area="" asp-controller="Home" asp-action="Detail">
+                        <div class="item-image">
+                            <img src="@item.MealImage" alt="@item.MealName" />
+                        </div>
+                        <div class="item-details">
+                            <h5>@item.MealName</h5>
+                            <p>$@item.Price.ToString("#,##0")</p>
+                        </div>                    
+                    </a>
+                    <button class="button">
+                        <span>Add to cart</span>
+                        <div class="cart">
+                            <svg viewBox="0 0 36 26">
+                                <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
+                                <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

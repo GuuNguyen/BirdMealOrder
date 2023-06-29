@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repositories.Repositories.BirdRepositories;
 using Repositories.Repositories.LoginRepositories;
 using Repositories.Repositories.MealRepositories;
 using Repositories.Repositories.OrderRepositories;
@@ -25,7 +26,9 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 
+builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 builder.Services.AddDbContext<BirdMealOrderDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("MyDB"));

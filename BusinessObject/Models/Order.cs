@@ -15,16 +15,9 @@ namespace BusinessObject.Models
         public DateTime OrderDate { get; set; }
         public DateTime? ShipDate { get; set; }
         public decimal? TotalPrice { get; set; }
-        public OrderStatus Status { get; set; }
+        public int? Status { get; set; }
 
         public virtual User User { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-    }
-
-    public enum OrderStatus
-    {
-        Pending,
-        Completed,
-        Canceled
     }
 }

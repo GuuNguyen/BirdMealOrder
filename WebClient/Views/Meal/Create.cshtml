@@ -1,0 +1,429 @@
+﻿@model Repositories.DTOs.MealDTO.CreateMealDTO
+@{
+    ViewData["Title"] = "Create Bird Meal";
+    var message = TempData["SuccMessage"] as string;
+    var Emessage = TempData["ErrMessage"] as string;
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<style>
+    body {
+        background-color: #ffffff;
+    }
+
+    .selected-bird {
+        display: inline-block;
+        border: 1px solid #538a50;
+        border-radius: 50px;
+        padding: 5px 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+
+    .btn-primary {
+        background-color: #538a50;
+        border-color: #538a50;
+    }
+
+        .btn-primary:hover {
+            background-color: #3c6b3e;
+            border-color: #3c6b3e;
+        }
+
+    .btn-success {
+        background-color: #538a50;
+        border-color: #538a50;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #3c6b3e;
+            border-color: #3c6b3e;
+        }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 0.2s, opacity 0.2s;
+    }
+
+        .overlay.show {
+            visibility: visible;
+            opacity: 1;
+            transition-delay: 0s;
+        }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        border-top-color: #ffffff;
+    }
+
+</style>
+<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+     data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="margin-bottom: 0px" class="white-box">
+                        <div class="container">
+                            <div style="display: flex; align-items: center" class="row">
+                                <div class="col-md-6">
+                                    <h3 style="font-size: 30px" class="box-title">Create Meal</h3>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a asp-action="Meal_Index" asp-controller="Staff" style="margin-left: 318px; background-color: #538a50" class="btn text-white">
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted"></p>
+                        <div class="col">
+                            @if (!string.IsNullOrEmpty(message))
+                            {
+                                <div id="notification" class="alert alert-success row-cols-md-6" role="alert">
+                                    @message
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Emessage))
+                            {
+                                <div id="notification" class="alert alert-danger row-cols-md-6" role="alert">
+                                    @Emessage
+                                </div>
+                            }
+                        </div>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="row mb-1">
+                                <div class="col-8">
+                                    <label for="meal-name" class="form-label">Meal Name:</label>
+                                    <input type="text" id="meal-name" name="MealName" class="form-control" required>
+                                </div>
+                                <div class="col-2">
+                                    <label for="meal-price" class="form-label">Meal Price (VND): </label>
+                                    <input type="number" min="1" id="meal-price" name="Price" class="form-control" required>
+                                </div>
+                                <div class="col-2">
+                                    <label for="meal-quantity" class="form-label">Quantity Available:</label>
+                                    <input type="number" min="1" step="1" id="meal-quantity" name="QuantityAvailable" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="meal-description" class="form-label">Meal Description:</label>
+                                <textarea id="meal-description" name="MealDescription" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="meal-image" class="form-label">Meal Image:</label>
+                                <input type="file" id="meal-image" name="MealImage" accept="image/*" class="form-control" required>
+                            </div>
+
+                            <h4>Made from Products:</h4>
+
+                            <div id="product-container">
+                                <div class="product-item">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <label class="form-label">Product Name:</label>
+                                            <select name="ProductOptions[0].ProductId" class="form-select">
+                                                <!-- Placeholder option -->
+                                                <!-- <option value="" selected disabled>Select a product</option> -->
+                                                @foreach (var product in ViewBag.Products)
+                                                {
+                                                    <option value="@product.Value">@product.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label">Quantity Required:</label>
+                                            <input type="number" name="ProductOptions[0].QuantityRequired" min="1" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" onclick="addProduct()" class="btn btn-primary mt-3 mb-3">More Product</button>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <h4>Meal for Birds:</h4>
+                                <div id="all-birds-container">
+                                    <input type="checkbox" id="allBirdsCheckbox" class="form-check-input" onchange="toggleAllBirds()">
+                                    <label for="allBirdsCheckbox" class="form-check-label">All Birds</label>
+                                </div>
+
+                            </div>
+                            <div class="mb-3" id="selected-birds-container" style="margin-top: 10px;"></div>
+                            <div class="mb-3">
+                                <input type="text" id="bird-input" oninput="showMatchingBirds()" placeholder="Enter bird name" class="form-control">
+                            </div>
+
+                            <div id="bird-list-container" style="max-height: 150px; overflow-y: auto; display: none; border: 1px solid #538a50; padding: 10px;">
+                                @foreach (var birdMeal in ViewBag.BirdMeals)
+                                {
+                                    <div>
+                                        <input type="checkbox" name="BirdIds[]" value="@birdMeal.Value" onclick="toggleBirdSelection(this)">
+                                        <label class="form-check-label">@birdMeal.Text</label>
+                                    </div>
+                                }
+                            </div>
+
+                            <br>
+
+                            <input id="createButton" type="submit" value="Create Meal" class="btn btn-success" onclick="checkInputsAndShowOverlay()">
+                            <div id="overlay" class="overlay">
+                                <div class="spinner"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var originalBirds = [];
+
+        function showMatchingBirds() {
+            var birdInput = document.getElementById("bird-input");
+            var birdListContainer = document.getElementById("bird-list-container");
+            var searchText = birdInput.value.toLowerCase();
+            var matchingBirds = [];
+
+            if (originalBirds.length === 0) {
+                // Lưu danh sách chim ban đầu để sử dụng sau này
+                var birdElements = birdListContainer.getElementsByTagName("div");
+                for (var i = 0; i < birdElements.length; i++) {
+                    originalBirds.push(birdElements[i]);
+                }
+            }
+
+            // Tìm kiếm các chim phù hợp
+            for (var i = 0; i < originalBirds.length; i++) {
+                var birdText = originalBirds[i].textContent.toLowerCase();
+                if (birdText.includes(searchText)) {
+                    originalBirds[i].style.display = "block";
+                    matchingBirds.push(originalBirds[i]);
+                } else {
+                    originalBirds[i].style.display = "none";
+                }
+            }
+
+            // Hiển thị hoặc ẩn danh sách chim phù hợp
+            if (matchingBirds.length > 0 && searchText !== "") {
+                birdListContainer.style.display = "block"; // Hiển thị nếu có kết quả và ô input không trống
+            } else {
+                birdListContainer.style.display = "none"; // Ẩn nếu không có kết quả hoặc ô input trống
+            }
+
+            // Hiển thị danh sách chim phù hợp
+            birdListContainer.innerHTML = "";
+            for (var j = 0; j < matchingBirds.length; j++) {
+                birdListContainer.appendChild(matchingBirds[j]);
+            }
+        }
+
+        function toggleBirdSelection(checkbox) {
+            var birdInput = document.getElementById("bird-input");
+            var selectedBirdsContainer = document.getElementById("selected-birds-container");
+            var selectedBirds = selectedBirdsContainer.getElementsByTagName("div");
+
+            if (checkbox.checked) {
+                // Thêm tên chim vào ô input bên trên
+                var birdName = checkbox.nextElementSibling.textContent;
+                birdInput.value = birdName;
+
+                // Tạo một div để chứa tên chim và nút x
+                var birdDiv = document.createElement("div");
+                birdDiv.className = "selected-bird";
+
+                // Tạo một span để hiển thị tên chim đã chọn
+                var birdNameSpan = document.createElement("span");
+                birdNameSpan.textContent = birdName;
+
+                // Tạo một nút x để bỏ chọn chim
+                var removeButton = document.createElement("button");
+                removeButton.textContent = "x";
+                removeButton.className = "btn btn-sm mb-1";
+                removeButton.onclick = function () {
+                    checkbox.checked = false;
+                    selectedBirdsContainer.removeChild(birdDiv);
+                    birdInput.value = "";
+                };
+
+                // Thêm span và nút x vào div
+                birdDiv.appendChild(birdNameSpan);
+                birdDiv.appendChild(removeButton);
+
+                // Thêm div vào container
+                selectedBirdsContainer.appendChild(birdDiv);
+            } else {
+                // Xóa div chứa tên chim đã bỏ chọn
+                for (var i = 0; i < selectedBirds.length; i++) {
+                    var birdNameSpan = selectedBirds[i].getElementsByTagName("span")[0];
+                    if (birdNameSpan.textContent === checkbox.nextElementSibling.textContent) {
+                        selectedBirdsContainer.removeChild(selectedBirds[i]);
+                        break;
+                    }
+                }
+
+                // Xóa tên chim khỏi ô input bên trên nếu không còn chim nào được chọn
+                if (selectedBirdsContainer.childElementCount === 0) {
+                    birdInput.value = "";
+                }
+            }
+        }
+
+        function addProduct() {
+            var productContainer = document.getElementById("product-container");
+            var productItem = document.createElement("div");
+            productItem.className = "product-item";
+            var productItemHtml = `
+                                <div class="row">
+                                  <div class="col-8">
+                                    <label class="form-label">Product Name:</label>
+                                    <select name="ProductOptions[${productContainer.childElementCount}].ProductId" class="form-select">
+        @foreach (var product in ViewBag.Products)
+        {
+                                                    <option value="@product.Value">@product.Text</option>
+        }
+                                    </select>
+                                  </div>
+                                  <div class="col-4">
+                                    <label class="form-label">Quantity Required:</label>
+                                    <input type="number" name="ProductOptions[${productContainer.childElementCount}].QuantityRequired" min="1" class="form-control">
+                                  </div>
+                                  <div class="col-1">
+                                    <button type="button" onclick="removeProduct(this)" class="btn btn-danger btn-sm mt-3">Remove</button>
+                                  </div>
+                                </div>
+                              `;
+            productItem.innerHTML = productItemHtml;
+            productContainer.appendChild(productItem);
+
+            // Lấy danh sách nút "More Product"
+            var moreProductButtons = document.querySelectorAll(".btn-primary");
+
+            // Lặp qua danh sách nút và thêm màu sắc
+            moreProductButtons.forEach(function (button) {
+                button.style.backgroundColor = "#538a50";
+            });
+        }
+
+        function removeProduct(button) {
+            var productItem = button.closest(".product-item");
+            var productContainer = document.getElementById("product-container");
+            productContainer.removeChild(productItem);
+
+            // Lấy danh sách nút "More Product"
+            var moreProductButtons = document.querySelectorAll(".btn-primary");
+
+            // Lặp qua danh sách nút và thêm màu sắc
+            moreProductButtons.forEach(function (button) {
+                button.style.backgroundColor = "#538a50";
+            });
+        }
+        //function clearBirdName() {
+        //    var birdInput = document.getElementById("bird-input");
+        //    birdInput.value = "";
+        //}
+        setTimeout(function () {
+            var notification = document.getElementById('notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+        }, 3000);
+        function checkInputsAndShowOverlay() {
+            var mealNameInput = document.getElementById("meal-name");
+            var mealPriceInput = document.getElementById("meal-price");
+            var mealQuantityInput = document.getElementById("meal-quantity");
+            var mealDescriptionInput = document.getElementById("meal-description");
+            var mealImageInput = document.getElementById("meal-image");
+
+            var inputs = [mealNameInput, mealPriceInput, mealQuantityInput, mealDescriptionInput, mealImageInput];
+            var allInputsFilled = true;
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === "") {
+                    allInputsFilled = false;
+                    break;
+                }
+            }
+
+            if (allInputsFilled) {
+                showOverlay();
+            }
+        }
+        function showOverlay() {
+            var overlay = document.getElementById("overlay");
+            overlay.classList.add("show");
+            animateSpinner();
+        }
+
+        function animateSpinner() {
+            var spinner = document.querySelector(".spinner");
+            var rotation = 0;
+            var animationId;
+
+            function rotate() {
+                rotation += 10;
+                spinner.style.transform = "rotate(" + rotation + "deg)";
+                animationId = requestAnimationFrame(rotate);
+            }
+
+            rotate();
+
+        }
+        function toggleAllBirds() {
+            var allBirdsCheckbox = document.getElementById("allBirdsCheckbox");
+            var birdCheckboxes = document.querySelectorAll("input[name='BirdIds[]']");
+            var selectedBirdsContainer = document.getElementById("selected-birds-container");
+            var birdInput = document.getElementById("bird-input");
+            if (allBirdsCheckbox.checked) {
+                selectedBirdsContainer.innerHTML = "";
+                birdInput.disabled = true;
+                // Chọn tất cả các checkbox chim
+                birdCheckboxes.forEach(function (checkbox) {
+                    checkbox.checked = true;
+                });
+            } else {
+                birdInput.disabled = false;
+                selectedBirdsContainer.innerHTML = "";
+                // Bỏ chọn tất cả các checkbox chim
+                birdCheckboxes.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            var birdInput = document.getElementById("bird-input");
+            var birdListContainer = document.getElementById("bird-list-container");
+
+            // Xử lý sự kiện khi click ra ngoài vùng input
+            document.addEventListener("click", function (event) {
+                var target = event.target;
+                if (!birdInput.contains(target) && !birdListContainer.contains(target)) {
+                    birdInput.value = ""; // Xóa text trong input
+                    birdListContainer.style.display = "none"; // Ẩn ô gợi ý
+                }
+            });
+        });
+
+    </script>
+}
