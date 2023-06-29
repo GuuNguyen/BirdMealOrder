@@ -86,5 +86,26 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static bool RefundQuantityProduct(Dictionary<int, int> productQuantityRefund)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    foreach (var item in productQuantityRefund)
+                    {
+                        var product = context.Products.Find(item.Key);
+                        product.QuantityAvailable = product.QuantityAvailable + item.Value;
+                    }
+                    context.SaveChanges();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

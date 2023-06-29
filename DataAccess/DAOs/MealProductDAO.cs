@@ -52,18 +52,40 @@ namespace DataAccess.DAOs
 
         public static string CheckQuantityProductAvailable(int productId, int quantityRequired)
         {
-            using (var context = new BirdMealOrderDBContext()) // Thay YourDbContext bằng tên DbContext của ứng dụng của bạn
+            try
             {
-
-                var product = context.Products.Find(productId);
-
-                if (quantityRequired > product.QuantityAvailable)
+                using (var context = new BirdMealOrderDBContext()) // Thay YourDbContext bằng tên DbContext của ứng dụng của bạn
                 {
-                    return $"The quantity required of '{product.ProductName}' is greater than the available quantity({product.QuantityAvailable})!";
+
+                    var product = context.Products.Find(productId);
+
+                    if (quantityRequired > product.QuantityAvailable)
+                    {
+                        return $"The quantity required of '{product.ProductName}' is greater than the available quantity({product.QuantityAvailable})!";
+                    }
+                }
+
+                return string.Empty;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static List<MealProduct> GetProductsByMealId(int mealId)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    return context.MealProducts.Where(mp => mp.MealId == mealId).ToList();
                 }
             }
-
-            return string.Empty;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
     }

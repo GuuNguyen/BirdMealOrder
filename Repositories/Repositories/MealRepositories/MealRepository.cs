@@ -55,15 +55,22 @@ namespace Repositories.Repositories.MealRepositories
         public void DeleteMeal(int id)
         {
             var mealInOrderDetails = OrderDetailDAO.CheckMealInOderDetails(id);
+            var meal = MealDAO.GetMeal(id);
             if (mealInOrderDetails)
             {
-                var meal = MealDAO.GetMeal(id);
                 meal.MealStatus = MealStatus.Unavailable;
                 MealDAO.Update(meal);
             }
             else
             {
-                MealDAO.Delete(id);
+                Dictionary<int, int> productQuantityRefund = new Dictionary<int, int>();
+                var mealProducts = MealProductDAO.GetProductsByMealId(id);
+                foreach (var productMeal in mealProducts)
+                {
+                    productQuantityRefund.Add(productMeal.ProductId, productMeal.QuantityRequired * meal.QuantityAvailable);
+                }
+                var checkRefund = ProductDAO.RefundQuantityProduct(productQuantityRefund);
+                if (checkRefund) MealDAO.Delete(id);
             }
 
         }
