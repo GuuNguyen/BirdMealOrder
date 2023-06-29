@@ -15,5 +15,6 @@ namespace Repositories.Repositories.MealRepositories
         string CreateMeal(CreateMealDTO createMeal);
         void UpdateMeal(MealDTO mealDTO);
         void DeleteMeal(int id);
+        void ChangeStatus(int mealId);
     }
 }
