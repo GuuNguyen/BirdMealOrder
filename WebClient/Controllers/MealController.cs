@@ -124,5 +124,10 @@ namespace WebClient.Controllers
             Meal? meal = JsonSerializer.Deserialize<Meal>(strData, options);
             return View(meal);
         }
+
+        public async Task<IActionResult> Edit(int mealId)
+        {
+            return View();
+        }
     }
 }

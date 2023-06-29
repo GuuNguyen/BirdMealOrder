@@ -1,0 +1,105 @@
+﻿@model Repositories.DTOs.MealDTO.UpdateMealDTO
+@{
+    ViewData["Title"] = "Update Bird Meal";
+    var message = TempData["SuccMessage"] as string;
+    var Emessage = TempData["ErrMessage"] as string;
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+     data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="margin-bottom: 0px" class="white-box">
+                        <div class="container">
+                            <div style="display: flex; align-items: center" class="row">
+                                <div class="col-md-6">
+                                    <h3 style="font-size: 30px" class="box-title">Create Meal</h3>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a asp-action="Meal_Index" asp-controller="Staff" style="margin-left: 318px; background-color: #538a50" class="btn text-white">
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted"></p>
+                        <div class="col">
+                            @if (!string.IsNullOrEmpty(message))
+                            {
+                                <div id="notification" class="alert alert-success row-cols-md-6" role="alert">
+                                    @message
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Emessage))
+                            {
+                                <div id="notification" class="alert alert-danger row-cols-md-6" role="alert">
+                                    @Emessage
+                                </div>
+                            }
+                        </div>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="MealId">Meal ID:</label>
+                                <input type="text" class="form-control" id="MealId" name="MealId" value="@Model.MealId" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="MealCode">Meal Code:</label>
+                                <input type="text" class="form-control" id="MealCode" name="MealCode" value="@Model.MealCode">
+                            </div>
+                            <div class="form-group">
+                                <label for="MealName">Meal Name:</label>
+                                <input type="text" class="form-control" id="MealName" name="MealName" value="@Model.MealName">
+                            </div>
+                            <div class="form-group">
+                                <label for="MealDescription">Meal Description:</label>
+                                <input type="text" class="form-control" id="MealDescription" name="MealDescription" value="@Model.MealDescription">
+                            </div>
+                            <div class="form-group">
+                                <label for="Price">Price:</label>
+                                <input type="number" step="0.01" class="form-control" id="Price" name="Price" value="@Model.Price">
+                            </div>
+                            <div class="form-group">
+                                <label for="QuantityAvailable">Quantity Available:</label>
+                                <input type="number" class="form-control" id="QuantityAvailable" name="QuantityAvailable" value="@Model.QuantityAvailable">
+                            </div>
+                            <div class="form-group">
+                                <label for="MealImage">Meal Image:</label>
+                                <input type="file" class="form-control-file" id="MealImage" name="MealImage">
+                            </div>
+                            <div class="form-group">
+                                <label for="MealStatus">Meal Status:</label>
+                                <select class="form-control" id="MealStatus" name="MealStatus">
+                                    <option value="Active" selected="@Model.MealStatus == MealStatus.Active">Active</option>
+                                    <option value="Inactive" selected="@Model.MealStatus == MealStatus.Inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ProductRequireds">Product Requireds:</label>
+                                <select multiple class="form-control" id="ProductRequireds" name="ProductRequireds">
+                                    @foreach (var product in Model.ProductRequireds)
+                                    {
+                                        <option value="@product">@product</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="BirdIds">Bird IDs:</label>
+                                <select multiple class="form-control" id="BirdIds" name="BirdIds">
+                                    @foreach (var birdId in Model.BirdIds)
+                                    {
+                                        <option value="@birdId">@birdId</option>
+                                    }
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

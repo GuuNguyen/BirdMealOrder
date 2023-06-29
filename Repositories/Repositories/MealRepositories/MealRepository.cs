@@ -15,10 +15,11 @@ namespace Repositories.Repositories.MealRepositories
     public class MealRepository : IMealRepository
     {
         private readonly IMapper _mapper;
-
-        public MealRepository(IMapper mapper)
+        private readonly BirdMealOrderDBContext _dbContext;
+        public MealRepository(IMapper mapper, BirdMealOrderDBContext dBContext)
         {
             _mapper = mapper;
+            _dbContext = dBContext;
         }
 
         public void ChangeStatus(int mealId)
@@ -91,6 +92,44 @@ namespace Repositories.Repositories.MealRepositories
         public Meal GetMeal(int id)
         {
             return MealDAO.GetMeal(id);
+        }
+
+        public UpdateMealDTO? GetMealInclueBirdAndProduct(int mealId)
+        {
+            try
+            {
+                var productRequireds = _dbContext.MealProducts.Where(mp => mp.MealId == mealId)
+                                        .Select(mp => new ProductRequired
+                                        {
+                                            ProductId = mp.ProductId,
+                                            QuantityRequired = mp.QuantityRequired
+                                        }).ToList();
+
+                var birdIds = _dbContext.BirdMeals.Where(b => b.MealId == mealId)
+                                        .Select(b => b.BirdId).ToList();
+
+                return (from m in _dbContext.Meals
+                        where m.MealId == mealId
+                        select new UpdateMealDTO
+                        {
+                            MealId = m.MealId,
+                            MealCode = m.MealCode,
+                            MealName = m.MealName,
+                            MealDescription = m.MealDescription,
+                            Price = m.Price,
+                            QuantityAvailable = m.QuantityAvailable,
+                            MealImage = m.MealImage,
+                            MealStatus = (MealStatus)m.MealStatus,
+                            ProductRequireds = productRequireds,
+                            BirdIds = birdIds
+                        }).SingleOrDefault();
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public void UpdateMeal(MealDTO mealDTO)
