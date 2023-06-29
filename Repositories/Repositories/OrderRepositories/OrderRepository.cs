@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Repositories.DTOs.OrderDTO;
@@ -23,7 +24,7 @@ namespace Repositories.Repositories.OrderRepositories
                 UserId = order.UserId,
                 OrderDate = DateTime.Now,
                 ShipDate = null,
-                Status = OrderStatus.Pending,
+                Status = (int?)OrderStatus.Pending,
                 OrderDetails = new List<OrderDetail>()
             };
             foreach (var cartItem in order.CartItems)

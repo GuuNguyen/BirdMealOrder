@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'proxima-nova';
+    src: url('~/font/proxima_nova_font-webfont.woff2') format('woff2'), 
+         url('~/font/proxima_nova_font-webfont.woff') format('woff');
+}
 
 @media (min-width: 768px) {
     html {
@@ -12,13 +17,17 @@ html {
 
 body {
     margin-bottom: 60px;
+    font-family: 'proxima-nova','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 
-.text-nav a{
-    font-size: 1.2rem;
-    font-weight: 400;
+.text-nav a {
+    font-size: 0.99rem;
+    font-weight: 600;  
 }
 
+.nav-item a {
+    letter-spacing: .1em;
+}
 .inner-form {
     display: flex;
     align-items: center;
@@ -279,15 +288,11 @@ p, ul li, ol li {
     padding-bottom: 10px;
 }
 
-
-
 action {
   position: fixed;
   top: 20px;
   right: 30px;
 }
-
-
 
 .action .menu {
   position: absolute;
