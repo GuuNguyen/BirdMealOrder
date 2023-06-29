@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Microsoft.IdentityModel.Tokens;
@@ -23,14 +24,15 @@ namespace Repositories.Repositories.MealRepositories
         {
             foreach (ProductRequired productRequired in createMeal.ProductOptions)
             {
-                string mess = MealProductDAO.CheckQuantityProductAvailable(productRequired.ProductId, productRequired.QuantityRequired);
+                string mess = MealProductDAO.CheckQuantityProductAvailable(productRequired.ProductId, productRequired.QuantityRequired * createMeal.QuantityAvailable);
                 if (!mess.IsNullOrEmpty())
                 {
                     return mess;
                 }
             }
             var meal = _mapper.Map<Meal>(createMeal);
-            meal.MealStatus = MealStatus.Available;
+            meal.MealCode = GenerateCodeDAO.GenerateProductCode("Meal");
+            meal.MealStatus = (int)MealStatus.Available;
             int mealId = MealDAO.Create(meal);
             if (mealId > 0)
             {
@@ -47,7 +49,7 @@ namespace Repositories.Repositories.MealRepositories
                     QuantityRequired = productRequired.QuantityRequired,
                     MealId = mealId
                 }).ToList();
-                MealProductDAO.CreateRange(mealProducts);
+                MealProductDAO.CreateRange(mealProducts, createMeal.QuantityAvailable);
             }
             return string.Empty;
         }
@@ -55,15 +57,22 @@ namespace Repositories.Repositories.MealRepositories
         public void DeleteMeal(int id)
         {
             var mealInOrderDetails = OrderDetailDAO.CheckMealInOderDetails(id);
+            var meal = MealDAO.GetMeal(id);
             if (mealInOrderDetails)
             {
-                var meal = MealDAO.GetMeal(id);
-                meal.MealStatus = MealStatus.Unavailable;
+                meal.MealStatus = (int)MealStatus.Unavailable;
                 MealDAO.Update(meal);
             }
             else
             {
-                MealDAO.Delete(id);
+                Dictionary<int, int> productQuantityRefund = new Dictionary<int, int>();
+                var mealProducts = MealProductDAO.GetProductsByMealId(id);
+                foreach (var productMeal in mealProducts)
+                {
+                    productQuantityRefund.Add(productMeal.ProductId, productMeal.QuantityRequired * meal.QuantityAvailable);
+                }
+                var checkRefund = ProductDAO.RefundQuantityProduct(productQuantityRefund);
+                if (checkRefund) MealDAO.Delete(id);
             }
 
         }
