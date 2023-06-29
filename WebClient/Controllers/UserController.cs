@@ -61,11 +61,11 @@ namespace WebClient.Controllers
                 //    return RedirectToAction("Index", "User");
                 //}
 
-                ViewBag.Message = "Create successfully!";
-                return View();
+                TempData["SuccMessage"] = "Create Successfull!";
+                return RedirectToAction("CreateUser", "User");
             }
             ModelState.AddModelError(String.Empty, "Failed to call API");
-            return View();
+            return RedirectToAction("CreateUser", "User");
         }
 
         public async Task<IActionResult> DeleteUser(int id)
@@ -137,11 +137,23 @@ namespace WebClient.Controllers
             }
             ModelState.AddModelError(String.Empty, "Failed to call API!");
             return View();
-
-
-
         }
 
+        public async Task<IActionResult> DetailUser(int id)
+        {
+            //if (HttpContext.Session.GetString("role") == null)
+            //{
+            //    return RedirectToAction("Login", "Login");
+            //}
+            HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
+            string strData = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            User lUser = JsonSerializer.Deserialize<User>(strData, options);
+            return View(lUser);
+        }
 
     }
 }

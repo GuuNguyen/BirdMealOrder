@@ -24,7 +24,7 @@
                                     <h3 style="font-size: 30px" class="box-title">User</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
+                                    <a asp-action="CreateUser" asp-controller="User" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
                                         Create new user
                                     </a>
                                 </div>
@@ -88,9 +88,9 @@
                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                                     </div>
                                                     <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a>
-                                                        <a asp-action="Details" asp-route-id="@item.UserId">Details</a>
-                                                        <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                                                        <a asp-action="EditUser" asp-controller="User" asp-route-id="@item.UserId">Edit</a>
+                                                        <a asp-action="DetailUser" asp-controller="User" asp-route-id="@item.UserId">Details</a>
+                                                        <a asp-action="DeleteUser" asp-controller="User" asp-route-id="@item.UserId">Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
