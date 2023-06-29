@@ -24,7 +24,6 @@ namespace DataAccess.DAOs
                 productCode = prefix + randomDigits;
             }
             return productCode;
-
         }
         public static List<string> GetCode(string productType)
         {

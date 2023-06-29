@@ -39,6 +39,21 @@ namespace DataAccess.DAOs
             }
         }
 
+        public static Meal GetMealByCode(string code)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    return context.Meals.Where(m => m.MealCode == code).SingleOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static int Create(Meal meal)
         {
             try
