@@ -42,40 +42,46 @@
                             }
                         </div>
                         <form method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="MealId">Meal ID:</label>
-                                <input type="text" class="form-control" id="MealId" name="MealId" value="@Model.MealId" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="MealCode">Meal Code:</label>
-                                <input type="text" class="form-control" id="MealCode" name="MealCode" value="@Model.MealCode">
-                            </div>
-                            <div class="form-group">
-                                <label for="MealName">Meal Name:</label>
-                                <input type="text" class="form-control" id="MealName" name="MealName" value="@Model.MealName">
+                            <div class="row">
+                                <div class="form-group col-2">
+                                    <label for="MealId">Meal ID:</label>
+                                    <input type="text" class="form-control" id="MealId" name="MealId" value="@Model.MealId" readonly>
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="MealCode">Meal Code:</label>
+                                    <input type="text" class="form-control" id="MealCode" name="MealCode" value="@Model.MealCode" readonly>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label for="MealName">Meal Name:</label>
+                                    <input type="text" class="form-control" id="MealName" name="MealName" value="@Model.MealName">
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="Price">Price($):</label>
+                                    <input type="number" step="0.01" class="form-control" id="Price" name="Price" value="@Model.Price">
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="QuantityAvailable">Quantity Available:</label>
+                                    <input type="number" class="form-control" id="QuantityAvailable" name="QuantityAvailable" value="@Model.QuantityAvailable">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="MealDescription">Meal Description:</label>
-                                <input type="text" class="form-control" id="MealDescription" name="MealDescription" value="@Model.MealDescription">
+                                <textarea type="text" class="form-control" id="MealDescription" name="MealDescription" value="">@Model.MealDescription</textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="Price">Price:</label>
-                                <input type="number" step="0.01" class="form-control" id="Price" name="Price" value="@Model.Price">
+                           
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <img class="meal-image" src="@Model.MealImage" />
+                                <div class="col-4"></div>
                             </div>
-                            <div class="form-group">
-                                <label for="QuantityAvailable">Quantity Available:</label>
-                                <input type="number" class="form-control" id="QuantityAvailable" name="QuantityAvailable" value="@Model.QuantityAvailable">
-                            </div>
+                            
                             <div class="form-group">
                                 <label for="MealImage">Meal Image:</label>
                                 <input type="file" class="form-control-file" id="MealImage" name="MealImage">
                             </div>
                             <div class="form-group">
                                 <label for="MealStatus">Meal Status:</label>
-                                <select class="form-control" id="MealStatus" name="MealStatus">
-                                    <option value="Active" selected="@Model.MealStatus == MealStatus.Active">Active</option>
-                                    <option value="Inactive" selected="@Model.MealStatus == MealStatus.Inactive">Inactive</option>
-                                </select>
+                                <select asp-for="MealStatus" class="form-control" asp-items="ViewBag.MealStatus"></select>
                             </div>
                             <div class="form-group">
                                 <label for="ProductRequireds">Product Requireds:</label>

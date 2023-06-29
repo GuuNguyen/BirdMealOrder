@@ -127,7 +127,14 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Edit(int mealId)
         {
-            return View();
+            HttpResponseMessage respone = await client.GetAsync(MealApiUrl + "/GetMealIncludeBird&Product/" + mealId);
+            string strData = await respone.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            UpdateMealDTO? meal = JsonSerializer.Deserialize<UpdateMealDTO>(strData, options);
+            return View(meal);
         }
     }
 }
