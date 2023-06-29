@@ -13,6 +13,7 @@ namespace WebClient.Controllers
         private readonly HttpClient _client;
         private string MealAPIUrl = "";
         private string BirdAPIUrl = "";
+        private string ProductUrl = "";
 
         public HomeController()
         {
@@ -21,6 +22,7 @@ namespace WebClient.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             MealAPIUrl = "https://localhost:7022/api/Meal";
             BirdAPIUrl = "https://localhost:7022/api/Bird";
+            ProductUrl = "https://localhost:7022/api/Product";
         }
 
         public async Task<IActionResult> Index()
@@ -52,7 +54,9 @@ namespace WebClient.Controllers
         public async Task<IActionResult> Meal()
         {
             HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl);
+            HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
             string mealStrData = await mealResponse.Content.ReadAsStringAsync();
+            string birdStrData = await birdResponse.Content.ReadAsStringAsync();
 
             var options = new JsonSerializerOptions
             {
@@ -62,17 +66,58 @@ namespace WebClient.Controllers
             List<Meal> listMeal = new List<Meal>();
             listMeal = JsonSerializer.Deserialize<List<Meal>>(mealStrData, options);
 
+            List<Bird> listBird = new List<Bird>();
+            listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+
             var breadcrumbs = new List<BreadCrumb>
             {
                 new BreadCrumb { Text = "Home", Url = "/" },
-                new BreadCrumb { Text = "Meals", Url = "/Home/Meal" }
+                new BreadCrumb { Text = "Meal", Url = "/Home/Meal" }
             };
             var finalResult = new MealViewModel
             {
                 Breadcrumbs = breadcrumbs,
-                Meals = listMeal
+                Meals = listMeal,
+                Birds = listBird
             };
             return View(finalResult);
+        }
+
+        public async Task<IActionResult> Food()
+        {
+            HttpResponseMessage productResponse = await _client.GetAsync(ProductUrl);
+            HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
+            string productStrData = await productResponse.Content.ReadAsStringAsync();
+            string birdStrData = await birdResponse.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            List<Product> listProduct = new List<Product>();
+            listProduct = JsonSerializer.Deserialize<List<Product>>(productStrData, options);
+
+            List<Bird> listBird = new List<Bird>();
+            listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+
+            var breadcrumbs = new List<BreadCrumb>
+            {
+                new BreadCrumb { Text = "Home", Url = "/" },
+                new BreadCrumb { Text = "Food", Url = "/Home/Food" }
+            };
+            var finalResult = new FoodViewModel
+            {
+                Breadcrumbs = breadcrumbs,
+                Products = listProduct,
+                Birds = listBird
+            };
+            return View(finalResult);
+        }
+
+        public IActionResult Detail()
+        {
+            return View();
         }
     }
 }

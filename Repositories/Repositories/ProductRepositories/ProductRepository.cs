@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Repositories.DTOs.ProductDTO;
@@ -30,7 +31,8 @@ namespace Repositories.Repositories.ProductRepositories
         {
             if(createProduct == null) return false;
             var product = _mapper.Map<Product>(createProduct);
-            product.ProductStatus = ProductStatus.Available;
+            product.ProductCode = GenerateCodeDAO.GenerateProductCode("Product");
+            product.ProductStatus = (int)ProductStatus.Available;
             ProductDAO.Create(product);
             return true;
         }

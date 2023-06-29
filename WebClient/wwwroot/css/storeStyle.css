@@ -1,6 +1,12 @@
-﻿body {
+﻿@font-face {
+  font-family: 'proxima-nova';
+  src: url('~/font/proxima_nova_font-webfont.woff2') format('woff2'),
+       url('~/font/proxima_nova_font-webfont.woff') format('woff');
+}
+body {
     margin: 0;
     box-sizing: border-box;
+    font-family: 'proxima-nova','Helvetica Neue',Helvetica,Arial,sans-serif;
 }
 
 /*============================= breadcrumb =======================*/
@@ -153,12 +159,22 @@
     padding: 10px;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
+
+.a-text-link {
+    text-decoration: none;
+    color: black;
+}
+
 .grid-item-meal:hover {
    transform: scale(1.02)
 }
+.item-image {
+    height: 259px;
+}
 .item-image img {
     max-width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }
 
 .item-details {
@@ -412,8 +428,9 @@
 }
 
 .item-text-page p {
-    font-size: 30px;
+    font-size: 40px;
     font-weight: bold;
+    letter-spacing: .01em;
 }
 
 .desc-text p{
@@ -440,6 +457,7 @@
     font-size: 20px;
 }
 
+
 #filterTable {
     left: 0;
     padding: 10px 0 10px 10em;
@@ -464,3 +482,107 @@
 #applyFilterButton {
   margin-top: 10px;
 }
+
+
+.btn-apply-filter {
+    margin-right: 11em;
+    background-color: #FFFFFF;
+    border: 0;
+    border-radius: .5rem;
+    box-sizing: border-box;
+    color: #111827;
+    font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: .875rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    padding: .75rem 1rem;
+    text-align: center;
+    text-decoration: none #D1D5DB solid;
+    text-decoration-thickness: auto;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.btn-apply-filter:hover {
+    background-color: rgb(249,250,251);
+}
+
+.btn-apply-filter:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.btn-apply-filter:focus-visible {
+    box-shadow: none;
+}
+
+/*================================================== details page ============================================*/
+
+.container-product-detail{
+    display: flex;
+    gap: 1em;
+}
+
+..product-detail-img{
+    max-width: 400px;
+}
+
+.product-detail-img img {
+    max-width: 100%;
+    height: auto;
+}
+
+.hero-product-detail {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+
+.product-detail-atc-btn {
+    align-items: center;
+    appearance: none;
+    background-color: #FCFCFD;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395A;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono",monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow .15s,transform .15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow,transform;
+    font-size: 18px;
+}
+
+    .product-detail-atc-btn:focus {
+        box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    }
+
+    .product-detail-atc-btn:hover {
+        box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+        transform: translateY(-2px);
+    }
+
+    .product-detail-atc-btn:active {
+        box-shadow: #D6D6E7 0 3px 7px inset;
+        transform: translateY(2px);
+    }

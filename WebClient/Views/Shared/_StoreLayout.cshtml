@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebClient</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/pretty-checkbox/pretty-checkbox.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebClient.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/storeStyle.css" />
@@ -16,16 +17,16 @@
     <header>
         <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-2">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#" style="min-width:180px"><img style="height:64px" src="~/asset/bird_logo.png" alt="new logo" ezimgfmt="rs rscb1 src ng ngcb1" class=" ezlazyloaded" data-ezsrc="" ezoid="0.6068713656392648"></a>
+                <a class="navbar-brand" href="#" style="min-width:180px"><img style="height:64px" src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/home-images%2Fbird_logo.png?alt=media&token=4b15b3ff-de2f-4369-99a6-069ad4bc87cb" alt="new logo" ezimgfmt="rs rscb1 src ng ngcb1" class=" ezlazyloaded" data-ezsrc="" ezoid="0.6068713656392648"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav text-nav">
-                        <li class="nav-item"><a class="nav-link mx-2" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link mx-2" href="#">Shop</a></li>
-                        <li class="nav-item"><a class="nav-link mx-2" asp-area="" asp-controller="Home" asp-action="Meal">Meals</a></li>
-                        <li class="nav-item"><a class="nav-link mx-2" href="#">Products</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" aria-current="page" asp-area="" asp-controller="Home" asp-action="Index">HOME</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" href="#">STORE</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" asp-area="" asp-controller="Home" asp-action="Meal">MEAL</a></li>
+                        <li class="nav-item"><a class="nav-link mx-2" asp-area="" asp-controller="Home" asp-action="Food">FOOD</a></li>
                     </ul>                   
                     <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
                         <li class="nav-item mx-2 text-nav" style="margin: auto;">
@@ -44,15 +45,15 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="nav-item mx-2 text-nav">
-                            <a class="nav-link" href="#">
+                        <li class=" mx-2 text-nav">
+                            <a class="nav-link" style="display: flex;margin-top: 5px;" href="#">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
                                 </svg>
                                 <span class="ms-1 align-middle">Cart</span>
                             </a>
                         </li>
-                        <li class="nav-item mx-2 text-nav">
+                        <li class=" mx-2 text-nav">
                             @if(name != null)
                             {
                                 <div class="action">

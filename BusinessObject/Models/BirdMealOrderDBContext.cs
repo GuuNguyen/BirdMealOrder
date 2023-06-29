@@ -60,13 +60,11 @@ namespace BusinessObject.Models
                 entity.HasOne(d => d.Bird)
                     .WithMany()
                     .HasForeignKey(d => d.BirdId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BirdMeal_Bird");
 
                 entity.HasOne(d => d.Meal)
                     .WithMany()
                     .HasForeignKey(d => d.MealId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_BirdMeal_Meal");
             });
 
@@ -95,6 +93,8 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.MealId).HasColumnName("MealID");
 
+                entity.Property(e => e.MealCode).HasMaxLength(50);
+
                 entity.Property(e => e.MealName).HasMaxLength(50);
 
                 entity.Property(e => e.Price).HasColumnType("money");
@@ -113,13 +113,11 @@ namespace BusinessObject.Models
                 entity.HasOne(d => d.Meal)
                     .WithMany()
                     .HasForeignKey(d => d.MealId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MealProduct_Meal");
 
                 entity.HasOne(d => d.Product)
                     .WithMany()
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MealProduct_Product");
             });
 
@@ -161,6 +159,7 @@ namespace BusinessObject.Models
                 entity.HasOne(d => d.Meal)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.MealId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_OrderDetail_Meal");
 
                 entity.HasOne(d => d.Order)
@@ -172,6 +171,7 @@ namespace BusinessObject.Models
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_OrderDetail_Product");
             });
 
@@ -182,6 +182,8 @@ namespace BusinessObject.Models
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.Price).HasColumnType("money");
+
+                entity.Property(e => e.ProductCode).HasMaxLength(50);
 
                 entity.Property(e => e.ProductName).HasMaxLength(50);
             });
