@@ -97,6 +97,7 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     var meal = context.Meals.FirstOrDefault(m => m.MealId == mealUpdate.MealId);
+                    meal.MealCode = mealUpdate.MealCode;
                     meal.MealName = mealUpdate.MealName;
                     meal.MealDescription = mealUpdate.MealDescription;
                     meal.Price = mealUpdate.Price;
