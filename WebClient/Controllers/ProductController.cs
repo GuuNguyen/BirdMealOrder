@@ -19,7 +19,7 @@ namespace WebClient.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             ProductApiUrl = "https://localhost:7022/api/Product";
         }
-        // GET: ProductController
+
         public async Task<ActionResult> Index()
         {
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl);
