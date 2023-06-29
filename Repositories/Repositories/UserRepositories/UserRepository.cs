@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Repositories.DTOs.UserDTO;
@@ -31,7 +32,7 @@ namespace Repositories.Repositories.UserRepositories
                 {
                     var newUser = _mapper.Map<User>(userDTO);
                     newUser.RoleId = 3;
-                    newUser.Status = UserStatus.Active;
+                    newUser.Status = (int)UserStatus.Active;
                     UserDAO.Create(newUser);
                     return true;
                 }

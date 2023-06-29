@@ -1,4 +1,4 @@
-﻿@model WebClient.ViewModels.MealViewModel
+﻿@model WebClient.ViewModels.FoodViewModel
 
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
@@ -10,27 +10,27 @@
     <div class="best_seller-container">
         <div class="hero-content">
             <div class="item-text-page">
-                <p>Meal</p>
+                <p>Food</p>
             </div>
             <div class="desc-text">
                 <p>
-                    Our Meal is specifically designed to meet the diverse nutritional needs of different bird species.
-                    We ensure a balanced blend of essential nutrients such as protein, fiber, vitamins, and minerals to support overall development,
-                    good health, and flourishing vitality in your cherished feathered companions.
+                    We take pride in offering a wide selection of high-quality bird food to cater to the discerning palates of
+                    your beloved pet birds. Our carefully curated collection includes a diverse range of nutritious options,
+                    including a variety of seeds, specially formulated bird pellets, and delectable treats.
                 </p>
             </div>
             @Html.Partial("_TopContainer")
         </div>
         <div class="grid-view-meal">
-            @foreach (var item in Model.Meals)
+            @foreach (var item in Model.Products)
             {
                 <div class="grid-item-meal">
                     <a class="a-text-link" asp-area="" asp-controller="Home" asp-action="Detail">
                         <div class="item-image">
-                            <img src="@item.MealImage" alt="@item.MealName" />
+                            <img src="@item.ProductImage" alt="@item.ProductName" />
                         </div>
                         <div class="item-details">
-                            <h5>@item.MealName</h5>
+                            <h5>@item.ProductName</h5>
                             <p>$@item.Price.ToString("#,##0")</p>
                         </div>                    
                     </a>
@@ -48,4 +48,3 @@
         </div>
     </div>
 </div>
-

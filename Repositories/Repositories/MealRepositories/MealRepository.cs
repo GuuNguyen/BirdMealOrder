@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObject.Enums;
 using BusinessObject.Models;
 using DataAccess.DAOs;
 using Microsoft.IdentityModel.Tokens;
@@ -30,7 +31,8 @@ namespace Repositories.Repositories.MealRepositories
                 }
             }
             var meal = _mapper.Map<Meal>(createMeal);
-            meal.MealStatus = MealStatus.Available;
+            meal.MealCode = GenerateCodeDAO.GenerateProductCode("Meal");
+            meal.MealStatus = (int)MealStatus.Available;
             int mealId = MealDAO.Create(meal);
             if (mealId > 0)
             {

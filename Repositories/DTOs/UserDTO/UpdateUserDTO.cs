@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObject.Enums;
+using BusinessObject.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,6 @@ namespace Repositories.DTOs.UserDTO
         public string Password { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public int RoleId { get; set; }
-        public int Status { get; set; }
+        public UserStatus Status { get; set; }
     }
 }
