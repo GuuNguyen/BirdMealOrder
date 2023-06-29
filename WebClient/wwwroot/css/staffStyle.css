@@ -240,3 +240,7 @@
         .modal-confirm .btn-danger:focus {
             background: #ee3535;
         }
+.meal-image {
+    width: 100px;
+    height: 100px;
+}

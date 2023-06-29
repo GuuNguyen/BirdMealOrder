@@ -16,5 +16,7 @@ namespace Repositories.Repositories.MealRepositories
         void UpdateMeal(MealDTO mealDTO);
         void DeleteMeal(int id);
         void ChangeStatus(int mealId);
+
+        UpdateMealDTO GetMealInclueBirdAndProduct(int mealId);
     }
 }
