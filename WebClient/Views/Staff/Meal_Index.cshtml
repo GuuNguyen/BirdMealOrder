@@ -1,0 +1,172 @@
+﻿@model IEnumerable<BusinessObject.Models.Meal>
+
+@{
+    ViewData["Title"] = "Meal_Index";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+}
+
+<div class="preloader">
+    <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
+    </div>
+</div>
+
+<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+     data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div style="margin-bottom: 0px" class="white-box">
+                        <div class="container">
+                            <div style="display: flex; align-items: center" class="row">
+                                <div class="col-md-6">
+                                    <h3 style="font-size: 30px" class="box-title">Meal</h3>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a asp-action="Create" asp-controller="Meal" style="margin-left: 318px; background-color: #538a50" class="btn text-white">
+                                        Create new meal
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted"></p>
+
+                        <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
+                            <table class="table text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.MealImage)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.MealName)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.Price)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.QuantityAvailable)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.MealStatus)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (string.IsNullOrEmpty(item.MealImage))
+                                                {
+                                                    <img class="product-img" src="~/Admin/plugins/images/no-image.png" width="100" height="100" />
+                                                }
+                                                else
+                                                {
+                                                    <img class="product-img" src="@item.MealImage" width="100" height="100" />
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MealName)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Price)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.QuantityAvailable)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MealStatus)
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <div onclick="toggleDropdown(this)">
+                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                    </div>
+                                                    <div class="dropdown-content">
+                                                        <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a>
+                                                        <a asp-action="Details" asp-route-id="@item.MealId">Details</a>
+                                                        <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+        .dropdown > div {
+            cursor: pointer;
+        }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 12px 16px;
+        z-index: 1;
+        right: 0;
+        left: auto;
+    }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 0;
+            color: black; /* Màu chữ mặc định */
+            transition: color 0.3s;
+        }
+
+            .dropdown-content a:hover {
+                color: #538a50; /* Màu chữ khi rê chuột vào */
+            }
+</style>
+
+<script>
+    var activeDropdown = null;
+
+    function toggleDropdown(dots) {
+        var dropdownContent = dots.nextElementSibling;
+        if (activeDropdown !== dropdownContent) {
+            closeActiveDropdown();
+            dropdownContent.style.display = 'block';
+            activeDropdown = dropdownContent;
+        } else {
+            closeActiveDropdown();
+        }
+    }
+
+    function closeActiveDropdown() {
+        if (activeDropdown) {
+            activeDropdown.style.display = 'none';
+            activeDropdown = null;
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+        var targetElement = event.target;
+        if (!targetElement.closest('.dropdown')) {
+            closeActiveDropdown();
+        }
+    });
+</script>

@@ -3,16 +3,12 @@
     ViewData["Title"] = "Create Bird Meal";
     var message = TempData["SuccMessage"] as string;
     var Emessage = TempData["ErrMessage"] as string;
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
-<h1 style="color: #538a50;">Create Bird Meal</h1>
 <style>
     body {
         background-color: #ffffff;
-    }
-
-    h1 {
-        color: #538a50;
     }
 
     .selected-bird {
@@ -24,9 +20,6 @@
         margin-bottom: 5px;
     }
 
-    .form-label {
-        color: #538a50;
-    }
 
     .btn-primary {
         background-color: #538a50;
@@ -41,6 +34,7 @@
     .btn-success {
         background-color: #538a50;
         border-color: #538a50;
+        color: white;
     }
 
         .btn-success:hover {
@@ -79,103 +73,129 @@
     }
 
 </style>
-<div class="col">
-    @if (!string.IsNullOrEmpty(message))
-    {
-        <div id="notification" class="alert alert-success row-cols-md-6" role="alert">
-            @message
-        </div>
-    }
-    @if (!string.IsNullOrEmpty(Emessage))
-    {
-        <div id="notification" class="alert alert-danger row-cols-md-6" role="alert">
-            @Emessage
-        </div>
-    }
-</div>
-<form method="post" enctype="multipart/form-data">
-    <div class="row mb-1">
-        <div class="col-8">
-            <label for="meal-name" class="form-label">Meal Name:</label>
-            <input type="text" id="meal-name" name="MealName" class="form-control" required>
-        </div>
-        <div class="col-2">
-            <label for="meal-price" class="form-label">Meal Price:</label>
-            <input type="number" id="meal-price" name="Price" class="form-control" required>
-        </div>
-        <div class="col-2">
-            <label for="meal-quantity" class="form-label">Quantity Available:</label>
-            <input type="number" min="1" step="1" id="meal-quantity" name="QuantityAvailable" class="form-control" required>
-        </div>
-    </div>
-
-    <div class="mb-1">
-        <label for="meal-description" class="form-label">Meal Description:</label>
-        <textarea id="meal-description" name="MealDescription" class="form-control" required></textarea>
-    </div>
-
-    <div class="mb-1">
-        <label for="meal-image" class="form-label">Meal Image:</label>
-        <input type="file" id="meal-image" name="MealImage" accept="image/*" class="form-control" required>
-    </div>
-
-    <h4>Made from Products:</h4>
-
-    <div id="product-container">
-        <div class="product-item">
+<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+     data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <div class="page-wrapper">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-8">
-                    <label class="form-label">Product Name:</label>
-                    <select name="ProductOptions[0].ProductId" class="form-select">
-                        <!-- Placeholder option -->
-                        <!-- <option value="" selected disabled>Select a product</option> -->
-                        @foreach (var product in ViewBag.Products)
-                        {
-                            <option value="@product.Value">@product.Text</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-4">
-                    <label class="form-label">Quantity Required:</label>
-                    <input type="number" name="ProductOptions[0].QuantityRequired" min="1" class="form-control" required>
+                <div class="col-sm-12">
+                    <div style="margin-bottom: 0px" class="white-box">
+                        <div class="container">
+                            <div style="display: flex; align-items: center" class="row">
+                                <div class="col-md-6">
+                                    <h3 style="font-size: 30px" class="box-title">Create Meal</h3>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a asp-action="Meal_Index" asp-controller="Staff" style="margin-left: 318px; background-color: #538a50" class="btn text-white">
+                                        Back to List
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted"></p>
+                        <div class="col">
+                            @if (!string.IsNullOrEmpty(message))
+                            {
+                                <div id="notification" class="alert alert-success row-cols-md-6" role="alert">
+                                    @message
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Emessage))
+                            {
+                                <div id="notification" class="alert alert-danger row-cols-md-6" role="alert">
+                                    @Emessage
+                                </div>
+                            }
+                        </div>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="row mb-1">
+                                <div class="col-8">
+                                    <label for="meal-name" class="form-label">Meal Name:</label>
+                                    <input type="text" id="meal-name" name="MealName" class="form-control" required>
+                                </div>
+                                <div class="col-2">
+                                    <label for="meal-price" class="form-label">Meal Price (VND): </label>
+                                    <input type="number" min="1" id="meal-price" name="Price" class="form-control" required>
+                                </div>
+                                <div class="col-2">
+                                    <label for="meal-quantity" class="form-label">Quantity Available:</label>
+                                    <input type="number" min="1" step="1" id="meal-quantity" name="QuantityAvailable" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="meal-description" class="form-label">Meal Description:</label>
+                                <textarea id="meal-description" name="MealDescription" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="mb-1">
+                                <label for="meal-image" class="form-label">Meal Image:</label>
+                                <input type="file" id="meal-image" name="MealImage" accept="image/*" class="form-control" required>
+                            </div>
+
+                            <h4>Made from Products:</h4>
+
+                            <div id="product-container">
+                                <div class="product-item">
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <label class="form-label">Product Name:</label>
+                                            <select name="ProductOptions[0].ProductId" class="form-select">
+                                                <!-- Placeholder option -->
+                                                <!-- <option value="" selected disabled>Select a product</option> -->
+                                                @foreach (var product in ViewBag.Products)
+                                                {
+                                                    <option value="@product.Value">@product.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label">Quantity Required:</label>
+                                            <input type="number" name="ProductOptions[0].QuantityRequired" min="1" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" onclick="addProduct()" class="btn btn-primary mt-3 mb-3">More Product</button>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <h4>Meal for Birds:</h4>
+                                <div id="all-birds-container">
+                                    <input type="checkbox" id="allBirdsCheckbox" class="form-check-input" onchange="toggleAllBirds()">
+                                    <label for="allBirdsCheckbox" class="form-check-label">All Birds</label>
+                                </div>
+
+                            </div>
+                            <div class="mb-3" id="selected-birds-container" style="margin-top: 10px;"></div>
+                            <div class="mb-3">
+                                <input type="text" id="bird-input" oninput="showMatchingBirds()" placeholder="Enter bird name" class="form-control">
+                            </div>
+
+                            <div id="bird-list-container" style="max-height: 150px; overflow-y: auto; display: none; border: 1px solid #538a50; padding: 10px;">
+                                @foreach (var birdMeal in ViewBag.BirdMeals)
+                                {
+                                    <div>
+                                        <input type="checkbox" name="BirdIds[]" value="@birdMeal.Value" onclick="toggleBirdSelection(this)">
+                                        <label class="form-check-label">@birdMeal.Text</label>
+                                    </div>
+                                }
+                            </div>
+
+                            <br>
+
+                            <input id="createButton" type="submit" value="Create Meal" class="btn btn-success" onclick="checkInputsAndShowOverlay()">
+                            <div id="overlay" class="overlay">
+                                <div class="spinner"></div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <button type="button" onclick="addProduct()" class="btn btn-primary mt-3 mb-3">More Product</button>
-
-    <div class="d-flex align-items-center gap-3">
-        <h4 >Meal for Birds:</h4>
-        <div id="all-birds-container">
-            <input type="checkbox" id="allBirdsCheckbox" class="form-check-input" onchange="toggleAllBirds()">
-            <label for="allBirdsCheckbox" class="form-check-label">All Birds</label>
-        </div>
-
-    </div>
-    <div class="mb-3" id="selected-birds-container" style="margin-top: 10px;"></div>
-    <div class="mb-3">
-        <input type="text" id="bird-input" oninput="showMatchingBirds()" onblur="clearBirdName()" placeholder="Enter bird name" class="form-control">
-    </div>
-
-    <div id="bird-list-container" style="max-height: 150px; overflow-y: auto; display: none; border: 1px solid #538a50; padding: 10px;">
-        @foreach (var birdMeal in ViewBag.BirdMeals)
-        {
-            <div>
-                <input type="checkbox" name="BirdIds[]" value="@birdMeal.Value" onclick="toggleBirdSelection(this)">
-                <label class="form-check-label">@birdMeal.Text</label>
-            </div>
-        }
-    </div>
-
-    <br>
-
-    <input id="createButton" type="submit" value="Create Meal" class="btn btn-success" onclick="showOverlay()">
-    <div id="overlay" class="overlay">
-        <div class="spinner"></div>
-    </div>
-</form>
-
+</div>
 @section Scripts {
     <script>
         var originalBirds = [];
@@ -275,25 +295,25 @@
             var productItem = document.createElement("div");
             productItem.className = "product-item";
             var productItemHtml = `
-                        <div class="row">
-                          <div class="col-8">
-                            <label class="form-label">Product Name:</label>
-                            <select name="ProductOptions[${productContainer.childElementCount}].ProductId" class="form-select">
+                                <div class="row">
+                                  <div class="col-8">
+                                    <label class="form-label">Product Name:</label>
+                                    <select name="ProductOptions[${productContainer.childElementCount}].ProductId" class="form-select">
         @foreach (var product in ViewBag.Products)
         {
-                                        <option value="@product.Value">@product.Text</option>
+                                                    <option value="@product.Value">@product.Text</option>
         }
-                            </select>
-                          </div>
-                          <div class="col-4">
-                            <label class="form-label">Quantity Required:</label>
-                            <input type="number" name="ProductOptions[${productContainer.childElementCount}].QuantityRequired" min="1" class="form-control">
-                          </div>
-                          <div class="col-1">
-                            <button type="button" onclick="removeProduct(this)" class="btn btn-danger btn-sm mt-3">Remove</button>
-                          </div>
-                        </div>
-                      `;
+                                    </select>
+                                  </div>
+                                  <div class="col-4">
+                                    <label class="form-label">Quantity Required:</label>
+                                    <input type="number" name="ProductOptions[${productContainer.childElementCount}].QuantityRequired" min="1" class="form-control">
+                                  </div>
+                                  <div class="col-1">
+                                    <button type="button" onclick="removeProduct(this)" class="btn btn-danger btn-sm mt-3">Remove</button>
+                                  </div>
+                                </div>
+                              `;
             productItem.innerHTML = productItemHtml;
             productContainer.appendChild(productItem);
 
@@ -319,16 +339,38 @@
                 button.style.backgroundColor = "#538a50";
             });
         }
-        function clearBirdName() {
-            var birdInput = document.getElementById("bird-input");
-            birdInput.value = "";
-        }
+        //function clearBirdName() {
+        //    var birdInput = document.getElementById("bird-input");
+        //    birdInput.value = "";
+        //}
         setTimeout(function () {
             var notification = document.getElementById('notification');
             if (notification) {
                 notification.style.display = 'none';
             }
         }, 3000);
+        function checkInputsAndShowOverlay() {
+            var mealNameInput = document.getElementById("meal-name");
+            var mealPriceInput = document.getElementById("meal-price");
+            var mealQuantityInput = document.getElementById("meal-quantity");
+            var mealDescriptionInput = document.getElementById("meal-description");
+            var mealImageInput = document.getElementById("meal-image");
+            var birdInput = document.getElementById("bird-input");
+
+            var inputs = [mealNameInput, mealPriceInput, mealQuantityInput, mealDescriptionInput, mealImageInput, birdInput];
+            var allInputsFilled = true;
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === "") {
+                    allInputsFilled = false;
+                    break;
+                }
+            }
+
+            if (allInputsFilled) {
+                showOverlay();
+            }
+        }
         function showOverlay() {
             var overlay = document.getElementById("overlay");
             overlay.classList.add("show");
@@ -352,19 +394,37 @@
         function toggleAllBirds() {
             var allBirdsCheckbox = document.getElementById("allBirdsCheckbox");
             var birdCheckboxes = document.querySelectorAll("input[name='BirdIds[]']");
-
+            var selectedBirdsContainer = document.getElementById("selected-birds-container");
+            var birdInput = document.getElementById("bird-input");
             if (allBirdsCheckbox.checked) {
+                selectedBirdsContainer.innerHTML = "";
+                birdInput.disabled = true;
                 // Chọn tất cả các checkbox chim
                 birdCheckboxes.forEach(function (checkbox) {
                     checkbox.checked = true;
                 });
             } else {
+                birdInput.disabled = false;
+                selectedBirdsContainer.innerHTML = "";
                 // Bỏ chọn tất cả các checkbox chim
                 birdCheckboxes.forEach(function (checkbox) {
                     checkbox.checked = false;
                 });
             }
         }
+        document.addEventListener("DOMContentLoaded", function () {
+            var birdInput = document.getElementById("bird-input");
+            var birdListContainer = document.getElementById("bird-list-container");
+
+            // Xử lý sự kiện khi click ra ngoài vùng input
+            document.addEventListener("click", function (event) {
+                var target = event.target;
+                if (!birdInput.contains(target) && !birdListContainer.contains(target)) {
+                    birdInput.value = ""; // Xóa text trong input
+                    birdListContainer.style.display = "none"; // Ẩn ô gợi ý
+                }
+            });
+        });
 
     </script>
 }

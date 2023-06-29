@@ -56,7 +56,18 @@ namespace Repositories.Repositories.MealRepositories
 
         public void DeleteMeal(int id)
         {
-            MealDAO.Delete(id);
+            var mealInOrderDetails = OrderDetailDAO.CheckMealInOderDetails(id);
+            if (mealInOrderDetails)
+            {
+                var meal = MealDAO.GetMeal(id);
+                meal.MealStatus = MealStatus.Unavailable;
+                MealDAO.Update(meal);
+            }
+            else
+            {
+                MealDAO.Delete(id);
+            }
+
         }
 
         public List<Meal> GetAllMeals()
