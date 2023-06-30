@@ -12,6 +12,8 @@ namespace Repositories.Repositories.ProductRepositories
     {
         List<Product> GetAllProducts();
         Product GetProductById(int id);
+        Product GetProductByCode(string code);
+        List<Product> GetProductsByMealId(int id);
         bool AddProduct(CreateProductDTO product);
         bool UpdateProduct(ProductDTO product);
         bool DeleteProduct(int id);

@@ -1,31 +1,113 @@
-﻿@{
+﻿@model WebClient.ViewModels.DetailPMViewModel
+
+@{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
     ViewData["Title"] = "View";
 }
-
 <div class="container-body page-container">
-    @*@Html.Partial("_BreadCrumb")*@
+    @Html.Partial("_BreadCrumb")
     <div class="container-product-detail">
         <div class="product-detail-img">
-            <img src="https://d1c63njxta1zb2.cloudfront.net/item-images/1486064194264_24_L" />
+            @if (Model.Product != null)
+            {
+                <img src="@Model.Product.ProductImage" />
+            }
+            else
+            {
+                <img src="@Model.Meal.MealImage" />
+            }
         </div>
         <div class="hero-product-detail">
             <div class="product-detail-content">
-                <p>PRODUCT NAME</p>
-                <p>$18.00</p>
-                <p>ME223343</p>
-                <p>
-                    We take pride in offering a wide selection of high-quality bird food to cater to the discerning palates of
-                    your beloved pet birds. Our carefully curated collection includes a diverse range of nutritious options,
-                    including a variety of seeds, specially formulated bird pellets, and delectable treats.
-                </p>
+                @if (Model.Product != null)
+                {
+                    <h2>@Model.Product.ProductName</h2>
+                    <p>
+                        <i class="fa-solid fa-dollar-sign"></i>
+                        @Model.Product.Price.ToString("0.00")
+                    </p>
+                    <p>SKU: @Model.Product.ProductCode</p>
+                    <p>@Model.Product.Description</p>
+                }
+                else
+                {
+                    <h2>@Model.Meal.MealName</h2>
+                    <p>
+                        <i class="fa-solid fa-dollar-sign"></i>
+                        @Model.Meal.Price.ToString("0.00")
+                    </p>
+                    <p>SKU: @Model.Meal.MealCode</p>
+                    <p>@Model.Meal.MealDescription</p>
+                }
             </div>
-           <div class="hero-product-detail-atc-btn">
-                <button class="product-detail-atc-btn" role="button">Button 30</button>
-           </div>
+            <div class="hero-product-detail-atc-btn">
+                <div class="hero-btn-plus-minus">
+                    <button class="btn-plus-minus">-</button>
+                    <input class="btn-plus-minus-count" type="number" required value="1" />
+                    <button class="btn-plus-minus">+</button>
+                </div>
+                <button class="product-detail-atc-btn" role="button">ADD TO CART</button>                            
+            </div>
+
+            <div class="d-flex flex-column gap-3">
+                @if (Model.Meal != null)
+                {
+                    <div class="line"></div>
+                    <div class="text-ingredient">
+                        <p>
+                            INCLUDING
+                        </p>
+                    </div>
+                    <div class="list-item-ingredient">
+                        @foreach (var item in Model.ProductIngredients)
+                        {
+                            <a asp-route-code="@item.ProductCode" asp-area="" asp-controller="Home" asp-action="Detail" class="item-ingredient">
+                                <p>@item.ProductName</p>
+                            </a>
+                        }
+                    </div>
+                }
+                <div class="line"></div>
+                <div class="text-ingredient">
+                    <p>
+                        SUITABLE FOR BIRDS
+                    </p>
+                </div>
+                <div class="list-item-ingredient">
+                    @foreach (var item in Model.Birds)
+                    {
+                        <div class="item-ingredient">
+                            <p>@item.BirdName</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="line"></div>
+<div class="container-body page-container">
+    <div class="product-detail-under-container">
+        <div class="item-text-detail">
+            <p>YOU MAY ALSO LIKE</p>
+        </div>
+        <div class="grid-view-detail">
+            @if (Model.Meals != null)
+            {
+                @foreach (var item in Model.Meals.Take(3).ToList())
+                {
+                    @Html.Partial("_ListMeal", item)
+                }
+            }
+            else
+            {
+                @foreach (var item in Model.Products.Take(3).ToList())
+                {
+                    @Html.Partial("_ListProduct", item)
+                }
+            }
         </div>
     </div>
 </div>
 
-<!-- HTML !-->
 

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Cart\**" />
+    <Content Remove="Views\Cart\**" />
+    <EmbeddedResource Remove="Views\Cart\**" />
+    <None Remove="Views\Cart\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Views\Cart\" />
     <Folder Include="Views\Order\" />
     <Folder Include="Views\User\" />

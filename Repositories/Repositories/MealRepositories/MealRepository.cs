@@ -132,6 +132,8 @@ namespace Repositories.Repositories.MealRepositories
             }
         }
 
+        public Meal GetMealByCode(string code) => MealDAO.GetMealByCode(code);
+
         public void UpdateMeal(MealDTO mealDTO)
         {
             var meal = _mapper.Map<Meal>(mealDTO);
