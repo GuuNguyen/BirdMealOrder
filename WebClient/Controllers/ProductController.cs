@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Enums;
 using BusinessObject.Models;
+using Firebase.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -43,20 +44,33 @@ namespace WebClient.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Product product)
+        public async Task<ActionResult> Create(Product product, IFormFile productImage)
         {
+            if (productImage != null && productImage.Length > 0)
+            {
+                var task = new FirebaseStorage("groupprojectprn.appspot.com")
+            .Child("product-images")
+            .Child(Path.GetFileName(productImage.FileName))
+            .PutAsync(productImage.OpenReadStream());
+
+                // Chờ upload hoàn thành
+                var imageUrl = await task;
+
+                // Lưu URL vào database
+                product.ProductImage = imageUrl;
+            }
             string strData = JsonSerializer.Serialize(product);
             var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PostAsync(ProductApiUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.Message = "Create successfully";
+                TempData["msg"] = "Create successfully!";
             }
             else
             {
-                ViewBag.Message = "Fail to call API";
+                TempData["msg"] = "Something Went Wrong!";
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Create", "Product");
         }
 
         public async Task<ActionResult> Edit(int id)
