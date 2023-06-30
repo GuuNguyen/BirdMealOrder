@@ -61,5 +61,26 @@ namespace Repositories.Repositories.UserRepositories
             }
             return false;
         }
+
+        public bool CreateUserFull(CreateUserDTOFull userDTOFull)
+        {
+            if (userDTOFull.FullName != null && userDTOFull.UserName != null && userDTOFull.PhoneNumber != null && userDTOFull.Password != null)
+            {
+                if (!UserDAO.isExitedUserName(userDTOFull.FullName) && !UserDAO.isExitedPhoneNumber(userDTOFull.PhoneNumber))
+                {
+                    var newUser = _mapper.Map<User>(userDTOFull);
+                    newUser.Status = (int)UserStatus.Active;
+                    UserDAO.Create(newUser);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ChangeStatus(int userId)
+        {
+            UserDAO.ChangeStatus(userId);
+           
+        }
     }
 }
