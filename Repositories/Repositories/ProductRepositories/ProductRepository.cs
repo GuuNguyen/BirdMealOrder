@@ -58,5 +58,9 @@ namespace Repositories.Repositories.ProductRepositories
             ProductDAO.ChangeProductStatus(id);
             return true;
         }
+
+        public Product GetProductByCode(string code) => ProductDAO.GetProductByCode(code);
+
+        public List<Product> GetProductsByMealId(int id) => ProductDAO.GetProductsByMealId(id);
     }
 }

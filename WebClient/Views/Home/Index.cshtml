@@ -24,16 +24,16 @@
             <p>Bird category</p>
         </div>
         <div class="grid-view-bird">
-            @foreach(var item in Model.Birds)
+            @foreach (var item in Model.Birds)
             {
                 <a class="grid-item-bird">
                     <img src="@item.BirdImage" alt="Image 1">
                     <div class="item-content-bird ">@item.BirdName</div>
                 </a>
-            }         
+            }
         </div>
     </div>
-   
+
     <div class="best_seller-container">
         <div class="item-text">
             <p>Best seller</p>
@@ -41,28 +41,11 @@
         <div class="grid-view-meal">
             @foreach (var item in Model.Meals.Take(4).ToList())
             {
-                <div class="grid-item-meal">
-                    <div class="item-image">
-                        <img src="@item.MealImage" alt="@item.MealName" />
-                    </div>
-                    <div class="item-details">
-                        <h5>@item.MealName</h5>
-                        <p>$@item.Price.ToString("#,##0")</p>              
-                    </div>
-                    <button class="button">
-                        <span>Add to cart</span>
-                        <div class="cart">
-                            <svg viewBox="0 0 36 26">
-                                <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
-                                <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
-                            </svg>
-                        </div>
-                    </button>
-                </div>
+                @Html.Partial("_ListMeal", item)
             }
         </div>
     </div>
-    
+
 </div>
 <div class="banner-container">
     <img class="banner-image" src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/home-images%2Fbird_banner_3.jpg?alt=media&token=00db0eff-f3ac-4211-bb6a-1d9238fb9c34" alt="Banner Image">
@@ -86,24 +69,7 @@
             <div class="grid-view-meal">
                 @foreach (var item in Model.Meals.Take(8).ToList())
                 {
-                    <div class="grid-item-meal">
-                        <div class="item-image">
-                            <img src="@item.MealImage" alt="@item.MealName" />
-                        </div>
-                        <div class="item-details">
-                            <h5>@item.MealName</h5>
-                            <p>$@item.Price.ToString("#,##0")</p>                          
-                        </div>
-                        <button class="button">
-                            <span>Add to cart</span>
-                            <div class="cart">
-                                <svg viewBox="0 0 36 26">
-                                    <polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline>
-                                    <polyline points="15 13.5 17 15.5 22 10.5"></polyline>
-                                </svg>
-                            </div>
-                        </button>
-                    </div>
+                    @Html.Partial("_ListMeal", item)
                 }
             </div>
         </div>
@@ -116,7 +82,7 @@
     <div class="banner-text-small">
         <h1 class="title">Outdoor birdseed</h1>
         <p>
-            Birdseed for outdoor feeders is a nutritional supplement meant to cater to the general bird population, 
+            Birdseed for outdoor feeders is a nutritional supplement meant to cater to the general bird population,
             and some benefit specific species of birds. There are many types of seed that can offer a food source to birds in
             need of an energy boost during migration and other times of the year.
         </p>
