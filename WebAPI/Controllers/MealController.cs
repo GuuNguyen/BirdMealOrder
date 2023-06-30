@@ -48,11 +48,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateMeal(MealDTO mealDTO)
+        public IActionResult UpdateMeal(UpdateMealDTO mealDTO)
         {
             var meal = _mealRepo.GetMeal(mealDTO.MealId);
             if (meal == null) return NotFound();
-            _mealRepo.UpdateMeal(mealDTO);
+            var check = _mealRepo.UpdateMeal(mealDTO);
+            if (!check.IsNullOrEmpty()) return Conflict(check);
             return Ok("Update Successfull!");
         }
 

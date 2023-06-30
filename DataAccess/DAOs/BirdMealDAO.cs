@@ -44,5 +44,22 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static void DeleteByMealId(int mealId)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    var query = $"DELETE FROM BirdMeal WHERE MealId= {mealId};";
+                    context.Database.ExecuteSqlRaw(query);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
