@@ -29,6 +29,19 @@ namespace WebAPI.Controllers
             return Ok(product);
         }
 
+        [HttpGet("ByMeal/{mealId}")]
+        public IActionResult GetProductsByMeal(int mealId)
+        {
+            var product = _repo.GetProductsByMealId(mealId);
+            return Ok(product);
+        }
+
+        [HttpGet("Detail/{productCode}")]
+        public IActionResult GetProductByID(string productCode)
+        {
+            return Ok(_repo.GetProductByCode(productCode));
+        }
+
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDTO product)
         {

@@ -60,7 +60,7 @@ namespace Repositories.Repositories.MealRepositories
             if (mealInOrderDetails)
             {
                 var meal = MealDAO.GetMeal(id);
-                meal.MealStatus = MealStatus.Unavailable;
+                meal.MealStatus = (int)MealStatus.Unavailable;
                 MealDAO.Update(meal);
             }
             else
@@ -79,6 +79,8 @@ namespace Repositories.Repositories.MealRepositories
         {
             return MealDAO.GetMeal(id);
         }
+
+        public Meal GetMealByCode(string code) => MealDAO.GetMealByCode(code);
 
         public void UpdateMeal(MealDTO mealDTO)
         {

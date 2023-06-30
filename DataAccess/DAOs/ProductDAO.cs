@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,21 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static List<Product> GetProductsByMealId(int id)
+        {
+            try
+            {
+                using(var context = new BirdMealOrderDBContext())
+                {
+                    return context.MealProducts.Where(c => c.MealId == id).Select(p => p.Product).ToList();
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static Product GetProductById(int id)
         {
             try
@@ -30,6 +46,20 @@ namespace DataAccess.DAOs
                 using (var _context = new BirdMealOrderDBContext())
                 {
                     return _context.Products.Find(id);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public static Product GetProductByCode(string code)
+        {
+            try
+            {
+                using (var _context = new BirdMealOrderDBContext())
+                {
+                    return _context.Products.Where(p => p.ProductCode == code).SingleOrDefault();
                 }
             }
             catch (Exception ex)
