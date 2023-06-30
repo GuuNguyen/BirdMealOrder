@@ -30,6 +30,12 @@ namespace WebAPI.Controllers
             return Ok(_mealRepo.GetMeal(id));
         }
 
+        [HttpGet("Detail/{mealCode}")]
+        public IActionResult GetMeal(string mealCode)
+        {
+            return Ok(_mealRepo.GetMealByCode(mealCode));
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteMeal(int id)
         {

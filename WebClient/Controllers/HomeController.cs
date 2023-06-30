@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -115,8 +116,75 @@ namespace WebClient.Controllers
             return View(finalResult);
         }
 
-        public IActionResult Detail()
+        public async Task<IActionResult> Detail(string code)
         {
+            if (!string.IsNullOrEmpty(code))
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                Meal meal = null;
+                Product product = null;
+                List<Meal> listMeal = null;
+                List<Product> listProduct = null;
+                List<Bird> listBird = new List<Bird>();
+                List<Product> productIngredients = null;
+                var breadcrumbs = new List<BreadCrumb>
+                {
+                    new BreadCrumb { Text = "Home", Url = "/" },
+                };
+                string prefix = code.Substring(0, 2);
+                switch(prefix)
+                {
+                    case "ME":
+                        HttpResponseMessage listMealResponse = await _client.GetAsync(MealAPIUrl);
+                        HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl + $"/Detail/{code}");
+
+                        string listMealStrData = await listMealResponse.Content.ReadAsStringAsync();
+                        string mealStrData = await mealResponse.Content.ReadAsStringAsync();
+
+                        listMeal = JsonSerializer.Deserialize<List<Meal>>(listMealStrData, options);
+                        meal = JsonSerializer.Deserialize<Meal>(mealStrData, options);
+
+                        HttpResponseMessage productIngredientsResponse = await _client.GetAsync(ProductUrl + $"/ByMeal/{meal.MealId}");
+                        string productIngredientsStrData = await productIngredientsResponse.Content.ReadAsStringAsync();
+                        productIngredients = JsonSerializer.Deserialize<List<Product>>(productIngredientsStrData, options);
+
+                        var mealBreadCrumb = new BreadCrumb { Text = "Meal", Url = "/Home/Meal" };
+                        var mealBreadCrumbDetail = new BreadCrumb {  Text = meal.MealName, Url = $"/Home/Detail?code={meal.MealCode}"};
+
+                        breadcrumbs.Add(mealBreadCrumb);
+                        breadcrumbs.Add(mealBreadCrumbDetail);
+                        break;
+                    case "FO":
+                        HttpResponseMessage listProductResponse = await _client.GetAsync(ProductUrl);
+                        HttpResponseMessage productResponse = await _client.GetAsync(ProductUrl + $"/Detail/{code}");
+                        string listProductStrData = await listProductResponse.Content.ReadAsStringAsync();
+                        string productStrData = await productResponse.Content.ReadAsStringAsync();
+                        listProduct = JsonSerializer.Deserialize<List<Product>>(listProductStrData, options);
+                        product = JsonSerializer.Deserialize<Product>(productStrData, options);
+                        var foodBreadCrumb = new BreadCrumb { Text = "Food", Url = "/Home/Food" };
+                        var foodBreadCrumbDetail = new BreadCrumb { Text = product.ProductName, Url = $"/Home/Detail?code={product.ProductCode}" };
+                        breadcrumbs.Add(foodBreadCrumb);
+                        breadcrumbs.Add(foodBreadCrumbDetail);
+                        break;
+                }
+                HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
+                string birdStrData = await birdResponse.Content.ReadAsStringAsync();
+                listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+                var finalResult = new DetailPMViewModel
+                {
+                    Breadcrumbs = breadcrumbs,
+                    Meal = meal,
+                    Product = product,
+                    Meals = listMeal,
+                    ProductIngredients = productIngredients,
+                    Birds = listBird,
+                    Products = listProduct,
+                };
+                return View(finalResult);          
+            }
             return View();
         }
     }

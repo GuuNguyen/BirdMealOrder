@@ -1,0 +1,53 @@
+﻿@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewData["Title"] = "View";
+}
+
+<div class="container-checkout-body page-container">
+   <div class="cart-container">
+       <div class="hero-cart checkout-text">
+           <h4>SHOPPING CART</h4>
+            <div class="table-list-cart-item">
+                <div class="table-cart-header">
+                    <p>ITEM</p>
+                    <p>PRICE</p>
+                    <p>QUANTITY</p>
+                    <p>SUBTOTAL</p>
+                </div>
+                <div class="table-cart-body">
+                    <div class="cart-item">
+                        <div class="cart-item-content-main">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/meal-images%2Fbluebird.jpg?alt=media&token=42b832fc-c0e8-4469-85ee-cfa5aff6d6ed" />
+                            <div class="cart-item-content">
+                                <h5>Bluebird Bugberry Blend</h5>
+                                <p>SKU: ME654321</p>
+                            </div>
+                        </div>                      
+                        <div class="cart-item-content-money">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                            <p>18.00</p>
+                        </div>
+                        <div class="cart-item-content-money">
+                            <span>-</span>
+                            <input class="btn-plus-minus-count" type="number" value="1" min="0" max="1000" required/>
+                            <span>+</span>
+                        </div>
+                        <div class="cart-item-content-money">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                            <p>36.00</p>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/meal-images%2Fbluebird.jpg?alt=media&token=42b832fc-c0e8-4469-85ee-cfa5aff6d6ed" />
+                    </div>
+                    <div class="cart-item">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/meal-images%2Fbluebird.jpg?alt=media&token=42b832fc-c0e8-4469-85ee-cfa5aff6d6ed" />
+                    </div>
+                </div>
+            </div>
+       </div>
+        <div class="delivery-container checkout-text">
+            <h4>DELIVERY INFORMATION</h4>
+       </div>
+   </div>
+</div>
