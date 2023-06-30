@@ -14,8 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\User\" />
+    <Folder Include="Views\Cart\" />
     <Folder Include="Views\Order\" />
+    <Folder Include="Views\User\" />
     <Folder Include="wwwroot\Admin\" />
   </ItemGroup>
 

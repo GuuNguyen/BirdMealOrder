@@ -1,4 +1,6 @@
-﻿using BusinessObject.Models;
+﻿using Azure;
+using BusinessObject.Enums;
+using BusinessObject.Models;
 using DataAccess.DAOs;
 using Firebase.Storage;
 using Google.Apis.Auth.OAuth2;
@@ -43,8 +45,9 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true,
             };
             List<Product>? products = JsonSerializer.Deserialize<List<Product>>(strData, options);
+            var availableProducts = products.Where(p => p.ProductStatus == (int)ProductStatus.Available).ToList();
             List<Bird>? birds = JsonSerializer.Deserialize<List<Bird>>(strDataB, options);
-            ViewBag.Products = new SelectList(products, "ProductId", "ProductName");
+            ViewBag.Products = new SelectList(availableProducts, "ProductId", "ProductName");
             ViewBag.BirdMeals = new SelectList(birds, "BirdId", "BirdName");
             return View();
         }
@@ -105,11 +108,33 @@ namespace WebClient.Controllers
             HttpResponseMessage respone = await client.DeleteAsync(MealApiUrl + "/" + mealId);
             if (respone.IsSuccessStatusCode)
             {
-                TempData["SuccMessage"] = "Delete Successfull!";
-                return RedirectToAction("Index", "Meal");
+                return RedirectToAction("Meal_Index", "Staff");
             }
-            TempData["ErrMessage"] = "Delete Failed!";
-            return View();
+            return RedirectToAction("Meal_Index", "Staff");
+        }
+
+        public async Task<IActionResult> Details(int mealId)
+        {
+            HttpResponseMessage respone = await client.GetAsync(MealApiUrl + "/" + mealId);
+            string strData = await respone.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            Meal? meal = JsonSerializer.Deserialize<Meal>(strData, options);
+            return View(meal);
+        }
+
+        public async Task<IActionResult> Edit(int mealId)
+        {
+            HttpResponseMessage respone = await client.GetAsync(MealApiUrl + "/GetMealIncludeBird&Product/" + mealId);
+            string strData = await respone.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            UpdateMealDTO? meal = JsonSerializer.Deserialize<UpdateMealDTO>(strData, options);
+            return View(meal);
         }
     }
 }

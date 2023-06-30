@@ -33,11 +33,35 @@
                         </div>
 
                         <p class="text-muted"></p>
-
+                        <div id="notification" class="alert" style="display: none;"></div>
+                        <!-- Modal HTML -->
+                        <div id="myModal" class="modal fade">
+                            <div class="modal-dialog modal-confirm">
+                                <div class="modal-content">
+                                    <div class="modal-header flex-column">
+                                        <div class="icon-box">
+                                            <i class="material-icons">&#xE5CD;</i>
+                                        </div>
+                                        <h4 class="modal-title w-100">Are you sure?</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>If this meal is in order, it will be changed status</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteMeal()">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
                             <table class="table text-nowrap">
                                 <thead>
                                     <tr>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.MealCode)
+                                        </th>
                                         <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.MealImage)
                                         </th>
@@ -45,7 +69,7 @@
                                             @Html.DisplayNameFor(model => model.MealName)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.Price)
+                                            @Html.DisplayNameFor(model => model.Price) ($)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.QuantityAvailable)
@@ -61,7 +85,10 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr>
+                                        <tr data-id="@item.MealId">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MealCode)
+                                            </td>
                                             <td>
                                                 @if (string.IsNullOrEmpty(item.MealImage))
                                                 {
@@ -82,17 +109,22 @@
                                                 @Html.DisplayFor(modelItem => item.QuantityAvailable)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.MealStatus)
+                                                <div class="checkbox-wrapper-5">
+                                                    <div class="check">
+                                                        <input id="check-@item.MealId" type="checkbox" @(item.MealStatus == 1 ? "checked" : "") onchange="toggleMealStatus(this, @item.MealId)">
+                                                        <label class="labelCheck" for="check-@item.MealId"></label>
+                                                    </div>
+                                                </div>
                                             </td>
-                                            <td>
+                                            <td class="option">
                                                 <div class="dropdown">
                                                     <div onclick="toggleDropdown(this)">
                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                                     </div>
                                                     <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-route-id="@item.MealId">Edit</a>
-                                                        <a asp-action="Details" asp-route-id="@item.MealId">Details</a>
-                                                        <a asp-action="Delete" asp-route-id="@item.MealId">Delete</a>
+                                                        <a asp-action="Edit" asp-route-mealId="@item.MealId" asp-controller="Meal"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
+                                                        <a asp-action="Details" asp-controller="Meal" asp-route-mealId="@item.MealId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
+                                                        <a onclick="setMealIdToDelete(@item.MealId)" data-target="#myModal" data-toggle="modal" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -108,65 +140,73 @@
     </div>
 </div>
 
-<style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
 
-        .dropdown > div {
-            cursor: pointer;
-        }
+@section scripts {
+    <script>
+        var activeDropdown = null;
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        padding: 12px 16px;
-        z-index: 1;
-        right: 0;
-        left: auto;
-    }
-
-        .dropdown-content a {
-            display: block;
-            padding: 8px 0;
-            color: black; /* Màu chữ mặc định */
-            transition: color 0.3s;
-        }
-
-            .dropdown-content a:hover {
-                color: #538a50; /* Màu chữ khi rê chuột vào */
+        function toggleDropdown(dots) {
+            var dropdownContent = dots.nextElementSibling;
+            if (activeDropdown !== dropdownContent) {
+                closeActiveDropdown();
+                dropdownContent.style.display = 'block';
+                activeDropdown = dropdownContent;
+            } else {
+                closeActiveDropdown();
             }
-</style>
-
-<script>
-    var activeDropdown = null;
-
-    function toggleDropdown(dots) {
-        var dropdownContent = dots.nextElementSibling;
-        if (activeDropdown !== dropdownContent) {
-            closeActiveDropdown();
-            dropdownContent.style.display = 'block';
-            activeDropdown = dropdownContent;
-        } else {
-            closeActiveDropdown();
         }
-    }
 
-    function closeActiveDropdown() {
-        if (activeDropdown) {
-            activeDropdown.style.display = 'none';
-            activeDropdown = null;
+        function closeActiveDropdown() {
+            if (activeDropdown) {
+                activeDropdown.style.display = 'none';
+                activeDropdown = null;
+            }
         }
-    }
 
-    document.addEventListener('click', function (event) {
-        var targetElement = event.target;
-        if (!targetElement.closest('.dropdown')) {
-            closeActiveDropdown();
+        document.addEventListener('click', function (event) {
+            var targetElement = event.target;
+            if (!targetElement.closest('.dropdown')) {
+                closeActiveDropdown();
+            }
+        });
+
+        function toggleMealStatus(checkbox, mealId) {
+            $.ajax({
+                url: "https://localhost:7022/api/Meal/ChangeStatus/" + mealId,
+                type: "put",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                },
+                error: function (xhr) {
+                    console.log(xhr)
+                }
+            });
         }
-    });
-</script>
+        var mealIdToDelete;
+        function setMealIdToDelete(mealId) {
+            mealIdToDelete = mealId;
+        }
+        function deleteMeal() {
+            if (mealIdToDelete) {
+                $.ajax({
+                    url: "https://localhost:7022/api/Meal/" + mealIdToDelete,
+                    type: "delete",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "text",
+                    success: function (result) {
+                        $("#notification").removeClass("alert-danger").addClass("alert-success");
+                        $("#notification").text("Delete successfully.").show().delay(3000).fadeOut();
+                        $('tr[data-id="' + mealIdToDelete + '"]').remove();
+                    },
+                    error: function (xhr) {
+                        $("#notification").removeClass("alert-success").addClass("alert-danger");
+                        $("#notification").text("Error delete. Please try again.").show().delay(3000).fadeOut();
+                        console.log(xhr)
+                    }
+                });
+            }
+        }
+    </script>
+}

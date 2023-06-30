@@ -2,53 +2,51 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
+<div class="product_detail">
+    <div class="product-container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="image">
+                    <img class="product-image" src="@Html.DisplayFor(model => model.ProductImage)" />
+                </div>
+            </div>
 
-<h1>Details</h1>
-
-<div>
-    <h4>Product</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QuantityAvailable)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QuantityAvailable)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductImage)
-        </dt>
-        <dd class = "col-sm-10">
-            <img class="product-img" src="@Model.ProductImage" width="150" height="150" />
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductStatus)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="col-lg-6">
+                <div class="product-box">
+                    <div class="product-item">
+                        <dl class="row product-item_field">
+                            <dd class="col-sm-12">
+                                @Html.DisplayFor(model => model.ProductName)
+                            </dd>
+                            <dd class="col-sm-12">
+                                @Html.DisplayFor(model => model.ProductCode)
+                            </dd>
+                            <dd class="col-sm-12">
+                                <div>$</div>
+                                @Html.DisplayFor(model => model.Price)
+                            </dd>
+                            <dd class="col-sm-12">
+                                @Html.DisplayFor(model => model.Description)
+                            </dd>
+                            <dd class="col-sm-12">
+                                <div>There are</div>
+                                @Html.DisplayFor(model => model.QuantityAvailable)
+                                <div>products left</div>
+                            </dd>
+                            <dd class="col-sm-12">
+                                <div>Status is</div>
+                                @Html.DisplayFor(model => model.ProductStatus)
+                            </dd>
+                        </dl>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
+                            <a asp-action="Index">Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

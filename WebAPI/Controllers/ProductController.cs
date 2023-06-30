@@ -61,5 +61,12 @@ namespace WebAPI.Controllers
             var isSuccess = _repo.DeleteProduct(id);
             return isSuccess ? Ok("Successfull delete!") : BadRequest("Fail delete!");
         }
+
+        [HttpPut("changeStatus/{id}")]
+        public IActionResult ChangeStatus(int id)
+        {
+            var isSuccess = _repo.ChangeProductStatus(id);
+            return isSuccess ? Ok("Successfull change!") : BadRequest("Fail change!");
+        }
     }
 }

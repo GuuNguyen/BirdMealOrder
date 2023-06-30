@@ -17,5 +17,6 @@ namespace Repositories.Repositories.ProductRepositories
         bool AddProduct(CreateProductDTO product);
         bool UpdateProduct(ProductDTO product);
         bool DeleteProduct(int id);
+        bool ChangeProductStatus(int id);
     }
 }

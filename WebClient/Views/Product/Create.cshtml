@@ -2,52 +2,72 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    var msg = TempData["msg"] as string;
 }
+<div class="product_create">
 
-<h1>Create</h1>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
+    <div class="">
+        <div class="row">
+            <div class="col-lg-6 col-md-4 product_create_item">
+                <div class = "product-notification">
+                    <h1>Create product</h1>
+                    <div>
+                        @if (!string.IsNullOrEmpty(msg))
+                        {
+                            <div class="alert alert-info product-notification-item">
+                                @msg
+                            </div>
+                        }
+                    </div>
+                </div>
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="ProductName" class="control-label"></label>
+                        <input asp-for="ProductName" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="QuantityAvailable" class="control-label"></label>
+                        <input asp-for="QuantityAvailable" class="form-control" min="1" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductImage" class="control-label"></label>
+                        <input type="file" id="productimage" name="productImage" accept="image/*" class="form-control" required>
+                    </div>
+                    <div class="btn-to-back-product">
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" asp-action="Product_Index" asp-controller="Staff">Back to List</a>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="col-lg-6 product_create_item_image">
+                <img class="background-image-product-create" src="~/Admin/plugins/images/image-product-create-2.jpg" />
             </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QuantityAvailable" class="control-label"></label>
-                <input asp-for="QuantityAvailable" class="form-control" />
-                <span asp-validation-for="QuantityAvailable" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductImage" class="control-label"></label>
-                <input asp-for="ProductImage" class="form-control" />
-                <span asp-validation-for="ProductImage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var alertElement = document.querySelector(".alert");
+        if (alertElement) {
+            setTimeout(function() {
+                alertElement.style.display = "none";
+            }, 3000);
+        }
+    });
+</script>
