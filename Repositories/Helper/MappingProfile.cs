@@ -24,6 +24,7 @@ namespace Repositories.Helper
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<User, CreateUserDTO>().ReverseMap();
             CreateMap<User, CreateUserDTOFull>().ReverseMap();
+            CreateMap<User, UpdateUserDTO>().ReverseMap();
         }
     }
 }

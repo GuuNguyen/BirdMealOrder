@@ -15,6 +15,7 @@ namespace Repositories.Repositories.UserRepositories
         bool CreateUser(CreateUserDTO userDTO);
         bool CreateUserFull(CreateUserDTOFull userDTOFull);
         bool UpdateUser(UpdateUserDTO userDTO);
-        bool DeleteUser(int id);    
+        bool DeleteUser(int id);
+        void ChangeStatus(int userId);
     }
 }

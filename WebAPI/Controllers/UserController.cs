@@ -57,5 +57,17 @@ namespace WebAPI.Controllers
             return deleteUser ? Ok("Delete success") : BadRequest();
         }
 
+
+        [HttpPut("ChangeStatus/{userId}")]
+        public IActionResult ChangeStatus(int userId)
+        {
+            var user = _userRepository.GetUser(userId);
+            if (user == null)
+            {
+                return NotFound();  
+            }
+            _userRepository.ChangeStatus(userId);
+            return Ok("Change Successfull!");
+        }
     }
 }

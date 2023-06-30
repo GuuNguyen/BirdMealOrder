@@ -76,5 +76,11 @@ namespace Repositories.Repositories.UserRepositories
             }
             return false;
         }
+
+        public void ChangeStatus(int userId)
+        {
+            UserDAO.ChangeStatus(userId);
+           
+        }
     }
 }
