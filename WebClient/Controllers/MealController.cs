@@ -133,8 +133,92 @@ namespace WebClient.Controllers
             {
                 PropertyNameCaseInsensitive = true,
             };
+
             UpdateMealDTO? meal = JsonSerializer.Deserialize<UpdateMealDTO>(strData, options);
+            var statusList = Enum.GetValues(typeof(MealStatus));
+            ViewBag.MealStatus = new SelectList(statusList, meal.MealStatus);
+
+
+            HttpResponseMessage responseP = await client.GetAsync(ProductApiUrl);
+            string strDataP = await responseP.Content.ReadAsStringAsync();
+            HttpResponseMessage responseB = await client.GetAsync(BirdApiUrl);
+            string strDataB = await responseB.Content.ReadAsStringAsync();
+
+            List<Product>? products = JsonSerializer.Deserialize<List<Product>>(strDataP, options);
+            List<Bird>? birds = JsonSerializer.Deserialize<List<Bird>>(strDataB, options);
+
+            ViewBag.Products = new SelectList(products, "ProductId", "ProductName");
+            ViewBag.BirdMeals = new SelectList(birds, "BirdId", "BirdName");
+
             return View(meal);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateMealDTO updateMealDTO, IFormFile mImage)
+        {
+            var productIds = new List<int>();
+            foreach (var product in updateMealDTO.ProductRequireds)
+            {
+                if (productIds.Contains(product.ProductId))
+                {
+                    TempData["ErrMessage"] = "You cannot create a meal from two same products!";
+                    return RedirectToAction("Create");
+                }
+                else
+                {
+                    productIds.Add(product.ProductId); // Thêm ID vào danh sách đã xuất hiện
+                }
+            }
+            // Lấy tên tệp tin cũ
+            var oldFile = Path.GetFileName(updateMealDTO.MealImage);
+
+            var startIndex = oldFile.IndexOf("meal-images%2F") + "meal-images%2F".Length;
+            var endIndex = oldFile.IndexOf("?alt=media&token=");
+
+            var cleanFileName = oldFile.Substring(startIndex, endIndex - startIndex);
+
+            if (mImage != null && mImage.Length > 0)
+            {
+                var newFileName = Path.GetFileName(mImage.FileName);
+
+                var task = new FirebaseStorage("groupprojectprn.appspot.com")
+                    .Child("meal-images")
+                    .Child(newFileName)
+                    .PutAsync(mImage.OpenReadStream());
+
+                // Chờ upload hoàn thành
+                var newImageUrl = await task;
+
+                // Lưu URL mới vào updateMealDTO
+                updateMealDTO.MealImage = newImageUrl;
+            }
+
+            string jsonStr = JsonSerializer.Serialize(updateMealDTO);
+            var contentData = new StringContent(jsonStr, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PutAsync(MealApiUrl, contentData);
+            if (response.IsSuccessStatusCode)
+            {
+                // Xóa tệp tin cũ
+                if (mImage != null && mImage.Length > 0)
+                {
+                    await new FirebaseStorage("groupprojectprn.appspot.com")
+                    .Child("meal-images")
+                    .Child(cleanFileName)
+                    .DeleteAsync();
+                }
+                TempData["SuccMessage"] = "Update Successfull!";
+                return RedirectToAction("Meal_Index", "Staff");
+            }
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+                TempData["ErrMessage"] = errorMessage;
+            }else
+            {
+                TempData["ErrMessage"] = "Update Failed!";
+            }
+            
+
+            return RedirectToAction("Meal_Index", "Staff");
         }
     }
 }

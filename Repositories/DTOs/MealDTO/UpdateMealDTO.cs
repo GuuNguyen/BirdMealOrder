@@ -22,8 +22,7 @@ namespace Repositories.DTOs.MealDTO
         public decimal Price { get; set; }
         [Required]
         public int QuantityAvailable { get; set; }
-        [Required]
-        public string MealImage { get; set; }
+        public string? MealImage { get; set; }
         [Required]
         public MealStatus MealStatus { get; set; }
         [Required]

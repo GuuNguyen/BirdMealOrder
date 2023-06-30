@@ -33,7 +33,7 @@ document.addEventListener("click", function (event) {
 });
 
 
-document.querySelectorAll(".button").forEach((button) =>
+document.querySelectorAll(".button-atc").forEach((button) =>
     button.addEventListener("click", (e) => {
         if (!button.classList.contains("loading")) {
             button.classList.add("loading");

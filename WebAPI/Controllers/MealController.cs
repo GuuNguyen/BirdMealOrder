@@ -30,6 +30,12 @@ namespace WebAPI.Controllers
             return Ok(_mealRepo.GetMeal(id));
         }
 
+        [HttpGet("Detail/{mealCode}")]
+        public IActionResult GetMeal(string mealCode)
+        {
+            return Ok(_mealRepo.GetMealByCode(mealCode));
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteMeal(int id)
         {
@@ -48,11 +54,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateMeal(MealDTO mealDTO)
+        public IActionResult UpdateMeal(UpdateMealDTO mealDTO)
         {
             var meal = _mealRepo.GetMeal(mealDTO.MealId);
             if (meal == null) return NotFound();
-            _mealRepo.UpdateMeal(mealDTO);
+            var check = _mealRepo.UpdateMeal(mealDTO);
+            if (!check.IsNullOrEmpty()) return Conflict(check);
             return Ok("Update Successfull!");
         }
 
