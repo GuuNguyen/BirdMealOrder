@@ -14,7 +14,7 @@ namespace Repositories.Repositories.MealRepositories
         Meal GetMeal(int id);
         Meal GetMealByCode(string code);
         string CreateMeal(CreateMealDTO createMeal);
-        void UpdateMeal(MealDTO mealDTO);
+        string UpdateMeal(UpdateMealDTO mealDTO);
         void DeleteMeal(int id);
         void ChangeStatus(int mealId);
 
