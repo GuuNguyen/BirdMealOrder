@@ -40,7 +40,7 @@ namespace Repositories.Repositories.ProductRepositories
         { 
             var check = ProductDAO.GetProductById(updateProduct.ProductId);
             if(check == null) return false;
-            var product = _mapper.Map<Product>(updateProduct);
+            var product = _mapper.Map(updateProduct, check);
             ProductDAO.UpdateProduct(product);
             return true;
         }
