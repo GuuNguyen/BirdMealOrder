@@ -240,8 +240,6 @@
         .modal-confirm .btn-danger:focus {
             background: #ee3535;
         }
-<<<<<<< HEAD
-
 /*style in Product detail*/
 .product-item_field dd:nth-child(1) {
     font-size: 30px;
@@ -316,9 +314,53 @@
     border: 1px solid #e4e4e6;
 }
 /*end style in Product detail*/
-=======
 .meal-image {
     width: 100px;
     height: 100px;
 }
->>>>>>> 76cc6b3841280ffa82a19b471f612cfe257f1dd4
+
+/*begin style in Product create*/
+.product_create {
+    margin-left: 240px;
+    height: 652px;
+    padding: 33px 23px 33px 35px;
+}
+
+.product_create_item {
+    background-color: white;
+    border: 3px solid #538a50;
+    width: 500px;
+    height: 585px;
+    max-width: 500px;
+    margin-left: 42px;
+    box-shadow: 4px 4px #538a50;
+    border-radius: 10px;
+    padding-top: 30px;
+}
+
+.product_create_item_image {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.background-image-product-create {
+    width: 550px;
+    height: 550px;
+    margin-left: 45px;
+}
+
+.btn-to-back-product {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-notification {
+    display: flex;
+    justify-content: space-between;
+}
+
+product-notification-item {
+    width: 164px;
+}
+/*end style in Product create*/
