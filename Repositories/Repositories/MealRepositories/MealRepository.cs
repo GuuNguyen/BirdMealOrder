@@ -133,8 +133,6 @@ namespace Repositories.Repositories.MealRepositories
         }
 
         public Meal GetMealByCode(string code) => MealDAO.GetMealByCode(code);
-
-        public void UpdateMeal(MealDTO mealDTO)
         public string UpdateMeal(UpdateMealDTO mealDTO)
         {
             var oldMeal = MealDAO.GetMeal(mealDTO.MealId);
