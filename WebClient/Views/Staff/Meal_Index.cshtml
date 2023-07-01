@@ -139,7 +139,7 @@
                                                     </div>
                                                     <div class="dropdown-content">
                                                         <a asp-action="Edit" asp-route-mealId="@item.MealId" asp-controller="Meal"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
-                                                        <a asp-action="Details" asp-controller="Meal" asp-route-mealId="@item.MealId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
+                                                        <a asp-action="Details" asp-controller="Meal" asp-route-code="@item.MealCode"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
                                                         <a onclick="setMealIdToDelete(@item.MealId)" data-target="#myModal" data-toggle="modal" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
                                                 </div>

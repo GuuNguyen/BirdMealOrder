@@ -13,6 +13,8 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Security.AccessControl;
 using System.Text.Json;
+using WebClient.ViewModels;
+
 namespace WebClient.Controllers
 {
     public class MealController : Controller
@@ -212,13 +214,75 @@ namespace WebClient.Controllers
             {
                 string errorMessage = await response.Content.ReadAsStringAsync();
                 TempData["ErrMessage"] = errorMessage;
-            }else
+            }
+            else
             {
                 TempData["ErrMessage"] = "Update Failed!";
             }
-            
+
 
             return RedirectToAction("Meal_Index", "Staff");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string code)
+        {
+            if (!string.IsNullOrEmpty(code))
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                Meal meal = null;
+                Product product = null;
+                List<Meal> listMeal = null;
+                List<Product> listProduct = null;
+                List<Bird> listBird = new List<Bird>();
+                List<Product> productIngredients = null;
+                var breadcrumbs = new List<BreadCrumb>
+                {
+                    new BreadCrumb { Text = "Home", Url = "/" },
+                };
+                string prefix = code.Substring(0, 2);
+                switch (prefix)
+                {
+                    case "ME":
+                        HttpResponseMessage listMealResponse = await client.GetAsync(MealApiUrl);
+                        HttpResponseMessage mealResponse = await client.GetAsync(MealApiUrl + $"/Detail/{code}");
+
+                        string listMealStrData = await listMealResponse.Content.ReadAsStringAsync();
+                        string mealStrData = await mealResponse.Content.ReadAsStringAsync();
+
+                        listMeal = JsonSerializer.Deserialize<List<Meal>>(listMealStrData, options);
+                        meal = JsonSerializer.Deserialize<Meal>(mealStrData, options);
+
+                        HttpResponseMessage productIngredientsResponse = await client.GetAsync(ProductApiUrl + $"/ByMeal/{meal.MealId}");
+                        string productIngredientsStrData = await productIngredientsResponse.Content.ReadAsStringAsync();
+                        productIngredients = JsonSerializer.Deserialize<List<Product>>(productIngredientsStrData, options);
+
+                        var mealBreadCrumb = new BreadCrumb { Text = "Meal", Url = "/Home/Meal" };
+                        var mealBreadCrumbDetail = new BreadCrumb { Text = meal.MealName, Url = $"/Home/Detail?code={meal.MealCode}" };
+
+                        breadcrumbs.Add(mealBreadCrumb);
+                        breadcrumbs.Add(mealBreadCrumbDetail);
+                        break;
+                }
+                HttpResponseMessage birdResponse = await client.GetAsync(BirdApiUrl);
+                string birdStrData = await birdResponse.Content.ReadAsStringAsync();
+                listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+                var finalResult = new DetailPMViewModel
+                {
+                    Breadcrumbs = breadcrumbs,
+                    Meal = meal,
+                    Product = product,
+                    Meals = listMeal,
+                    ProductIngredients = productIngredients,
+                    Birds = listBird,
+                    Products = listProduct,
+                };
+                return View(finalResult);
+            }
+            return View();
         }
     }
 }
