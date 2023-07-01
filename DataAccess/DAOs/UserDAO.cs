@@ -31,7 +31,7 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    return context.Users.Include(u => u.Role).Where( u => u.UserId == id).SingleOrDefault();
+                    return context.Users.Include(u => u.Role).Where(u => u.UserId == id).SingleOrDefault();
                 }
             }
             catch (Exception ex)
@@ -93,7 +93,7 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var context = new BirdMealOrderDBContext())
+                using (var context = new BirdMealOrderDBContext())
                 {
                     var check = context.Users.Any(u => u.PhoneNumber == phoneNumer);
                     if (check)
@@ -102,7 +102,8 @@ namespace DataAccess.DAOs
                     }
                     return false;
                 }
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
@@ -120,6 +121,30 @@ namespace DataAccess.DAOs
                         return true;
                     }
                     return false;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static void ChangeStatus(int userId)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    var user = context.Users.Find(userId);
+                    if (user.Status == 0)
+                    {
+                        user.Status = 1;
+                    }
+                    else
+                    {
+                        user.Status = 0;
+                    }
+                    context.SaveChanges();
                 }
             }
             catch (Exception e)

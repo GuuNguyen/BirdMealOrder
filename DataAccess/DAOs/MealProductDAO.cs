@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using BusinessObject.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,45 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static void Update(MealProduct mealProduct, int newQuantity)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    using (var transaction = context.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            var query = "UPDATE MealProduct SET QuantityRequired = @QuantityRequired WHERE ProductId = @ProductId AND MealId = @MealId;";
+                            context.Database.ExecuteSqlRaw(query,
+                                new SqlParameter("@QuantityRequired", mealProduct.QuantityRequired),
+                                new SqlParameter("@ProductId", mealProduct.ProductId),
+                                new SqlParameter("@MealId", mealProduct.MealId));
+
+                            var product = context.Products.Find(mealProduct.ProductId);
+                            product.QuantityAvailable -= newQuantity;
+
+                            context.SaveChanges();
+
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            throw new Exception("Failed to update meal product.", ex);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Database error.", ex);
+            }
+        }
+
+
 
     }
 }

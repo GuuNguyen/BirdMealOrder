@@ -4,6 +4,7 @@ using Firebase.Storage;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Repositories.DTOs.ProductDTO;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -82,27 +83,40 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true
             };
             Product product = JsonSerializer.Deserialize<Product>(strData, options);
-            var productStatusValues = Enum.GetValues(typeof(ProductStatus)).Cast<ProductStatus>().ToList();
-            ViewBag.ProductStatus = new SelectList(productStatusValues);
+            var productStatusValues = Enum.GetValues(typeof(ProductStatus));
+            ViewBag.ProductStatus = new SelectList(productStatusValues, product.ProductStatus);
             return View(product);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, Product product)
+        public async Task<ActionResult> Edit(ProductDTO product, IFormFile productImage)
         {
+            if (productImage != null && productImage.Length > 0)
+            {
+                var task = new FirebaseStorage("groupprojectprn.appspot.com")
+            .Child("product-images")
+            .Child(Path.GetFileName(productImage.FileName))
+            .PutAsync(productImage.OpenReadStream());
+
+                // Chờ upload hoàn thành
+                var imageUrl = await task;
+
+                // Lưu URL vào database
+                product.ProductImage = imageUrl;
+            }
             string strData = JsonSerializer.Serialize(product);
             var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync(ProductApiUrl, contentData);
+            HttpResponseMessage response = await client.PutAsync(ProductApiUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
-                ViewBag.Message = "Insert successfully!";
+                TempData["msg"] = "Update successfully!";
             }
             else
             {
-                ViewBag.Message = "Error while calling WebAPI!";
+                TempData["msg"] = "Something Went Wrong!";
             }
-            return View(product);
+            return RedirectToAction("Product_Index", "Staff");
         }
 
         public async Task<ActionResult> Delete(int id)

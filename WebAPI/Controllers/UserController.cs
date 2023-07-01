@@ -34,6 +34,15 @@ namespace WebAPI.Controllers
             return newUser ? Ok(newUser) : BadRequest();
         }
 
+
+        [HttpPost("StaffCreateUser")]
+        public IActionResult CreateFull(CreateUserDTOFull userDTOFull)
+        {
+            var newUser = _userRepository.CreateUserFull(userDTOFull);
+            return newUser ? Ok(newUser) : BadRequest();
+        }
+
+
         [HttpPut]
         public IActionResult Update(UpdateUserDTO userDTO)
         {
@@ -48,5 +57,17 @@ namespace WebAPI.Controllers
             return deleteUser ? Ok("Delete success") : BadRequest();
         }
 
+
+        [HttpPut("ChangeStatus/{userId}")]
+        public IActionResult ChangeStatus(int userId)
+        {
+            var user = _userRepository.GetUser(userId);
+            if (user == null)
+            {
+                return NotFound();  
+            }
+            _userRepository.ChangeStatus(userId);
+            return Ok("Change Successfull!");
+        }
     }
 }
