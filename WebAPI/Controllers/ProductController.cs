@@ -42,6 +42,13 @@ namespace WebAPI.Controllers
             return Ok(_repo.GetProductByCode(productCode));
         }
 
+        [HttpPost("Products")]
+        public IActionResult GetProductByIds(List<int> productIds)
+        {
+            var isSuccess = _repo.GetProductsByIds(productIds);
+            return isSuccess != null ? Ok(isSuccess) : BadRequest("Fail create!");
+        }
+
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDTO product)
         {

@@ -36,6 +36,14 @@ namespace WebAPI.Controllers
             return Ok(_mealRepo.GetMealByCode(mealCode));
         }
 
+        [HttpPost("Meals")]
+        public IActionResult CreateMeal(List<int> mealIds)
+        {
+            var check = _mealRepo.GetMealsByIds(mealIds);
+            if (check.IsNullOrEmpty()) return BadRequest("Fail");
+            return Ok(check);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteMeal(int id)
         {

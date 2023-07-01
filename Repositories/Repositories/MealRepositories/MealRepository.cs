@@ -139,5 +139,7 @@ namespace Repositories.Repositories.MealRepositories
             var meal = _mapper.Map<Meal>(mealDTO);
             MealDAO.Update(meal);
         }
+
+        public List<Meal> GetMealsByIds(List<int> mealIds) => MealDAO.GetMealsByIds(mealIds);
     }
 }

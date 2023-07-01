@@ -62,5 +62,7 @@ namespace Repositories.Repositories.ProductRepositories
         public Product GetProductByCode(string code) => ProductDAO.GetProductByCode(code);
 
         public List<Product> GetProductsByMealId(int id) => ProductDAO.GetProductsByMealId(id);
+
+        public List<Product> GetProductsByIds(List<int> productIds) => ProductDAO.GetProductsByIds(productIds);
     }
 }
