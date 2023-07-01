@@ -40,7 +40,7 @@ namespace WebClient.Controllers
                 return View(list);
             }
 
-            return View(list.Where(l => l.FullName.ToLower().Contains(SearchKey.ToLower()) || l.UserName.ToLower().Contains(SearchKey.ToLower()) ).ToList());
+            return View(list.Where(l => l.FullName.ToLower().Contains(SearchKey.ToLower()) || l.UserName.ToLower().Contains(SearchKey.ToLower())).ToList());
         }
 
         public async Task<IActionResult> CreateUser()
@@ -66,7 +66,7 @@ namespace WebClient.Controllers
 
         //    if (respone.IsSuccessStatusCode)
         //    {
-                
+
 
         //        TempData["SuccMessage"] = "Create Successfull!";
         //        return RedirectToAction("CreateUser", "User");
@@ -75,7 +75,7 @@ namespace WebClient.Controllers
         //    return RedirectToAction("CreateUser", "User");
         //}
 
-        
+
         [HttpPost]
         public async Task<IActionResult> CreateUserFull(User user)
         {
@@ -92,7 +92,7 @@ namespace WebClient.Controllers
 
             string jsonStr = JsonSerializer.Serialize(user);
             var contentData = new StringContent(jsonStr, System.Text.Encoding.UTF8, "application/json");
-            HttpResponseMessage respone = await _client.PostAsync(UserAPIUrl + "/" +"StaffCreateUser", contentData);
+            HttpResponseMessage respone = await _client.PostAsync(UserAPIUrl + "/" + "StaffCreateUser", contentData);
 
             if (respone.IsSuccessStatusCode)
             {
@@ -102,7 +102,7 @@ namespace WebClient.Controllers
             ModelState.AddModelError(String.Empty, "Failed to call API");
             return RedirectToAction("CreateUser", "User");
         }
-        
+
 
 
 
@@ -138,9 +138,10 @@ namespace WebClient.Controllers
             {
                 ViewBag.Message = "Delete successfully!";
                 return RedirectToAction("Index", "User");
+
             }
             ModelState.AddModelError(String.Empty, "Failed to call API!");
-            return View("Index");
+            return RedirectToAction("Index", "User");
         }
 
 
@@ -154,7 +155,7 @@ namespace WebClient.Controllers
 
             HttpResponseMessage reponseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await reponseRole.Content.ReadAsStringAsync();
-            
+
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -172,7 +173,7 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(User user)
         {
-            
+
             HttpResponseMessage responseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await responseRole.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
