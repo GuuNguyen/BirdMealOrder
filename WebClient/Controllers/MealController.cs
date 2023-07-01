@@ -239,10 +239,6 @@ namespace WebClient.Controllers
                 List<Product> listProduct = null;
                 List<Bird> listBird = new List<Bird>();
                 List<Product> productIngredients = null;
-                var breadcrumbs = new List<BreadCrumb>
-                {
-                    new BreadCrumb { Text = "Home", Url = "/" },
-                };
                 string prefix = code.Substring(0, 2);
                 switch (prefix)
                 {
@@ -262,23 +258,24 @@ namespace WebClient.Controllers
 
                         var mealBreadCrumb = new BreadCrumb { Text = "Meal", Url = "/Home/Meal" };
                         var mealBreadCrumbDetail = new BreadCrumb { Text = meal.MealName, Url = $"/Home/Detail?code={meal.MealCode}" };
-
-                        breadcrumbs.Add(mealBreadCrumb);
-                        breadcrumbs.Add(mealBreadCrumbDetail);
                         break;
                 }
                 HttpResponseMessage birdResponse = await client.GetAsync(BirdApiUrl);
                 string birdStrData = await birdResponse.Content.ReadAsStringAsync();
                 listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+
+                HttpResponseMessage mealProductResponse = await client.GetAsync(MealApiUrl + $"/GetMealProductByMealId/{meal.MealId}");
+                string mealProductStrData = await mealProductResponse.Content.ReadAsStringAsync();
+                var listMealProduct = JsonSerializer.Deserialize<List<MealProduct>>(mealProductStrData, options);
                 var finalResult = new DetailPMViewModel
                 {
-                    Breadcrumbs = breadcrumbs,
                     Meal = meal,
                     Product = product,
                     Meals = listMeal,
                     ProductIngredients = productIngredients,
                     Birds = listBird,
                     Products = listProduct,
+                    MealProducts = listMealProduct
                 };
                 return View(finalResult);
             }

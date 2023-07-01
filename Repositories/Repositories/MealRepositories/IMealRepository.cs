@@ -20,5 +20,7 @@ namespace Repositories.Repositories.MealRepositories
         void ChangeStatus(int mealId);
 
         UpdateMealDTO GetMealInclueBirdAndProduct(int mealId);
+
+        List<MealProduct> GetMealProductsByMealId(int mealId);
     }
 }

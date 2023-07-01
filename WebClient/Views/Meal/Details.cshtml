@@ -13,7 +13,7 @@
                         <div class="container">
                             <div style="display: flex; align-items: center" class="row">
                                 <div class="col-md-6">
-                                    <h3 style="font-size: 30px" class="box-title">Create Meal</h3>
+                                    <h3 style="font-size: 30px" class="box-title">Detail Meal</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <a asp-action="Meal_Index" asp-controller="Staff" style="margin-left: 318px; background-color: #538a50" class="btn text-white">
@@ -24,17 +24,10 @@
                         </div>
 
                         <div class="container-body page-container">
-                            @Html.Partial("_BreadCrumb")
-                            <div class="container-product-detail">
+                            <div class="container-meal-detail">
                                 <div class="product-detail-img">
-                                    @if (Model.Product != null)
-                                    {
-                                        <img src="@Model.Product.ProductImage" />
-                                    }
-                                    else
-                                    {
+
                                         <img src="@Model.Meal.MealImage" />
-                                    }
                                 </div>
                                 <div class="hero-product-detail">
                                     <div class="product-detail-content">
@@ -59,14 +52,6 @@
                                             <p>@Model.Meal.MealDescription</p>
                                         }
                                     </div>
-                                    <div class="hero-product-detail-atc-btn">
-                                        <div class="hero-btn-plus-minus">
-                                            <button class="btn-plus-minus">-</button>
-                                            <input class="btn-plus-minus-count" type="number" required value="1" />
-                                            <button class="btn-plus-minus">+</button>
-                                        </div>
-                                        <button class="product-detail-atc-btn" role="button">ADD TO CART</button>
-                                    </div>
 
                                     <div class="d-flex flex-column gap-3">
                                         @if (Model.Meal != null)
@@ -80,9 +65,12 @@
                                             <div class="list-item-ingredient">
                                                 @foreach (var item in Model.ProductIngredients)
                                                 {
-                                                    <a asp-route-code="@item.ProductCode" asp-area="" asp-controller="Home" asp-action="Detail" class="item-ingredient">
-                                                        <p>@item.ProductName</p>
-                                                    </a>
+                                                    var mealProduct = Model.MealProducts.Where(mp => mp.ProductId == item.ProductId).SingleOrDefault();
+                                                    <div class="item-ingredient">
+                                                        <p>@item.ProductName x@(mealProduct.QuantityRequired)</p>
+                                                        
+                                                    </div>
+
                                                 }
                                             </div>
                                         }
@@ -110,3 +98,116 @@
         </div>
     </div>
 </div>
+
+<style>
+    .container-meal-detail {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        gap: 3em;
+        margin-top: 5rem;
+    }
+
+    .product-detail-img img {
+        width: 600px;
+        height: 600px;
+        object-fit: cover;
+    }
+
+    .hero-product-detail {
+        width: 35vw;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+
+    .product-detail-content h2 {
+        letter-spacing: .1em;
+        font-weight: 500;
+        font-size: 2.4em;
+    }
+
+    .product-detail-content p:nth-child(2) {
+        font-weight: bold;
+        font-size: 1.3em;
+        letter-spacing: .03em;
+        margin-bottom: .3em;
+    }
+
+    .product-detail-content p:nth-child(3) {
+        font-size: .9em;
+        color: gray;
+        font-weight: bold;
+        margin-bottom: 2em;
+        letter-spacing: .02em;
+    }
+
+    .product-detail-content p:nth-child(4) {
+        max-width: 540px;
+        height: 200px;
+        letter-spacing: .02em;
+        font-size: 15px;
+        font-weight: 400;
+    }
+
+    .line {
+        width: 100%;
+        border-bottom: 1px solid #d3d3d3;
+    }
+
+    .text-ingredient p {
+        letter-spacing: .08em;
+        font-size: 14px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .list-item-ingredient {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2%;
+    }
+
+
+    .item-ingredient p {
+        text-align: start;
+        font-size: 14px;
+        font-weight: 600;
+        margin: .6em .9em;
+    }
+
+    .item-ingredient {
+        max-width: fit-content;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: transparent 0 0 0 1px,rgba(18, 18, 18, .1) 0 6px 20px;
+        box-sizing: border-box;
+        color: #121212;
+        cursor: pointer;
+        display: inline-flex;
+        flex: 1 1 auto;
+        font-family: Inter,sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        justify-content: center;
+        line-height: 1;
+        margin-bottom: .5em;
+        padding: .4em .6em;
+        outline: none;
+        text-align: center;
+        text-decoration: none;
+        transition: box-shadow .2s,-webkit-box-shadow .2s;
+        white-space: nowrap;
+        border: 1px solid #d3d3d3;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .item-ingredient:hover {
+            box-shadow: #121212 0 0 0 1px, transparent 0 0 0 0;
+        }
+
+</style>

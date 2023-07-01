@@ -63,7 +63,7 @@ namespace WebClient.Controllers
             {
                 PropertyNameCaseInsensitive = true
             };
-            
+
             List<Meal> listMeal = new List<Meal>();
             listMeal = JsonSerializer.Deserialize<List<Meal>>(mealStrData, options);
 
@@ -130,12 +130,13 @@ namespace WebClient.Controllers
                 List<Product> listProduct = null;
                 List<Bird> listBird = new List<Bird>();
                 List<Product> productIngredients = null;
+                List<MealProduct> listMealProduct = null;
                 var breadcrumbs = new List<BreadCrumb>
                 {
                     new BreadCrumb { Text = "Home", Url = "/" },
                 };
                 string prefix = code.Substring(0, 2);
-                switch(prefix)
+                switch (prefix)
                 {
                     case "ME":
                         HttpResponseMessage listMealResponse = await _client.GetAsync(MealAPIUrl);
@@ -152,10 +153,13 @@ namespace WebClient.Controllers
                         productIngredients = JsonSerializer.Deserialize<List<Product>>(productIngredientsStrData, options);
 
                         var mealBreadCrumb = new BreadCrumb { Text = "Meal", Url = "/Home/Meal" };
-                        var mealBreadCrumbDetail = new BreadCrumb {  Text = meal.MealName, Url = $"/Home/Detail?code={meal.MealCode}"};
+                        var mealBreadCrumbDetail = new BreadCrumb { Text = meal.MealName, Url = $"/Home/Detail?code={meal.MealCode}" };
 
                         breadcrumbs.Add(mealBreadCrumb);
                         breadcrumbs.Add(mealBreadCrumbDetail);
+                        HttpResponseMessage mealProductResponse = await _client.GetAsync(MealAPIUrl + $"/GetMealProductByMealId/{meal.MealId}");
+                        string mealProductStrData = await mealProductResponse.Content.ReadAsStringAsync();
+                        listMealProduct = JsonSerializer.Deserialize<List<MealProduct>>(mealProductStrData, options);
                         break;
                     case "FO":
                         HttpResponseMessage listProductResponse = await _client.GetAsync(ProductUrl);
@@ -182,8 +186,9 @@ namespace WebClient.Controllers
                     ProductIngredients = productIngredients,
                     Birds = listBird,
                     Products = listProduct,
+                    MealProducts = listMealProduct ?? new List<MealProduct>()
                 };
-                return View(finalResult);          
+                return View(finalResult);
             }
             return View();
         }
