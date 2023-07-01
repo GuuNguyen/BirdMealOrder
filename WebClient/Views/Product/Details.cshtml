@@ -15,7 +15,7 @@
 
             <div class="col-lg-6">
                 <div class="product-box">
-                    <div class="product-item">
+                    <div class="product-item-detail">
                         <dl class="row product-item_field">
                             <dd class="col-sm-12">
                                 @Html.DisplayFor(model => model.ProductName)
@@ -41,8 +41,8 @@
                             </dd>
                         </dl>
                         <div>
-                            <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
-                            <a asp-action="Index">Back to List</a>
+                            <a class = "btn btn-primary" asp-action="Edit" asp-controller = "Product" asp-route-id="@Model?.ProductId">Edit</a>
+                            <a class = "btn btn-primary" asp-action="Product_Index" asp-controller = "Staff">Back to List</a>
                         </div>
                     </div>
                 </div>
