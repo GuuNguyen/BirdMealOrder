@@ -159,7 +159,7 @@ namespace WebClient.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> Order()
+        public async Task<IActionResult> Order(int shippingAddressId)
         {
             var strCart = HttpContext.Session.GetString("cart");
             var userId = HttpContext.Session.GetInt32("userID");
@@ -215,22 +215,24 @@ namespace WebClient.Controllers
                             }));
                         }
 
-                    }
-                    var newOrder = new CreateOrderDTO
+                    }              
+                }
+                var newOrder = new CreateOrderDTO
+                {
+                    UserId = userId.Value,
+                    ShippingAddressId = shippingAddressId,
+                    CartItems = list
+                };
+                var listCartSerialize = JsonSerializer.Serialize(newOrder, options);
+                var contentData = new StringContent(listCartSerialize, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage listCartResponse = await _client.PostAsync(OrderAPIUrl, contentData);
+                if (listCartResponse.IsSuccessStatusCode)
+                {
+                    HttpContext.Session.SetString("cart", string.Empty);
+                    return Ok(Json(new JsonMessageViewModel
                     {
-                        UserId = userId.Value,
-                        CartItems = list
-                    };
-                    var listCartSerialize = JsonSerializer.Serialize(newOrder, options);
-                    var contentData = new StringContent(listCartSerialize, System.Text.Encoding.UTF8, "application/json");
-                    HttpResponseMessage listCartResponse = await _client.PostAsync(OrderAPIUrl, contentData);
-                    if (listCartResponse.IsSuccessStatusCode)
-                    {
-                        return Ok(Json(new JsonMessageViewModel
-                        {
-                            SuccessMessage = "Your order is successfully created"
-                        }));
-                    }
+                        SuccessMessage = "Your order is successfully created"
+                    }));
                 }
             }
             return BadRequest(Json(new JsonMessageViewModel

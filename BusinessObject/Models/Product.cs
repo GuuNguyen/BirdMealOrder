@@ -1,5 +1,4 @@
-﻿using BusinessObject.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BusinessObject.Models
