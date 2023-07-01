@@ -8,6 +8,7 @@ namespace BusinessObject.Models
         public User()
         {
             Orders = new HashSet<Order>();
+            ShippingAddresses = new HashSet<ShippingAddress>();
         }
 
         public int UserId { get; set; }
@@ -20,5 +21,6 @@ namespace BusinessObject.Models
 
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<ShippingAddress> ShippingAddresses { get; set; }
     }
 }

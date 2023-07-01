@@ -25,6 +25,7 @@ namespace BusinessObject.Models
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<ShippingAddress> ShippingAddresses { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -52,6 +53,8 @@ namespace BusinessObject.Models
                 entity.HasNoKey();
 
                 entity.ToTable("BirdMeal");
+
+                entity.HasIndex(e => e.BirdId, "IX_BirdMeal");
 
                 entity.Property(e => e.BirdId).HasColumnName("BirdID");
 
@@ -131,9 +134,17 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.ShipDate).HasColumnType("datetime");
 
+                entity.Property(e => e.ShippingAddressId).HasColumnName("ShippingAddressID");
+
                 entity.Property(e => e.TotalPrice).HasColumnType("money");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.HasOne(d => d.ShippingAddress)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ShippingAddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_ShippingAddress");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Orders)
@@ -195,6 +206,33 @@ namespace BusinessObject.Models
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
                 entity.Property(e => e.RoleName).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<ShippingAddress>(entity =>
+            {
+                entity.ToTable("ShippingAddress");
+
+                entity.Property(e => e.ShippingAddressId).HasColumnName("ShippingAddressID");
+
+                entity.Property(e => e.City).HasMaxLength(50);
+
+                entity.Property(e => e.District).HasMaxLength(50);
+
+                entity.Property(e => e.FullName).HasMaxLength(50);
+
+                entity.Property(e => e.PhoneNumber).HasMaxLength(50);
+
+                entity.Property(e => e.StreetAddress).HasMaxLength(50);
+
+                entity.Property(e => e.UserId).HasColumnName("UserID");
+
+                entity.Property(e => e.Ward).HasMaxLength(50);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.ShippingAddresses)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ShippingAddress_User");
             });
 
             modelBuilder.Entity<User>(entity =>

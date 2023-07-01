@@ -22,6 +22,7 @@ namespace Repositories.Repositories.OrderRepositories
             var newOrder = new Order
             {
                 UserId = order.UserId,
+                ShippingAddressId = order.ShippingAddressId,
                 OrderDate = DateTime.Now,
                 ShipDate = null,
                 Status = (int?)OrderStatus.Pending,
