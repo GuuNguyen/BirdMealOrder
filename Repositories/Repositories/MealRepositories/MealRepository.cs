@@ -174,5 +174,10 @@ namespace Repositories.Repositories.MealRepositories
         }
 
         public List<Meal> GetMealsByIds(List<int> mealIds) => MealDAO.GetMealsByIds(mealIds);
+
+        public List<MealProduct> GetMealProductsByMealId(int mealId)
+        {
+            return MealProductDAO.GetProductsByMealId(mealId);
+        }
     }
 }

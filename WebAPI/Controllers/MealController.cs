@@ -87,5 +87,14 @@ namespace WebAPI.Controllers
             if (meal == null) return NotFound();
             return Ok(_mealRepo.GetMealInclueBirdAndProduct(mealId));
         }
+
+
+        [HttpGet("GetMealProductByMealId/{mealId}")]
+        public IActionResult GetMealProductByMealId(int mealId)
+        {
+            var meal = _mealRepo.GetMeal(mealId);
+            if (meal == null) return NotFound();
+            return Ok(_mealRepo.GetMealProductsByMealId(mealId));
+        }
     }
 }
