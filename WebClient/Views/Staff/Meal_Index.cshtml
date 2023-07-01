@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Meal_Index";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    var message = TempData["SuccMessage"] as string;
+    var Emessage = TempData["ErrMessage"] as string;
 }
 
 <div class="preloader">
@@ -34,6 +36,20 @@
 
                         <p class="text-muted"></p>
                         <div id="notification" class="alert" style="display: none;"></div>
+                        <div class="col">
+                            @if (!string.IsNullOrEmpty(message))
+                            {
+                                <div id="notification" class="alert alert-success row-cols-md-6" role="alert">
+                                    @message
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(Emessage))
+                            {
+                                <div id="notification" class="alert alert-danger row-cols-md-6" role="alert">
+                                    @Emessage
+                                </div>
+                            }
+                        </div>
                         <!-- Modal HTML -->
                         <div id="myModal" class="modal fade">
                             <div class="modal-dialog modal-confirm">
@@ -123,7 +139,7 @@
                                                     </div>
                                                     <div class="dropdown-content">
                                                         <a asp-action="Edit" asp-route-mealId="@item.MealId" asp-controller="Meal"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
-                                                        <a asp-action="Details" asp-controller="Meal" asp-route-mealId="@item.MealId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
+                                                        <a asp-action="Details" asp-controller="Meal" asp-route-code="@item.MealCode"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
                                                         <a onclick="setMealIdToDelete(@item.MealId)" data-target="#myModal" data-toggle="modal" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
                                                 </div>
@@ -208,5 +224,12 @@
                 });
             }
         }
+
+        setTimeout(function () {
+            var notification = document.getElementById('notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+        }, 3000);
     </script>
 }

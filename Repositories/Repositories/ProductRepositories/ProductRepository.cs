@@ -40,7 +40,7 @@ namespace Repositories.Repositories.ProductRepositories
         { 
             var check = ProductDAO.GetProductById(updateProduct.ProductId);
             if(check == null) return false;
-            var product = _mapper.Map<Product>(updateProduct);
+            var product = _mapper.Map(updateProduct, check);
             ProductDAO.UpdateProduct(product);
             return true;
         }
@@ -62,5 +62,7 @@ namespace Repositories.Repositories.ProductRepositories
         public Product GetProductByCode(string code) => ProductDAO.GetProductByCode(code);
 
         public List<Product> GetProductsByMealId(int id) => ProductDAO.GetProductsByMealId(id);
+
+        public List<Product> GetProductsByIds(List<int> productIds) => ProductDAO.GetProductsByIds(productIds);
     }
 }

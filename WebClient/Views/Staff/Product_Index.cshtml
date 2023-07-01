@@ -24,7 +24,7 @@
                                     <h3 style="font-size: 30px" class="box-title">Product</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a asp-action = "Create" asp-controller = "Product" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
+                                    <a asp-action="Create" asp-controller="Product" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
                                         Create new product
                                     </a>
                                 </div>
@@ -104,9 +104,9 @@
                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                                     </div>
                                                     <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-route-id="@item.ProductId"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
-                                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
-                                                        <a data-product-id="@item.ProductId" onclick="showDeleteConfirmation(this)" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
+                                                        <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.ProductId">Edit</a>
+                                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId">Details</a>
+                                                        <a data-product-id="@item.ProductId" onclick="showDeleteConfirmation(this)">Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -137,7 +137,7 @@
                 <p>Do you really want to delete this product? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancel</button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
             </div>
         </div>
@@ -213,12 +213,27 @@
             }
         });
     });
+
+    // Function to hide the modal
+    function hideModal() {
+        $('#myModal').modal('hide');
+    }
+
+    // Function to show the modal
+    function showModal() {
+        $('#myModal').modal('show');
+    }
+
+    // Add event listeners to cancel button and close button (x)
+    document.getElementById('confirmDeleteBtn').addEventListener('click', showModal);
+    document.getElementById('cancelBtn').addEventListener('click', hideModal);
+    document.getElementsByClassName('close')[0].addEventListener('click', hideModal);
 </script>
 }
 
 <style>
     /* CSS cho cửa sổ thông báo */
     #notification {
-      display: none;
+        display: none;
     }
-  </style>
+</style>

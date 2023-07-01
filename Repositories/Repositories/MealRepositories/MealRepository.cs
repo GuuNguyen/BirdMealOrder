@@ -133,11 +133,51 @@ namespace Repositories.Repositories.MealRepositories
         }
 
         public Meal GetMealByCode(string code) => MealDAO.GetMealByCode(code);
-
-        public void UpdateMeal(MealDTO mealDTO)
+        public string UpdateMeal(UpdateMealDTO mealDTO)
         {
+            var oldMeal = MealDAO.GetMeal(mealDTO.MealId);
             var meal = _mapper.Map<Meal>(mealDTO);
+            var productsInMealOld = MealProductDAO.GetProductsByMealId(mealDTO.MealId);
+            foreach (var productUpdate in mealDTO.ProductRequireds)
+            {
+                var product = productsInMealOld.FirstOrDefault(p => p.ProductId == productUpdate.ProductId);
+                if (product != null)
+                {
+                    // lay so luong moi tru so luong cu
+                    var newQuantityUpdate = productUpdate.QuantityRequired * mealDTO.QuantityAvailable - product.QuantityRequired * oldMeal.QuantityAvailable;
+                    if (newQuantityUpdate > 0) // neu tang kiem tra product trong kho
+                    {
+                        var check = MealProductDAO.CheckQuantityProductAvailable(productUpdate.ProductId, newQuantityUpdate);
+                        if (!check.IsNullOrEmpty()) return check;
+
+                    }
+                    var mealProduct = new MealProduct
+                    {
+                        MealId = mealDTO.MealId,
+                        ProductId = productUpdate.ProductId,
+                        QuantityRequired = productUpdate.QuantityRequired,
+                    };
+                    MealProductDAO.Update(mealProduct, newQuantityUpdate);
+                }
+            }
+            var birdMeals = mealDTO.BirdIds.Select(id => new BirdMeal
+            {
+                BirdId = id,
+                MealId = mealDTO.MealId
+            }).ToList();
+
+            BirdMealDAO.DeleteByMealId(mealDTO.MealId);
+            BirdMealDAO.CreateRange(birdMeals);
             MealDAO.Update(meal);
+
+            return string.Empty;
+        }
+
+        public List<Meal> GetMealsByIds(List<int> mealIds) => MealDAO.GetMealsByIds(mealIds);
+
+        public List<MealProduct> GetMealProductsByMealId(int mealId)
+        {
+            return MealProductDAO.GetProductsByMealId(mealId);
         }
     }
 }

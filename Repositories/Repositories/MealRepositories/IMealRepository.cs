@@ -12,12 +12,15 @@ namespace Repositories.Repositories.MealRepositories
     {
         List<Meal> GetAllMeals();
         Meal GetMeal(int id);
+        List<Meal> GetMealsByIds(List<int> mealIds);
         Meal GetMealByCode(string code);
         string CreateMeal(CreateMealDTO createMeal);
-        void UpdateMeal(MealDTO mealDTO);
+        string UpdateMeal(UpdateMealDTO mealDTO);
         void DeleteMeal(int id);
         void ChangeStatus(int mealId);
 
         UpdateMealDTO GetMealInclueBirdAndProduct(int mealId);
+
+        List<MealProduct> GetMealProductsByMealId(int mealId);
     }
 }

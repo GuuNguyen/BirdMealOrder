@@ -36,6 +36,14 @@ namespace WebAPI.Controllers
             return Ok(_mealRepo.GetMealByCode(mealCode));
         }
 
+        [HttpPost("Meals")]
+        public IActionResult CreateMeal(List<int> mealIds)
+        {
+            var check = _mealRepo.GetMealsByIds(mealIds);
+            if (check.IsNullOrEmpty()) return BadRequest("Fail");
+            return Ok(check);
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteMeal(int id)
         {
@@ -54,11 +62,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateMeal(MealDTO mealDTO)
+        public IActionResult UpdateMeal(UpdateMealDTO mealDTO)
         {
             var meal = _mealRepo.GetMeal(mealDTO.MealId);
             if (meal == null) return NotFound();
-            _mealRepo.UpdateMeal(mealDTO);
+            var check = _mealRepo.UpdateMeal(mealDTO);
+            if (!check.IsNullOrEmpty()) return Conflict(check);
             return Ok("Update Successfull!");
         }
 
@@ -77,6 +86,15 @@ namespace WebAPI.Controllers
             var meal = _mealRepo.GetMeal(mealId);
             if (meal == null) return NotFound();
             return Ok(_mealRepo.GetMealInclueBirdAndProduct(mealId));
+        }
+
+
+        [HttpGet("GetMealProductByMealId/{mealId}")]
+        public IActionResult GetMealProductByMealId(int mealId)
+        {
+            var meal = _mealRepo.GetMeal(mealId);
+            if (meal == null) return NotFound();
+            return Ok(_mealRepo.GetMealProductsByMealId(mealId));
         }
     }
 }
