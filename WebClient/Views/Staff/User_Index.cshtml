@@ -32,6 +32,30 @@
                         </div>
 
                         <p class="text-muted"></p>
+                        <div id="notification" class="alert" style="display: none;"></div>
+                        <!-- Modal HTML -->
+                        <div id="myModal" class="modal fade">
+                            <div class="modal-dialog modal-confirm">
+                                <div class="modal-content">
+                                    <div class="modal-header flex-column">
+                                        <div class="icon-box">
+                                            <i class="material-icons">&#xE5CD;</i>
+                                        </div>
+                                        <h4 class="modal-title w-100">Are you sure?</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Deleting user will remove account and all associated data</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteUser()">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
 
                         <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
                             <table class="table text-nowrap">
@@ -63,7 +87,7 @@
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr>
+                                        <tr data-id="@item.UserId">
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.FullName)
                                             </td>
@@ -77,11 +101,11 @@
                                                 @Html.DisplayFor(modelItem => item.PhoneNumber)
                                             </td>
                                             <td>
-                                                
+
                                                 <div class="checkbox-wrapper-5">
                                                     <div class="check">
-                                                        <input id="check-@item.Status" type="checkbox" @(item.Status == 1 ? "checked" : "") onchange="toggleUserStatus(this, @item.UserId)">
-                                                        <label class="labelCheck" for="check-@item.Status"></label>
+                                                        <input id="check-@item.UserId" type="checkbox" @(item.Status == 1 ? "checked" : "") onchange="toggleUserStatus(this, @item.UserId)">
+                                                        <label class="labelCheck" for="check-@item.UserId"></label>
                                                     </div>
                                                 </div>
                                             </td>
@@ -95,8 +119,9 @@
                                                     </div>
                                                     <div class="dropdown-content">
                                                         <a asp-action="EditUser" asp-controller="User" asp-route-id="@item.UserId"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
-                                                        <a asp-action="DetailUser" asp-controller="User" asp-route-id="@item.UserId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
-                                                        <a asp-action="DeleteUser" asp-controller="User" asp-route-id="@item.UserId" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
+                                                       @* <a asp-action="DetailUser" asp-controller="User" asp-route-id="@item.UserId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>*@
+                                                        @*<a asp-action="DeleteUser" asp-controller="User" asp-route-id="@item.UserId" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>*@
+                                                        <a onclick="setUserIdToDelete(@item.UserId)" data-target="#myModal" data-toggle="modal" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -114,7 +139,7 @@
 
 <style>
     .option {
-        display: flex;
+        /*display: flex;*/
         justify-content: center
     }
 
@@ -194,6 +219,29 @@
         });
     }
 
-
+    var userIdToDelete;
+    function setUserIdToDelete(userId) {
+        userIdToDelete = userId;
+    }
+    function deleteUser() {
+        if (userIdToDelete) {
+            $.ajax({
+                url: "https://localhost:7022/api/User?userId=" + userIdToDelete,
+                type: "delete",
+                contentType: "application/json; charset=utf-8",
+                dataType: "text",
+                success: function (result) {
+                    $("#notification").removeClass("alert-danger").addClass("alert-success");
+                    $("#notification").text("Delete successfully.").show().delay(3000).fadeOut();
+                    $('tr[data-id="' + userIdToDelete + '"]').remove();
+                },
+                error: function (xhr) {
+                    $("#notification").removeClass("alert-success").addClass("alert-danger");
+                    $("#notification").text("Error delete. Please try again.").show().delay(3000).fadeOut();
+                    console.log(xhr)
+                }
+            });
+        }
+    }
 
 </script>

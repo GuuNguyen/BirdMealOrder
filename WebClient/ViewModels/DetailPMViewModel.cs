@@ -11,5 +11,6 @@ namespace WebClient.ViewModels
         public List<Bird> Birds { get; set; }
         public Meal? Meal { get; set; }
         public Product? Product { get; set; }
+        public List<MealProduct> MealProducts { get; set; }
     }
 }
