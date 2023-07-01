@@ -39,6 +39,21 @@ namespace DataAccess.DAOs
             }
         }
 
+        public static List<Product> GetProductsByIds(List<int> productIds)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    return context.Products.Where(p => productIds.Contains(p.ProductId)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static Product GetProductById(int id)
         {
             try

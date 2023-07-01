@@ -28,9 +28,10 @@ document.addEventListener("click", function (event) {
     const targetElement = event.target;
 
     if (!targetElement.closest(".menu") && !targetElement.closest(".action")) {
-        menu.classList.remove("active");
+        menu.setAttribute("class", menu.getAttribute("class").replace("active", "").trim());
     }
 });
+
 
 
 document.querySelectorAll(".button-atc").forEach((button) =>
@@ -72,3 +73,18 @@ $(document).ready(function() {
   }
 });
 
+$(document).ready(function () {
+    $(".detail-btn-plus").click(function () {
+        var quantityInput = $("#quantityInput");
+        var currentValue = parseInt(quantityInput.val());
+        quantityInput.val(currentValue + 1);
+    });
+
+    $(".detail-btn-minus").click(function () {
+        var quantityInput = $("#quantityInput");
+        var currentValue = parseInt(quantityInput.val());
+        if (currentValue > 1) {
+            quantityInput.val(currentValue - 1);
+        }
+    });
+});

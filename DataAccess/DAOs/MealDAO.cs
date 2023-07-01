@@ -56,6 +56,21 @@ namespace DataAccess.DAOs
             }
         }
 
+        public static List<Meal> GetMealsByIds(List<int> mealIds)
+        {
+            try
+            {
+                using(var context = new BirdMealOrderDBContext())
+                {
+                    return context.Meals.Where(m => mealIds.Contains(m.MealId)).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public static int Create(Meal meal)
         {
             try

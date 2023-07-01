@@ -172,5 +172,7 @@ namespace Repositories.Repositories.MealRepositories
 
             return string.Empty;
         }
+
+        public List<Meal> GetMealsByIds(List<int> mealIds) => MealDAO.GetMealsByIds(mealIds);
     }
 }
