@@ -12,6 +12,7 @@ namespace Repositories.Repositories.MealRepositories
     {
         List<Meal> GetAllMeals();
         Meal GetMeal(int id);
+        List<Meal> GetMealsByIds(List<int> mealIds);
         Meal GetMealByCode(string code);
         string CreateMeal(CreateMealDTO createMeal);
         string UpdateMeal(UpdateMealDTO mealDTO);
