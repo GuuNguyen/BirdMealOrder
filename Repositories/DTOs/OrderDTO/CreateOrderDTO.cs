@@ -10,6 +10,7 @@ namespace Repositories.DTOs.OrderDTO
     public class CreateOrderDTO
     {
         public int UserId { get; set; }
+        public int ShippingAddressId { get; set; }
         public List<CartItem> CartItems { get; set; }
     }
 }

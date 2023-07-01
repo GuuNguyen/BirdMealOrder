@@ -27,6 +27,7 @@ namespace Repositories.Helper
 
             CreateMap<User, CreateUserDTOFull>().ReverseMap();
             CreateMap<User, UpdateUserDTO>().ReverseMap();
+           
         }
     }
 }
