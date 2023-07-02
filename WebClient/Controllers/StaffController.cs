@@ -11,6 +11,7 @@ namespace WebClient.Controllers
         private string ProductApiUrl = "";
         private string UserApiUrl = "";
         private string MealApiUrl = "";
+        private string BirdApiUrl = "";
 
         public StaffController()
         {
@@ -20,6 +21,7 @@ namespace WebClient.Controllers
             ProductApiUrl = "https://localhost:7022/api/Product";
             UserApiUrl = "https://localhost:7022/api/User";
             MealApiUrl = "https://localhost:7022/api/Meal";
+            BirdApiUrl = "https://localhost:7022/api/Bird";
         }
         public async Task<IActionResult> Product_Index()
         {
@@ -61,6 +63,19 @@ namespace WebClient.Controllers
             };
             List<Meal> listMeal = JsonSerializer.Deserialize<List<Meal>>(strData, options);
             return View(listMeal);
+        }
+        public async Task<IActionResult> Bird_Index()
+        {
+            HttpResponseMessage response = await client.GetAsync(BirdApiUrl);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<Bird> listBird = JsonSerializer.Deserialize<List<Bird>>(strData, options);
+            return View(listBird);
         }
     }
 }
