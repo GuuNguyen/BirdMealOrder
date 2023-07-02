@@ -1,4 +1,5 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Enums;
+using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
@@ -29,11 +30,12 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var context = new BirdMealOrderDBContext())
+                using (var context = new BirdMealOrderDBContext())
                 {
                     return context.MealProducts.Where(c => c.MealId == id).Select(p => p.Product).ToList();
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -162,13 +164,13 @@ namespace DataAccess.DAOs
                     var product = _context.Products.Find(id);
                     if (product != null)
                     {
-                        if (product.ProductStatus == 0)
+                        if (product.ProductStatus == ProductStatus.Unavailable)
                         {
-                            product.ProductStatus = 1;
+                            product.ProductStatus = ProductStatus.Available;
                         }
                         else
                         {
-                            product.ProductStatus = 0;
+                            product.ProductStatus = ProductStatus.Unavailable;
                         }
                         _context.SaveChanges();
                     }

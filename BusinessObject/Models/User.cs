@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -18,7 +19,7 @@ namespace BusinessObject.Models
         public string Password { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public int RoleId { get; set; }
-        public int Status { get; set; }
+        public UserStatus Status { get; set; }
         [JsonIgnore]
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }

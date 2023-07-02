@@ -47,7 +47,7 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true,
             };
             List<Product>? products = JsonSerializer.Deserialize<List<Product>>(strData, options);
-            var availableProducts = products.Where(p => p.ProductStatus == (int)ProductStatus.Available).ToList();
+            var availableProducts = products.Where(p => p.ProductStatus == ProductStatus.Available).ToList();
             List<Bird>? birds = JsonSerializer.Deserialize<List<Bird>>(strDataB, options);
             ViewBag.Products = new SelectList(availableProducts, "ProductId", "ProductName");
             ViewBag.BirdMeals = new SelectList(birds, "BirdId", "BirdName");

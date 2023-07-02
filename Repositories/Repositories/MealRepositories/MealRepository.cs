@@ -39,7 +39,7 @@ namespace Repositories.Repositories.MealRepositories
             }
             var meal = _mapper.Map<Meal>(createMeal);
             meal.MealCode = GenerateCodeDAO.GenerateProductCode("Meal");
-            meal.MealStatus = (int)MealStatus.Available;
+            meal.MealStatus = MealStatus.Available;
             int mealId = MealDAO.Create(meal);
             if (mealId > 0)
             {

@@ -104,7 +104,7 @@
 
                                                 <div class="checkbox-wrapper-5">
                                                     <div class="check">
-                                                        <input id="check-@item.UserId" type="checkbox" @(item.Status == 1 ? "checked" : "") onchange="toggleUserStatus(this, @item.UserId)">
+                                                        <input id="check-@item.UserId" type="checkbox" @(item.Status == BusinessObject.Enums.UserStatus.Active ? "checked" : "") onchange="toggleUserStatus(this, @item.UserId)">
                                                         <label class="labelCheck" for="check-@item.UserId"></label>
                                                     </div>
                                                 </div>
