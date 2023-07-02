@@ -1,0 +1,59 @@
+﻿@model BusinessObject.Models.Bird
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    var msg = TempData["msg"] as string;
+}
+<div class="product_create">
+    <div class="">
+        <div class="row">
+            <div class="col-lg-6 col-md-4 product_create_item">
+                <div class = "product-notification">
+                    <h1>Create bird</h1>
+                    <div>
+                        @if (!string.IsNullOrEmpty(msg))
+                        {
+                            <div class="alert alert-info product-notification-item">
+                                @msg
+                            </div>
+                        }
+                    </div>
+                </div>
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="BirdName" class="control-label"></label>
+                        <input asp-for="BirdName" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BirdImage" class="control-label"></label>
+                        <input type="file" id="birdimage" name="birdImage" accept="image/*" class="form-control" required>
+                    </div>
+                    <div class="btn-to-back-product">
+                        <div class="form-group">
+                            <input type="submit" value="Create" class="btn btn-primary" />
+                        </div>
+                        <div>
+                            <a class="btn btn-primary" asp-action="Bird_Index" asp-controller="Staff">Back to List</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6 product_create_item_image">
+                <img class="background-image-product-create" src="~/Admin/plugins/images/image-product-create-2.jpg" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var alertElement = document.querySelector(".alert");
+        if (alertElement) {
+            setTimeout(function() {
+                alertElement.style.display = "none";
+            }, 3000);
+        }
+    });
+</script>
