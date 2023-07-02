@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "OrderHistory";
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    var selectedStatus = ViewData["SelectedStatus"] as string;
 }
 
 <div class="container-body page-container">
@@ -12,19 +13,19 @@
                 <p>Order History</p>
             </div>
             <div class="container-status-order">
-                <div class="status-order status-all" title="All">
+                <div class="status-order status-all" title="All" onclick="filterOrders('All')">
                     <span class="_20hgQK">All</span>
                 </div>
-                <div class="status-order" title="Pending">
+                <div class="status-order" title="Pending" onclick="filterOrders('Pending')">
                     <span class="_20hgQK">Pending</span>
                 </div>
-                <div class="status-order" title="Processing">
+                <div class="status-order" title="Processing" onclick="filterOrders('Processing')">
                     <span class="_20hgQK">Processing</span>
                 </div>
-                <div class="status-order" title="Completed">
+                <div class="status-order" title="Completed" onclick="filterOrders('Completed')">
                     <span class="_20hgQK">Completed</span>
                 </div>
-                <div class="status-order" title="Canceled">
+                <div class="status-order" title="Canceled" onclick="filterOrders('Canceled')">
                     <span class="_20hgQK">Canceled</span>
                 </div>
             </div>
@@ -39,55 +40,70 @@
             }
             else
             {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Order.OrderDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Order.ShipDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Order.TotalPrice)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Order.Status)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Order.User)
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Order.OrderDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Order.ShipDate)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Order.TotalPrice)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Order.Status)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Order.User.FullName)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Order.OrderId">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.Order.OrderId">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Order.OrderId">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                @foreach (var item in Model)
+                {
+                    <div class="container-order" data-status=@item.Order.Status>
+                        <div class="row header-order" style="padding: 12px">
+                            <div class="col-md-2">
+                                <img src="@item.Order.OrderDetails.FirstOrDefault().Product.ProductImage" alt="Your Image" class="img-fluid">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3>@item.Order.OrderDetails.FirstOrDefault().Product.ProductName</h3>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-top: 12px">
+                                        <p>x@(item.Order.OrderDetails.FirstOrDefault().Quantity)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row">
+                                    @item.Order.Status
+                                </div>
+                                @{
+                                    var price = @item.Order.OrderDetails.FirstOrDefault().Quantity * @item.Order.OrderDetails.FirstOrDefault().UnitPrice;
+                                }
+                                <div class="row unit-price">Unit Price: @price</div>
+                            </div>
+                        </div>
+                        <div class="row2-order">
+                            <div class="line line-left"></div>
+                            <div class="line line-right"></div>
+                        </div>
+                        <div class="total">
+                            <div class="total-content">
+                                <div class="container-icon-total">
+                                    <svg width="16" height="17" viewBox="0 0 253 263" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M126.5 0.389801C126.5 0.389801 82.61 27.8998 5.75 26.8598C5.08763 26.8507 4.43006 26.9733 3.81548 27.2205C3.20091 27.4677 2.64159 27.8346 2.17 28.2998C1.69998 28.7657 1.32713 29.3203 1.07307 29.9314C0.819019 30.5425 0.688805 31.198 0.689995 31.8598V106.97C0.687073 131.07 6.77532 154.78 18.3892 175.898C30.003 197.015 46.7657 214.855 67.12 227.76L118.47 260.28C120.872 261.802 123.657 262.61 126.5 262.61C129.343 262.61 132.128 261.802 134.53 260.28L185.88 227.73C206.234 214.825 222.997 196.985 234.611 175.868C246.225 154.75 252.313 131.04 252.31 106.94V31.8598C252.31 31.1973 252.178 30.5414 251.922 29.9303C251.667 29.3191 251.292 28.7649 250.82 28.2998C250.35 27.8358 249.792 27.4696 249.179 27.2225C248.566 26.9753 247.911 26.852 247.25 26.8598C170.39 27.8998 126.5 0.389801 126.5 0.389801Z" fill="#538a50"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M207.7 149.66L119.61 107.03C116.386 105.472 113.914 102.697 112.736 99.3154C111.558 95.9342 111.772 92.2235 113.33 88.9998C114.888 85.7761 117.663 83.3034 121.044 82.1257C124.426 80.948 128.136 81.1617 131.36 82.7198L215.43 123.38C215.7 120.38 215.85 117.38 215.85 114.31V61.0298C215.848 60.5592 215.753 60.0936 215.57 59.6598C215.393 59.2232 215.128 58.8281 214.79 58.4998C214.457 58.1705 214.063 57.909 213.63 57.7298C213.194 57.5576 212.729 57.4727 212.26 57.4798C157.69 58.2298 126.5 38.6798 126.5 38.6798C126.5 38.6798 95.31 58.2298 40.71 57.4798C40.2401 57.4732 39.7735 57.5602 39.3376 57.7357C38.9017 57.9113 38.5051 58.1719 38.1709 58.5023C37.8367 58.8328 37.5717 59.2264 37.3913 59.6604C37.2108 60.0943 37.1186 60.5599 37.12 61.0298V108.03L118.84 147.57C121.591 148.902 123.808 151.128 125.129 153.884C126.45 156.64 126.797 159.762 126.113 162.741C125.429 165.72 123.755 168.378 121.363 170.282C118.972 172.185 116.006 173.221 112.95 173.22C110.919 173.221 108.915 172.76 107.09 171.87L40.24 139.48C46.6407 164.573 62.3785 186.277 84.24 200.16L124.49 225.7C125.061 226.053 125.719 226.24 126.39 226.24C127.061 226.24 127.719 226.053 128.29 225.7L168.57 200.16C187.187 188.399 201.464 170.892 209.24 150.29C208.715 150.11 208.2 149.9 207.7 149.66Z" fill="#fff"></path></svg>
+                                </div>
+                                <div class="container-total-text">Total: </div>
+                                <div class="container-total-number">@item.Order.TotalPrice</div>
+                            </div>
+                        </div>
+                        <div class="container-footer-order">
+                            <div class="content-left-footer">
+                                <div>@item.Order.OrderDetails.Count() products in this order</div>
+                            </div>
+                            <div class="content-right-footer">
+                                @if (!item.AllReview)
+                                {
+                                    <div class="btn-right-footer">
+                                        <btn class="btn btn-content">FeedBack</btn>
+                                    </div>
+                                }
+                                <div class="btn-right-footer">
+                                    <btn class="btn btn-content">View All</btn>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+
+                    </div>
+
+                }
             }
 
         </div>
@@ -95,6 +111,13 @@
 </div>
 
 <style>
+    .container-order {
+        margin: 23px 0;
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+        border-radius: 0.125rem;
+        background-color: #f5f7f5;
+    }
+
     .img-notOrder {
         background-position: 50%;
         background-size: contain;
@@ -138,7 +161,7 @@
         border-top-right-radius: 2px;
     }
 
-    .status-order{
+    .status-order {
         cursor: pointer;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -158,12 +181,154 @@
         justify-content: center;
         transition: color .2s;
     }
-    .status-order:hover {
-        color: red;
-    }
+
+        .status-order:hover {
+            color: #16cc0c;
+        }
 
     .status-all {
-        color: red;
-        border-color: #ee4d2d;
+        color: #16cc0c;
+        border-color: #16cc0c;
+    }
+
+    .unit-price {
+        color: #538a50;
+        margin-top: 25px;
+    }
+
+    .container-footer-order {
+        padding: 12px 24px 18px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-content: center;
+        background: #f5f7f5;
+    }
+
+    .content-left-footer {
+        min-width: 300px;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        grid-gap: 4px;
+        gap: 4px;
+        flex-grow: 1;
+        word-wrap: break-word;
+        text-align: left;
+        font-size: 12px;
+        line-height: 16px;
+        color: rgba(0,0,0,.54);
+    }
+
+    .content-right-footer {
+        display: flex;
+    }
+
+    .btn-right-footer {
+        margin: 0 0 0 10px;
+        display: flex;
+        align-items: center;
+        text-overflow: ellipsis;
+    }
+
+    .row2-order {
+        margin-top: 10px;
+        width: 100%;
+        height: 0;
+        border-bottom: 1px dotted rgba(0,0,0,.09);
+        position: relative;
+    }
+
+    .total {
+        padding: 15px 24px 10px;
+        background: #f5f7f5;
+    }
+
+    .total-content {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .btn-content {
+        color: #555;
+        border: 1px solid #538a50;
+        font-weight: 400;
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 8px 10px;
+    }
+
+        .btn-content:hover {
+            color: white;
+            background-color: #538a50;
+        }
+
+    .container-icon-total {
+        cursor: pointer;
+        user-select: none;
+        margin: 0 5px 0 0;
+        line-height: 0;
+    }
+
+    .container-total-text {
+        margin: 0 10px 0 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(0,0,0,.8);
+    }
+
+    .container-total-number {
+        color: #538a50;
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .line {
+        box-sizing: border-box;
+        background: #f5f5f5;
+        width: 0.4375rem;
+        height: 0.4375rem rem;
+        border-radius: 50%;
+        z-index: 1;
+        position: absolute;
+        top: 0;
+    }
+
+    .line-left {
+        left: 0;
+        transform: translate(-50%,-50%);
+    }
+
+    .line-right {
+        right: 0;
+        transform: translate(50%,-50%);
     }
 </style>
+
+@section scripts {
+    <script>
+        function filterOrders(status) {
+            var statusOrders = document.getElementsByClassName("status-order");
+
+            // Xóa lớp CSS "status-all" khỏi tất cả các thẻ
+            for (var i = 0; i < statusOrders.length; i++) {
+                statusOrders[i].classList.remove("status-all");
+            }
+
+            // Thêm lớp CSS "status-all" cho thẻ vừa chọn
+            var selectedStatusOrder = document.querySelector('[title="' + status + '"]');
+            selectedStatusOrder.classList.add("status-all");
+
+            $('.status-order').removeClass('active');
+            $('.status-order[data-status="' + status + '"]').addClass('active');
+
+            $('.container-order').hide();
+            if (status === 'All') {
+                $('.container-order').show();
+            } else {
+                $('.container-order[data-status="' + status + '"]').show();
+            }
+        }
+    </script>
+        }

@@ -112,6 +112,10 @@ namespace DataAccess.DAOs
                 {
                     var ordersInfo = context.Orders
                         .Where(order => order.UserId == userId)
+                        .Include(order => order.OrderDetails)
+                            .ThenInclude(orderDetail => orderDetail.Meal)
+                        .Include(order => order.OrderDetails)
+                            .ThenInclude(orderDetail => orderDetail.Product)
                         .Select(order => new
                         {
                             Order = order,
@@ -127,6 +131,7 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
 
     }
 }
