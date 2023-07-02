@@ -7,15 +7,29 @@ using System.Threading.Tasks;
 
 namespace DataAccess.DAOs
 {
-    public class BirdDAO
+    public class ShippingAddressDAO
     {
-        public static List<Bird> GetAllBirds()
+        public static List<ShippingAddress> GetListSAByUserId(int userId)
+        {
+            try
+            {
+                using(var context = new BirdMealOrderDBContext())
+                {
+                    return context.ShippingAddresses.Where(s => s.UserId == userId).ToList();
+                }
+            }catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static ShippingAddress GetSAById(int id)
         {
             try
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    return context.Birds.ToList();
+                    return context.ShippingAddresses.Find(id);
                 }
             }
             catch (Exception ex)
@@ -24,67 +38,46 @@ namespace DataAccess.DAOs
             }
         }
 
-        public static Bird GetBirdById(int id)
+        public static void CreateSA(ShippingAddress shippingAddress)
         {
-            try
+            try 
             {
-                using (var context = new BirdMealOrderDBContext())
+                using(var context = new BirdMealOrderDBContext())
                 {
-                    return context.Birds.Find(id);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public static void CreateBird(Bird bird)
-        {
-            try
-            {
-                using (var context = new BirdMealOrderDBContext())
-                {
-                    context.Birds.Add(bird);
+                    context.ShippingAddresses.Add(shippingAddress);
                     context.SaveChanges();
                 }
-            }
-            catch (Exception ex)
+            } catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public static void UpdateBird(Bird bird)
+        public static void UpdateSA(ShippingAddress shippingAddress)
         {
             try
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    var birdUpdaet =  context.Birds.FirstOrDefault(p => p.BirdId == bird.BirdId);
-                    birdUpdaet.BirdName = bird.BirdName;
-                    birdUpdaet.BirdImage = bird.BirdImage;
+                    context.ShippingAddresses.Update(shippingAddress);
                     context.SaveChanges();
                 }
-            }
-            catch (Exception ex)
+            }catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public static void DeleteBird(int id)
+        public static void Delete(int id)
         {
             try
             {
-                using (var context = new BirdMealOrderDBContext())
+                using(var context = new BirdMealOrderDBContext())
                 {
-                    var birdDelete = context.Birds.Find(id);
-                    context.Remove(birdDelete);
+                    context.ShippingAddresses.Remove(context.ShippingAddresses.Find(id));
                     context.SaveChanges();
                 }
-            }
-            catch (Exception ex)
+            }catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }

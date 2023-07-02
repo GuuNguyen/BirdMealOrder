@@ -19,6 +19,7 @@ namespace Repositories.Repositories.ProductRepositories
         {
             _mapper = mapper;
         }
+
         public List<Product> GetAllProducts()
         {
             return ProductDAO.GetAllProducts();
