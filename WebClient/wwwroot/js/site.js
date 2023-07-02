@@ -88,3 +88,22 @@ $(document).ready(function () {
         }
     });
 });
+
+/*========== delivery model ==========*/
+var modal = document.getElementById("deliveryModal");
+var btn = document.getElementById("addNewDelivery");
+var closeBtn = document.getElementsByClassName("delivery-information-modal-close")[0];
+
+btn.onclick = function () {
+    modal.style.display = "block";
+}
+
+closeBtn.onclick = function () {
+    modal.style.display = "none";
+}
+
+window.onclick = function (event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}

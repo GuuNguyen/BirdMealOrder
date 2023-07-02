@@ -2,8 +2,10 @@
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
     ViewData["Title"] = "View";
+    var shippingAddressModel = new WebClient.ViewModels.ShippingAddressViewModel();
 }
 
+@Html.Partial("_DeliveryModal", shippingAddressModel)
 <div class="container-checkout-body page-container">
     <div class="cart-container">
         <div class="hero-cart checkout-text">
@@ -80,21 +82,18 @@
         <div class="delivery-container checkout-text">
             <h4>DELIVERY INFORMATION</h4>
             <div class="hero-delivery-table">
-                <div>
-                    <input placeholder="First Name" />
+                <a asp-area="" asp-controller="ShippingAddress" asp-action="_DeliveryModal" id="addNewDelivery" class="add-new-delivery">+ ADD NEW</a>
+                <div class="hero-shipping-address-item">
+                    <div class="shipping-address-item">
+                        <p>Nguyen Tan Duy</p>
+                        <p>58 Đường Số 1, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh</p>
+                        <p>+84 0976436614</p>
+                    </div>                  
                 </div>
-                <div>
-                    <input placeholder="Last Name" />
-                </div>
-                <div>
-                    <input placeholder="Phone Number" />
-                </div>
-                <div>
-                    <input placeholder="Street address" />
-                </div>
-                <div>
-                    <input placeholder="First Name" />
-                </div>
+            </div>
+            <div class="shipping-address-checkout">
+                <h4>Total: $50.00</h4>
+                <button class="product-detail-atc-btn checkout-btn">CHECKOUT</button>
             </div>
         </div>
     </div>
