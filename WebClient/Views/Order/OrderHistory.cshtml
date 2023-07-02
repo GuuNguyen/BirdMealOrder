@@ -1,60 +1,169 @@
-﻿@model IEnumerable<BusinessObject.Models.Order>
+﻿@model IEnumerable<WebClient.ViewModels.OrderHistoryViewModel>
 
 @{
     ViewData["Title"] = "OrderHistory";
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
 }
 
-<h1>OrderHistory</h1>
+<div class="container-body page-container">
+    <div class="best_seller-container">
+        <div class="hero-content">
+            <div class="item-text-page">
+                <p>Order History</p>
+            </div>
+            <div class="container-status-order">
+                <div class="status-order status-all" title="All">
+                    <span class="_20hgQK">All</span>
+                </div>
+                <div class="status-order" title="Pending">
+                    <span class="_20hgQK">Pending</span>
+                </div>
+                <div class="status-order" title="Processing">
+                    <span class="_20hgQK">Processing</span>
+                </div>
+                <div class="status-order" title="Completed">
+                    <span class="_20hgQK">Completed</span>
+                </div>
+                <div class="status-order" title="Canceled">
+                    <span class="_20hgQK">Canceled</span>
+                </div>
+            </div>
+            @if (Model.Count() <= 0)
+            {
+                <div class="d-flex justify-content-center" style="height: 500px">
+                    <div class="container-content-notOrder">
+                        <div class="img-notOrder"> </div>
+                        <div class="text-notOrder">No orders yet</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Order.OrderDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Order.ShipDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Order.TotalPrice)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Order.Status)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Order.User)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order.OrderDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order.ShipDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order.TotalPrice)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Order.User.FullName)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Order.OrderId">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Order.OrderId">Details</a> |
+                                    <a asp-action="Delete" asp-route-id="@item.Order.OrderId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShipDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ShipDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .img-notOrder {
+        background-position: 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 100px;
+        height: 100px;
+        background-image: url(https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/5fafbb923393b712b96488590b8f781f.png);
+    }
+
+    .container-content-notOrder {
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+        border-radius: 0.125rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+    }
+
+    .text-notOrder {
+        margin: 20px 0 0;
+        font-size: 18px;
+        line-height: 1.4;
+        color: rgba(0,0,0,.8);
+    }
+
+    .container-status-order {
+        width: 100%;
+        margin-bottom: 12px;
+        display: flex;
+        overflow: hidden;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #fff;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    .status-order{
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        padding: 16px 0;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+        color: rgba(0,0,0,.8);
+        background: #fff;
+        border-bottom: 2px solid rgba(0,0,0,.09);
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        transition: color .2s;
+    }
+    .status-order:hover {
+        color: red;
+    }
+
+    .status-all {
+        color: red;
+        border-color: #ee4d2d;
+    }
+</style>

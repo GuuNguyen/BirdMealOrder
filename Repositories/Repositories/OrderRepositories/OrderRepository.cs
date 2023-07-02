@@ -65,7 +65,7 @@ namespace Repositories.Repositories.OrderRepositories
 
         public bool UpdateOrder(UpdateOrderDTO order)
         {
-            if(order == null) return false;
+            if (order == null) return false;
             var updateOrder = _mapper.Map<Order>(order);
             OrderDAO.Update(updateOrder);
             return true;
@@ -77,6 +77,21 @@ namespace Repositories.Repositories.OrderRepositories
             if (order == null) return false;
             OrderDAO.DeleteOrder(id);
             return true;
+        }
+
+        public List<Order> GetOrdersByUserId(int userId)
+        {
+            return OrderDAO.GetOrdersByUserId(userId);
+        }
+
+        public Order GetOrder(int id)
+        {
+            return OrderDAO.GetOrder(id);
+        }
+
+        public List<object> GetOrdersAndCheckHasReviewByUserId(int userId)
+        {
+            return OrderDAO.GetOrdersAndCheckHasReviewByUserId(userId);
         }
     }
 }

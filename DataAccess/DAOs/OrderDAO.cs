@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +14,27 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var _context = new BirdMealOrderDBContext())
+                using (var _context = new BirdMealOrderDBContext())
                 {
                     return _context.Orders.ToList();
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
-            }         
+            }
         }
 
         public static Order GetOrder(int id)
         {
             try
             {
-                using(var _context = new BirdMealOrderDBContext())
+                using (var _context = new BirdMealOrderDBContext())
                 {
                     return _context.Orders.Find(id);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -41,12 +44,13 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var _context = new BirdMealOrderDBContext())
+                using (var _context = new BirdMealOrderDBContext())
                 {
                     _context.Orders.Add(order);
                     _context.SaveChanges();
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -56,12 +60,13 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var _context = new BirdMealOrderDBContext())
+                using (var _context = new BirdMealOrderDBContext())
                 {
                     _context.Orders.Update(order);
                     _context.SaveChanges();
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -71,16 +76,57 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var _context = new BirdMealOrderDBContext())
+                using (var _context = new BirdMealOrderDBContext())
                 {
                     var order = _context.Orders.Find(id);
                     _context.Orders.Remove(order);
                     _context.SaveChanges();
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
+
+        public static List<Order> GetOrdersByUserId(int userId)
+        {
+            try
+            {
+                using (var _context = new BirdMealOrderDBContext())
+                {
+                    return _context.Orders.Where(o => o.UserId == userId).Include(o => o.ShippingAddress).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public static List<object> GetOrdersAndCheckHasReviewByUserId(int userId)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    var ordersInfo = context.Orders
+                        .Where(order => order.UserId == userId)
+                        .Select(order => new
+                        {
+                            Order = order,
+                            AllReview = order.OrderDetails.All(orderDetail => orderDetail.Feedbacks.Any())
+                        })
+                        .ToList<object>();
+
+                    return ordersInfo;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
     }
 }
