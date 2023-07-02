@@ -26,13 +26,13 @@ namespace Repositories.Repositories.UserRepositories
 
         public bool CreateUser(CreateUserDTO userDTO)
         {
-            if(userDTO.FullName != null && userDTO.UserName != null && userDTO.PhoneNumber != null && userDTO.Password != null)
+            if (userDTO.FullName != null && userDTO.UserName != null && userDTO.PhoneNumber != null && userDTO.Password != null)
             {
-                if(!UserDAO.isExitedUserName(userDTO.FullName) && !UserDAO.isExitedPhoneNumber(userDTO.PhoneNumber))
+                if (!UserDAO.isExitedUserName(userDTO.FullName) && !UserDAO.isExitedPhoneNumber(userDTO.PhoneNumber))
                 {
                     var newUser = _mapper.Map<User>(userDTO);
                     newUser.RoleId = 3;
-                    newUser.Status = (int)UserStatus.Active;
+                    newUser.Status = UserStatus.Active;
                     UserDAO.Create(newUser);
                     return true;
                 }
@@ -54,7 +54,7 @@ namespace Repositories.Repositories.UserRepositories
         public bool DeleteUser(int id)
         {
             var user = UserDAO.GetUser(id);
-            if(user != null)
+            if (user != null)
             {
                 UserDAO.Delete(id);
                 return true;
@@ -69,7 +69,7 @@ namespace Repositories.Repositories.UserRepositories
                 if (!UserDAO.isExitedUserName(userDTOFull.FullName) && !UserDAO.isExitedPhoneNumber(userDTOFull.PhoneNumber))
                 {
                     var newUser = _mapper.Map<User>(userDTOFull);
-                    newUser.Status = (int)UserStatus.Active;
+                    newUser.Status = UserStatus.Active;
                     UserDAO.Create(newUser);
                     return true;
                 }
@@ -80,7 +80,7 @@ namespace Repositories.Repositories.UserRepositories
         public void ChangeStatus(int userId)
         {
             UserDAO.ChangeStatus(userId);
-           
+
         }
     }
 }

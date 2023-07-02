@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace BusinessObject.Models
@@ -17,7 +18,7 @@ namespace BusinessObject.Models
         public decimal Price { get; set; }
         public int QuantityAvailable { get; set; }
         public string? MealImage { get; set; }
-        public int MealStatus { get; set; }
+        public MealStatus MealStatus { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }

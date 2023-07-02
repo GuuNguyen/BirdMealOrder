@@ -25,7 +25,7 @@ namespace Repositories.Repositories.OrderRepositories
                 ShippingAddressId = order.ShippingAddressId,
                 OrderDate = DateTime.Now,
                 ShipDate = null,
-                Status = (int?)OrderStatus.Pending,
+                Status = OrderStatus.Pending,
                 OrderDetails = new List<OrderDetail>()
             };
             foreach (var cartItem in order.CartItems)

@@ -1,4 +1,5 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Enums;
+using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -136,13 +137,13 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     var user = context.Users.Find(userId);
-                    if (user.Status == 0)
+                    if (user.Status == UserStatus.Inactive)
                     {
-                        user.Status = 1;
+                        user.Status = UserStatus.Active;
                     }
                     else
                     {
-                        user.Status = 0;
+                        user.Status = UserStatus.Inactive;
                     }
                     context.SaveChanges();
                 }

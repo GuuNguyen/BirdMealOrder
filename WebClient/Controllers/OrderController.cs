@@ -73,7 +73,7 @@ namespace WebClient.Controllers
                             Ward = "truong thanh"
                         },
                         ShippingAddressId = 1,
-                        Status = (int?)OrderStatus.Pending,
+                        Status = OrderStatus.Pending,
                         TotalPrice = 0,
                         UserId = (int)userId,
 

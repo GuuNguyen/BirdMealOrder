@@ -30,17 +30,17 @@ namespace Repositories.Repositories.ProductRepositories
         }
         public bool AddProduct(CreateProductDTO createProduct)
         {
-            if(createProduct == null) return false;
+            if (createProduct == null) return false;
             var product = _mapper.Map<Product>(createProduct);
             product.ProductCode = GenerateCodeDAO.GenerateProductCode("Product");
-            product.ProductStatus = (int)ProductStatus.Available;
+            product.ProductStatus = ProductStatus.Available;
             ProductDAO.Create(product);
             return true;
         }
         public bool UpdateProduct(ProductDTO updateProduct)
-        { 
+        {
             var check = ProductDAO.GetProductById(updateProduct.ProductId);
-            if(check == null) return false;
+            if (check == null) return false;
             var product = _mapper.Map(updateProduct, check);
             ProductDAO.UpdateProduct(product);
             return true;
@@ -55,7 +55,7 @@ namespace Repositories.Repositories.ProductRepositories
         }
 
         public bool ChangeProductStatus(int id)
-        {   
+        {
             ProductDAO.ChangeProductStatus(id);
             return true;
         }
