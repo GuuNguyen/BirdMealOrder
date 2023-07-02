@@ -30,5 +30,19 @@ namespace WebClient.Controllers
             List<Order> listOrder = JsonSerializer.Deserialize<List<Order>>(strData, options);
             return View(listOrder);
         }
+
+        public async Task<IActionResult> OrderHistory(int userId)
+        {
+            HttpResponseMessage response = await client.GetAsync(OrderApiUrl);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<Order> listOrder = JsonSerializer.Deserialize<List<Order>>(strData, options);
+            return View(listOrder);
+        }
     }
 }

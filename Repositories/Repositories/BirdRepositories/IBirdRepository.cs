@@ -10,5 +10,9 @@ namespace Repositories.Repositories.BirdRepositories
     public interface IBirdRepository
     {
         List<Bird> GetAllBirds();
+        Bird GetBirdById(int id);
+        bool CreateBird(Bird bird);
+        bool UpdateBird(Bird bird);
+        bool DeleteBird(int id);
     }
 }
