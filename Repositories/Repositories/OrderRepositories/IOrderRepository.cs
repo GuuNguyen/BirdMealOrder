@@ -14,5 +14,8 @@ namespace Repositories.Repositories.OrderRepositories
         bool CreateOrder(CreateOrderDTO order);
         bool UpdateOrder(UpdateOrderDTO order);
         bool DeleteOrder(int id);
+        List<Order> GetOrdersByUserId(int userId);
+        Order GetOrder(int id);
+        List<object> GetOrdersAndCheckHasReviewByUserId(int userId);
     }
 }

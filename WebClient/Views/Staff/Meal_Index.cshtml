@@ -127,7 +127,7 @@
                                             <td>
                                                 <div class="checkbox-wrapper-5">
                                                     <div class="check">
-                                                        <input id="check-@item.MealId" type="checkbox" @(item.MealStatus == 1 ? "checked" : "") onchange="toggleMealStatus(this, @item.MealId)">
+                                                        <input id="check-@item.MealId" type="checkbox" @(item.MealStatus == BusinessObject.Enums.MealStatus.Available ? "checked" : "") onchange="toggleMealStatus(this, @item.MealId)">
                                                         <label class="labelCheck" for="check-@item.MealId"></label>
                                                     </div>
                                                 </div>

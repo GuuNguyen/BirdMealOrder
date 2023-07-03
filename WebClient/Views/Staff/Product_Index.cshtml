@@ -93,7 +93,7 @@
                                             <td>
                                                 <div class="checkbox-wrapper-5">
                                                     <div class="check">
-                                                        <input id="check-@item.ProductId" type="checkbox" @(item.ProductStatus == 1 ? "checked" : "") onchange="toggleProductStatus(this, @item.ProductId)">
+                                                        <input id="check-@item.ProductId" type="checkbox" @(item.ProductStatus == BusinessObject.Enums.ProductStatus.Available ? "checked" : "") onchange="toggleProductStatus(this, @item.ProductId)">
                                                         <label class="labelCheck" for="check-@item.ProductId"></label>
                                                     </div>
                                                 </div>

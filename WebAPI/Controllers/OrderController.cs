@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_repo.GetOrders());   
+            return Ok(_repo.GetOrders());
         }
 
         [HttpPost]
@@ -38,6 +38,24 @@ namespace WebAPI.Controllers
         {
             var isSuccess = _repo.DeleteOrder(id);
             return isSuccess ? Ok("Successfull delete!") : BadRequest("Fail delete!");
+        }
+
+        [HttpGet("GetOrderByUserId/{userId}")]
+        public IActionResult GetOrderByUserId(int userId)
+        {
+            return Ok(_repo.GetOrdersByUserId(userId));
+        }
+
+        [HttpGet("{orderId}")]
+        public IActionResult GetOrder(int orderId)
+        {
+            return Ok(_repo.GetOrder(orderId));
+        }
+
+        [HttpGet("GetOrdersAndCheckHasReviewByUserId/{userId}")]
+        public IActionResult GetOrdersAndCheckHasReviewByUserId(int userId)
+        {
+            return Ok(_repo.GetOrdersAndCheckHasReviewByUserId(userId));
         }
     }
 }

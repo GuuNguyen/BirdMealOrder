@@ -60,7 +60,7 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var context = new BirdMealOrderDBContext())
+                using (var context = new BirdMealOrderDBContext())
                 {
                     return context.Meals.Where(m => mealIds.Contains(m.MealId)).ToList();
                 }
@@ -137,13 +137,13 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     var meal = context.Meals.Find(mealId);
-                    if (meal.MealStatus == 0)
+                    if (meal.MealStatus == MealStatus.Unavailable)
                     {
-                        meal.MealStatus = 1;
+                        meal.MealStatus = MealStatus.Available;
                     }
                     else
                     {
-                        meal.MealStatus = 0;
+                        meal.MealStatus = MealStatus.Unavailable;
                     }
                     context.SaveChanges();
                 }
