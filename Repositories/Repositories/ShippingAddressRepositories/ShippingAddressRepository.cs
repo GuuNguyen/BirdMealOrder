@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Repositories.Repositories.ShippingAddressRepositories
 {
@@ -35,8 +36,9 @@ namespace Repositories.Repositories.ShippingAddressRepositories
         {
             var isNull = createSADTO.GetType()
                                     .GetProperties()
-                                    .Select(sa => sa.GetValue(createSADTO))
-                                    .Any(value => value == null || string.IsNullOrEmpty((string?)value));
+                                    .Where(pi => pi.PropertyType == typeof(string))
+                                    .Select(pi => (string)pi.GetValue(createSADTO))
+                                    .Any(value => string.IsNullOrEmpty(value));
             if (!isNull)
             {
                 var mappedSA = _mapper.Map<ShippingAddress>(createSADTO);
@@ -59,8 +61,8 @@ namespace Repositories.Repositories.ShippingAddressRepositories
         {
             var sa = ShippingAddressDAO.GetSAById(id);
             if (sa == null) return false;
-            ShippingAddressDAO.Delete(id); 
+            ShippingAddressDAO.Delete(id);
             return true;
-        }      
+        }
     }
 }

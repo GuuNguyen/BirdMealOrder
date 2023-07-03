@@ -10,8 +10,13 @@ namespace Repositories.Repositories.OrderRepositories
     public class OrderRepository : IOrderRepository
     {
         private readonly IMapper _mapper;
+        private readonly BirdMealOrderDBContext _context;
 
-        public OrderRepository(IMapper mapper) => _mapper = mapper;
+        public OrderRepository(IMapper mapper, BirdMealOrderDBContext context)
+        {
+            _mapper = mapper;
+            _context = context;
+        }
 
         public List<Order> GetOrders() => OrderDAO.GetOrders();
 
@@ -42,24 +47,25 @@ namespace Repositories.Repositories.OrderRepositories
                     var product = ProductDAO.GetProductById((int)cartItem.ProductId);
                     orderDetail.UnitPrice = product.Price;
                     product.QuantityAvailable -= cartItem.Quantity;
-                    ProductDAO.UpdateProduct(product);
+                    _context.Products.Update(product);
                 }
                 else if (cartItem.MealId != null)
                 {
                     var meal = MealDAO.GetMeal((int)cartItem.MealId);
                     orderDetail.UnitPrice = meal.Price;
                     meal.QuantityAvailable -= cartItem.Quantity;
-                    MealDAO.Update(meal);
+                    _context.Meals.Update(meal);
                 }
                 newOrder.OrderDetails.Add(orderDetail);
-                OrderDetailDAO.CreateOrderDetail(orderDetail);
+                _context.OrderDetails.Add(orderDetail);
             }
             foreach (var i in newOrder.OrderDetails)
             {
                 total += (i.UnitPrice * i.Quantity);
             }
             newOrder.TotalPrice = total;
-            OrderDAO.CreateOrder(newOrder);
+            _context.Orders.Add(newOrder);
+            _context.SaveChanges();
             return true;
         }
 
