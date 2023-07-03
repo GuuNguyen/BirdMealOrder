@@ -43,32 +43,57 @@
                 @foreach (var item in Model)
                 {
                     <div class="container-order" data-status=@item.Order.Status>
-                        <div class="row header-order" style="padding: 12px">
-                            <div class="col-md-2">
-                                <img src="@item.Order.OrderDetails.FirstOrDefault().Product.ProductImage" alt="Your Image" class="img-fluid">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h3>@item.Order.OrderDetails.FirstOrDefault().Product.ProductName</h3>
+                        @if(item.Order.OrderDetails.FirstOrDefault().Meal == null)
+                        {
+                            <div class="row header-order" style="padding: 12px">
+                                <div class="col-md-2">
+                                    <img src="@item.Order.OrderDetails.FirstOrDefault().Product.ProductImage" alt="Your Image" class="img-fluid">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h3>@item.Order.OrderDetails.FirstOrDefault().Product.ProductName</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 12px">
+                                            <p>x@(item.Order.OrderDetails.FirstOrDefault().Quantity)</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-top: 12px">
-                                        <p>x@(item.Order.OrderDetails.FirstOrDefault().Quantity)</p>
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        @item.Order.Status
+                                    </div>
+                                    <div class="row unit-price">Unit Price: @item.Order.OrderDetails.FirstOrDefault().UnitPrice</div>
+                                </div>
+                            </div>
+                        }else
+                        {
+                            <div class="row header-order" style="padding: 12px">
+                                <div class="col-md-2">
+                                    <img src="@item.Order.OrderDetails.FirstOrDefault().Meal.MealImage" alt="Your Image" class="img-fluid">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h3>@item.Order.OrderDetails.FirstOrDefault().Meal.MealName</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 12px">
+                                            <p>x@(item.Order.OrderDetails.FirstOrDefault().Quantity)</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="row">
-                                    @item.Order.Status
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        @item.Order.Status
+                                    </div>
+                                    <div class="row unit-price">Unit Price: @item.Order.OrderDetails.FirstOrDefault().UnitPrice</div>
                                 </div>
-                                @{
-                                    var price = @item.Order.OrderDetails.FirstOrDefault().Quantity * @item.Order.OrderDetails.FirstOrDefault().UnitPrice;
-                                }
-                                <div class="row unit-price">Unit Price: @price</div>
                             </div>
-                        </div>
+                        }
                         <div class="row2-order">
                             <div class="line line-left"></div>
                             <div class="line line-right"></div>
@@ -90,11 +115,11 @@
                                 @if (!item.AllReview)
                                 {
                                     <div class="btn-right-footer">
-                                        <btn class="btn btn-content">FeedBack</btn>
+                                        <a asp-action="OrderDetail" asp-route-orderId="@item.Order.OrderId" class="btn btn-content">FeedBack</a>
                                     </div>
                                 }
                                 <div class="btn-right-footer">
-                                    <btn class="btn btn-content">View All</btn>
+                                    <a asp-action="OrderDetail" asp-route-orderId="@item.Order.OrderId" class="btn btn-content">View All</a>
                                 </div>
                                 
                                 
@@ -111,6 +136,10 @@
 </div>
 
 <style>
+    .img-fluid {
+        width: 180px;
+        height: 120px;
+    }
     .container-order {
         margin: 23px 0;
         box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
