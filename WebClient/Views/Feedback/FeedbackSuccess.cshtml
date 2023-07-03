@@ -19,10 +19,10 @@
                 <a asp-action="OrderDetail" asp-route-OrderId="@Model.OrderId" asp-controller="Order" class="btn btn-content">Back to OrderDetails</a>
                 @if(Model.MealCode == null)
                 {
-                    <a action="Detail" asp-controller="Home" asp-route-code="@Model.ProductCode" class="btn btn-content">View your Feedback</a>
+                    <a asp-action="Detail" asp-controller="Home" asp-route-code="@Model.ProductCode" class="btn btn-content">View your Feedback</a>
                 }else
                 {
-                    <a action="Detail" asp-controller="Home" asp-route-code="@Model.MealCode" class="btn btn-content">View your Feedback</a>
+                    <a asp-action="Detail" asp-controller="Home" asp-route-code="@Model.MealCode" class="btn btn-content">View your Feedback</a>
                 }
             </div>
         </div>

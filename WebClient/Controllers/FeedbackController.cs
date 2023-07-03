@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessObject.Models;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.FeedbackDTO;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using WebClient.ViewModels;
 
 namespace WebClient.Controllers
@@ -21,7 +23,25 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Feedback(FeebackSuccessViewModel feebackSuccessViewModel)
         {
-            return RedirectToAction("FeedbackSuccess", feebackSuccessViewModel);
+            var feedback = new CreateFeedbackDTO
+            {
+                OrderDetailId = feebackSuccessViewModel.OrderDetailId,
+                Rating = feebackSuccessViewModel.Rating,
+                Feedback = feebackSuccessViewModel.Feedback
+            };
+            string strData = JsonSerializer.Serialize(feedback);
+            var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync(FeedbackAPI, contentData);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("FeedbackSuccess", feebackSuccessViewModel);
+            }
+            else
+            {
+                TempData["msg"] = "Something Went Wrong!";
+                return RedirectToAction("OrderDetail", "Order", feebackSuccessViewModel.OrderDetailId);
+            }
+
         }
         public async Task<IActionResult> FeedbackSuccess(FeebackSuccessViewModel feebackSuccessViewModel)
         {

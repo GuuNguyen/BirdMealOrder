@@ -16,6 +16,7 @@ namespace DataAccess.DAOs
                 using (var context = new BirdMealOrderDBContext())
                 {
                     context.Feedbacks.Add(feedback);
+                    context.SaveChanges();
                 }
             }
             catch (Exception ex)

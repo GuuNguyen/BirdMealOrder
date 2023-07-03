@@ -17,7 +17,12 @@ namespace Repositories.Repositories.FeedbackRepositories
         public FeedbackRepository(IMapper mapper) => _mapper = mapper;
         public void Create(CreateFeedbackDTO feedbackDTO)
         {
-            var feedback = _mapper.Map<Feedback>(feedbackDTO);
+            var feedback = new Feedback
+            {
+                OrderDetailId = feedbackDTO.OrderDetailId,
+                Rating = feedbackDTO.Rating,
+                Feedback1 = feedbackDTO.Feedback
+            };
             FeedbackDAO.Create(feedback);
         }
     }
