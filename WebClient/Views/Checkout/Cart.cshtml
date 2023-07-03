@@ -2,99 +2,127 @@
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
     ViewData["Title"] = "View";
-    var shippingAddressModel = new WebClient.ViewModels.ShippingAddressViewModel();
 }
-
-@Html.Partial("_DeliveryModal", shippingAddressModel)
+<div id="deliveryModalContainer"></div>
 <div class="container-checkout-body page-container">
     <div class="cart-container">
-        <div class="hero-cart checkout-text">
-            <h4>SHOPPING CART</h4>
-            <div class="table-list-cart-item">
-                <div class="table-cart-header">
-                    <p>ITEM</p>
-                    <p>PRICE</p>
-                    <p>QUANTITY</p>
-                    <p>SUBTOTAL</p>
-                </div>
-                <div class="table-cart-body">
-                    @if (Model.Meals != null)
-                    {
-                        @foreach (var item in Model.Meals)
+        @if (Model.CartItems.Count > 0)
+        {
+            <div class="hero-cart checkout-text">
+                <h4>SHOPPING CART</h4>
+                <div class="table-list-cart-item">
+                    <div class="table-cart-header">
+                        <p>ITEM</p>
+                        <p>PRICE</p>
+                        <p>QUANTITY</p>
+                        <p>SUBTOTAL</p>
+                    </div>
+                    <div class="table-cart-body">
+                        @if (Model.Meals != null)
                         {
-                            var quantity = Model.CartItems?.Where(c => c.MealId == item.MealId).Select(c => c.Quantity).SingleOrDefault();
-                            <div class="cart-item">
-                                <div class="cart-item-content-main">
-                                    <img src="@item.MealImage" />
-                                    <div class="cart-item-content">
-                                        <h5>@item.MealName</h5>
-                                        <p>@item.MealCode</p>
+                            @foreach (var item in Model.Meals)
+                            {
+                                var quantity = Model.CartItems?.Where(c => c.MealId == item.MealId).Select(c => c.Quantity).SingleOrDefault();
+                                <div class="cart-item" data-id="@item.MealId">
+
+                                    <div class="cart-item-content-main">
+                                        <img src="@item.MealImage" />
+                                        <div class="cart-item-content">
+                                            <h5>@item.MealName</h5>
+                                            <p>@item.MealCode</p>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item-content-money">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        <p id="itemPrice">@item.Price</p>
+                                    </div>
+                                    <div class="cart-item-content-money">
+                                        <button class="button-minus-checkout">-</button>
+                                        <input class="btn-plus-minus-count-checkout" type="number" value="@quantity" min="0" max="1000" required />
+                                        <button class="button-plus-checkout">+</button>
+                                    </div>
+                                    <div class="cart-item-content-money">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        <p id="itemSubPrice">@(item.Price * quantity)</p>
                                     </div>
                                 </div>
-                                <div class="cart-item-content-money">
-                                    <i class="fa-solid fa-dollar-sign"></i>
-                                    <p>@item.Price</p>
+                            }
+                        }
+                        @if (Model.Products != null)
+                        {
+                            @foreach (var item in Model.Products)
+                            {
+                                var quantity = Model.CartItems?.Where(c => c.ProductId == item.ProductId).Select(c => c.Quantity).SingleOrDefault();
+                                <div class="cart-item" data-id="@item.ProductId">
+                                    <div class="cart-item-content-main">
+                                        <img src="@item.ProductImage" />
+                                        <div class="cart-item-content">
+                                            <h5>@item.ProductName</h5>
+                                            <p>@item.ProductCode</p>
+                                        </div>
+                                    </div>
+                                    <div class="cart-item-content-money">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        <p id="itemPrice">@item.Price</p>
+                                    </div>
+                                    <div class="cart-item-content-money">
+                                        <button class="button-minus-checkout">-</button>
+                                        <input class="btn-plus-minus-count-checkout" type="number" value="@quantity" min="0" max="1000" required />
+                                        <button class="button-plus-checkout">+</button>
+                                    </div>
+                                    <div class="cart-item-content-money">
+                                        <i class="fa-solid fa-dollar-sign"></i>
+                                        <p id="itemSubPrice" >@(item.Price * quantity)</p>
+                                    </div>
                                 </div>
-                                <div class="cart-item-content-money">
-                                    <span>-</span>
-                                    <input class="btn-plus-minus-count" type="number" value="@quantity" min="0" max="1000" required />
-                                    <span>+</span>
-                                </div>
-                                <div class="cart-item-content-money">
-                                    <i class="fa-solid fa-dollar-sign"></i>
-                                    <p>@(item.Price * quantity)</p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="delivery-container checkout-text">
+                <h4>DELIVERY INFORMATION</h4>
+                <div class="hero-delivery-table">
+                    <a href="#" id="addNewDelivery" class="add-new-delivery">+ ADD NEW</a>
+                    @if (Model.ShippingAddresses != null)
+                    {
+                        @foreach (var item in Model.ShippingAddresses)
+                        {
+                            <div class="hero-shipping-address-item">
+                                <input type="radio" class="delivery-radio" name="selectedAddress" value="@item.ShippingAddressId" />
+                                <div class="shipping-address-item">
+                                    <p>@item.FullName</p>
+                                    <p>@item.StreetAddress, @item.Ward, @item.District, @item.City</p>
+                                    <p>+84 @item.PhoneNumber</p>
                                 </div>
                             </div>
                         }
                     }
-                    @if (Model.Products != null)
-                    {
-                        @foreach (var item in Model.Products)
-                        {
-                            var quantity = Model.CartItems?.Where(c => c.ProductId == item.ProductId).Select(c => c.Quantity).SingleOrDefault();
-                            <div class="cart-item">
-                                <div class="cart-item-content-main">
-                                    <img src="@item.ProductImage" />
-                                    <div class="cart-item-content">
-                                        <h5>@item.ProductName</h5>
-                                        <p>@item.ProductCode</p>
-                                    </div>
-                                </div>
-                                <div class="cart-item-content-money">
-                                    <i class="fa-solid fa-dollar-sign"></i>
-                                    <p>@item.Price</p>
-                                </div>
-                                <div class="cart-item-content-money">
-                                    <span>-</span>
-                                    <input class="btn-plus-minus-count" type="number" value="@quantity" min="0" max="1000" required />
-                                    <span>+</span>
-                                </div>
-                                <div class="cart-item-content-money">
-                                    <i class="fa-solid fa-dollar-sign"></i>
-                                    <p>@(item.Price * quantity)</p>
-                                </div>
-                            </div>
-                        }
-                    }
+                </div>
+                <div class="shipping-address-checkout">
+                    <h4>Total: <span id="totalAmount">$0.00</span></h4>
+                    <button class="checkout-btn">COMPLETE ORDER</button>
                 </div>
             </div>
-        </div>
-        <div class="delivery-container checkout-text">
-            <h4>DELIVERY INFORMATION</h4>
-            <div class="hero-delivery-table">
-                <a asp-area="" asp-controller="ShippingAddress" asp-action="_DeliveryModal" id="addNewDelivery" class="add-new-delivery">+ ADD NEW</a>
-                <div class="hero-shipping-address-item">
-                    <div class="shipping-address-item">
-                        <p>Nguyen Tan Duy</p>
-                        <p>58 Đường Số 1, Trường Thọ, Thủ Đức, Thành phố Hồ Chí Minh</p>
-                        <p>+84 0976436614</p>
-                    </div>                  
-                </div>
+        }
+        else
+        {
+            <div class="cart-img-empty">
+                <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/home-images%2FSeekPng.com_cart-png_1170538.png?alt=media&token=813d40b4-0528-4ad0-b3b0-742142d53e71" />
             </div>
-            <div class="shipping-address-checkout">
-                <h4>Total: $50.00</h4>
-                <button class="product-detail-atc-btn checkout-btn">CHECKOUT</button>
-            </div>
-        </div>
+        }
     </div>
 </div>
+
+
+@*<div id="deletePopup" class="overlay">
+    <div class="popup-delete-confirmation">
+        <h4>Confirmation</h4>
+        <p>Are you sure you want to delete this item?</p>
+        <a class="close" href="#">&times;</a>        
+        <div class="content">
+            <button id="confirmDelete">Yes</button>
+            <button id="cancelDelete">No</button>
+        </div>
+    </div>
+</div>*@
