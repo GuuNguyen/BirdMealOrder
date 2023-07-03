@@ -1,6 +1,7 @@
 ﻿using BusinessObject.Enums;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Models
 {
@@ -19,7 +20,7 @@ namespace BusinessObject.Models
         public int QuantityAvailable { get; set; }
         public string? ProductImage { get; set; }
         public ProductStatus ProductStatus { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
