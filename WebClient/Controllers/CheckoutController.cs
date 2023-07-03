@@ -3,6 +3,7 @@ using BusinessObject;
 using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.OrderDTO;
+using Repositories.DTOs.ShippingAddressDTO;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using WebClient.ViewModels;
@@ -16,6 +17,7 @@ namespace WebClient.Controllers
         private string MealAPIUrl = "";
         private string ProductAPIUrl = "";
         private string OrderAPIUrl = "";
+        private string SAAPIUrl = "";
 
         public CheckoutController()
         {
@@ -25,12 +27,14 @@ namespace WebClient.Controllers
             MealAPIUrl = "https://localhost:7022/api/Meal";
             ProductAPIUrl = "https://localhost:7022/api/Product";
             OrderAPIUrl = "https://localhost:7022/api/Order";
+            SAAPIUrl = "https://localhost:7022/api/ShippingAddress";
         }
 
         [HttpGet]
         public async Task<IActionResult> Cart()
         {
             var strCart = HttpContext.Session.GetString("cart");
+            var userId = HttpContext.Session.GetInt32("userID");
             bool haveMeal = false;
             bool haveProduct = false;
             List<Meal>? listMeal = null;
@@ -78,11 +82,15 @@ namespace WebClient.Controllers
                 string productStrData = await productResponse.Content.ReadAsStringAsync();
                 listProduct = JsonSerializer.Deserialize<List<Product>>(productStrData, options);
             }
+            HttpResponseMessage SAResponse = await _client.GetAsync(SAAPIUrl + $"/ListBy/{userId}");
+            string SAStrData = await SAResponse.Content.ReadAsStringAsync();
+            var listSA = JsonSerializer.Deserialize<List<GetSADTO>>(SAStrData, options);
             var finalResult = new GetCartViewModel
             {
                 Meals = listMeal ?? new List<Meal>(),
                 Products = listProduct ?? new List<Product>(),
                 CartItems = list,
+                ShippingAddresses = listSA,
             };
             return View(finalResult);
         }
@@ -176,15 +184,22 @@ namespace WebClient.Controllers
                 foreach (var item in list)
                 {
                     var isProduct = false;
+                    if (item.Quantity <= 0)
+                    {
+                        return BadRequest(Json(new JsonMessageViewModel
+                        {
+                            ErrorMessage = $"The quantity must be more than 0"
+                        }));
+                    }
                     if (item.ProductId.HasValue)
                     {
-                        apiUrl = "ProductAPIUrl";
+                        apiUrl = ProductAPIUrl;
                         id = item.ProductId.Value;
                         isProduct = true;
                     }
                     else
                     {
-                        apiUrl = "MealAPIUrl";
+                        apiUrl = MealAPIUrl;
                         id = item.MealId.Value;
                     }
                     HttpResponseMessage response = await _client.GetAsync(apiUrl + $"/{id}");
@@ -215,7 +230,7 @@ namespace WebClient.Controllers
                             }));
                         }
 
-                    }              
+                    }
                 }
                 var newOrder = new CreateOrderDTO
                 {
@@ -239,6 +254,27 @@ namespace WebClient.Controllers
             {
                 ErrorMessage = "Cart is Empty"
             }));
+        }
+        public  IActionResult UpdateQuantity(int id, int quantity)
+        {
+            var strCart = HttpContext.Session.GetString("cart");
+            var list = JsonSerializer.Deserialize<List<CartItem>>(strCart);
+
+            var item = list.SingleOrDefault(f => f.ProductId == id || f.MealId == id);
+            if (item != null)
+            {
+                if(quantity > 0)
+                {
+                    item.Quantity = quantity;
+                }
+                else
+                {
+                    list.Remove(item);
+                }           
+                HttpContext.Session.SetString("cart", JsonSerializer.Serialize(list));
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
