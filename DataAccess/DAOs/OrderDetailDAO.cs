@@ -42,5 +42,20 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static OrderDetail GetOrderDetail(int id)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    return context.OrderDetails.FirstOrDefault(o => o.OrderDetailId == id);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

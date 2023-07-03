@@ -40,7 +40,7 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
-            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "GetOrderByUserId/" + userId);
+            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "/GetOrdersAndCheckHasReviewByUserId/" + userId);
 
             string strData = await response.Content.ReadAsStringAsync();
 
@@ -53,107 +53,9 @@ namespace WebClient.Controllers
             {
                 listOrder = JsonSerializer.Deserialize<List<OrderHistoryViewModel>>(strData, options);
             }
-            else
-            {
-                var product = new Product
-                {
-                    ProductId = 1,
-                    Price = 15,
-                    Description = "alo alo",
-                    ProductCode = "P123",
-                    ProductImage = "https://binhminhdigital.com/StoreData/PageData/3429/Tim-hieu-ve-ban-quyen-hinh-anh%20(3).jpg",
-                    ProductName = "Khi111111111111111",
-                    ProductStatus = ProductStatus.Available,
-                    QuantityAvailable = 15,
-                };
-                var meal = new Meal
-                {
-                    MealId = 1,
-                    MealName = "Meal",
-                    MealDescription = "Meal Meal",
-                    MealCode = "M123",
-                    Price = 25,
-                    QuantityAvailable = 20,
-                    MealStatus = MealStatus.Available,
-                    MealImage = "https://vapa.vn/wp-content/uploads/2022/12/anh-cute-001-1.jpg",
-                };
-                var orderDetailProduct = new OrderDetail
-                {
-                    OrderId = 1,
-                    OrderDetailId = 1,
-                    ProductId = 1,
-                    Quantity = 1,
-                    UnitPrice = 15,
-                    Product = product,
-                };
-                var orderDetailMeal = new OrderDetail
-                {
-                    OrderId = 1,
-                    OrderDetailId = 2,
-                    MealId = 1,
-                    Quantity = 1,
-                    UnitPrice = 25,
-                    Meal = meal,
-                };
 
-                List<OrderDetail> orderDetails = new List<OrderDetail> { orderDetailProduct, orderDetailMeal };
-                var o = new OrderHistoryViewModel
-                {
-                    Order = new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        OrderId = 1,
-                        ShipDate = DateTime.Now,
-                        ShippingAddress = new ShippingAddress
-                        {
-                            City = "HCM",
-                            District = "Quan 9",
-                            FullName = "Bao",
-                            PhoneNumber = "1234567890",
-                            ShippingAddressId = 1,
-                            StreetAddress = "alo",
-                            Ward = "truong thanh"
-                        },
-                        ShippingAddressId = 1,
-                        Status = OrderStatus.Pending,
-                        TotalPrice = 40,
-                        UserId = (int)userId,
-                        OrderDetails = orderDetails
 
-                    },
-                    AllReview = false,
-                };
-                var o1 = new OrderHistoryViewModel
-                {
-                    Order = new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        OrderId = 1,
-                        ShipDate = DateTime.Now,
-                        ShippingAddress = new ShippingAddress
-                        {
-                            City = "HCM",
-                            District = "Quan 9",
-                            FullName = "Bao",
-                            PhoneNumber = "1234567890",
-                            ShippingAddressId = 1,
-                            StreetAddress = "alo",
-                            Ward = "truong thanh"
-                        },
-                        ShippingAddressId = 1,
-                        Status = OrderStatus.Completed,
-                        TotalPrice = 40,
-                        UserId = (int)userId,
-                        OrderDetails = orderDetails
-
-                    },
-                    AllReview = true,
-                };
-                listOrder.Add(o);
-                listOrder.Add(o1);
-            }
-
-            return View(listOrder);
+            return View(listOrder.OrderByDescending(o => o.Order.OrderId));
         }
 
         public async Task<IActionResult> OrderDetail(int OrderId)
@@ -163,7 +65,7 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
-            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "GetOrderByUserId/" + userId);
+            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "/GetOrdersAndCheckHasReviewByUserId/" + userId);
 
             string strData = await response.Content.ReadAsStringAsync();
 
@@ -175,105 +77,6 @@ namespace WebClient.Controllers
             if (!string.IsNullOrEmpty(strData))
             {
                 listOrder = JsonSerializer.Deserialize<List<OrderHistoryViewModel>>(strData, options);
-            }
-            else
-            {
-                var product = new Product
-                {
-                    ProductId = 1,
-                    Price = 15,
-                    Description = "alo alo",
-                    ProductCode = "P123",
-                    ProductImage = "https://binhminhdigital.com/StoreData/PageData/3429/Tim-hieu-ve-ban-quyen-hinh-anh%20(3).jpg",
-                    ProductName = "Khi111111111111111",
-                    ProductStatus = ProductStatus.Available,
-                    QuantityAvailable = 15,
-                };
-                var meal = new Meal
-                {
-                    MealId = 1,
-                    MealName = "Meal",
-                    MealDescription = "Meal Meal",
-                    MealCode = "M123",
-                    Price = 25,
-                    QuantityAvailable = 20,
-                    MealStatus = MealStatus.Available,
-                    MealImage = "https://vapa.vn/wp-content/uploads/2022/12/anh-cute-001-1.jpg",
-                };
-                var orderDetailProduct = new OrderDetail
-                {
-                    OrderId = 1,
-                    OrderDetailId = 1,
-                    ProductId = 1,
-                    Quantity = 1,
-                    UnitPrice = 15,
-                    Product = product,
-                };
-                var orderDetailMeal = new OrderDetail
-                {
-                    OrderId = 1,
-                    OrderDetailId = 2,
-                    MealId = 1,
-                    Quantity = 1,
-                    UnitPrice = 25,
-                    Meal = meal,
-                };
-
-                List<OrderDetail> orderDetails = new List<OrderDetail> { orderDetailProduct, orderDetailMeal };
-                var o = new OrderHistoryViewModel
-                {
-                    Order = new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        OrderId = 1,
-                        ShipDate = DateTime.Now,
-                        ShippingAddress = new ShippingAddress
-                        {
-                            City = "HCM",
-                            District = "Quan 9",
-                            FullName = "Bao",
-                            PhoneNumber = "1234567890",
-                            ShippingAddressId = 1,
-                            StreetAddress = "16/61/2a duong so 7 phuong tranh thanh quan 9 hcm",
-                            Ward = "truong thanh"
-                        },
-                        ShippingAddressId = 1,
-                        Status = OrderStatus.Pending,
-                        TotalPrice = 40,
-                        UserId = (int)userId,
-                        OrderDetails = orderDetails
-
-                    },
-                    AllReview = false,
-                };
-                var o1 = new OrderHistoryViewModel
-                {
-                    Order = new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        OrderId = 2,
-                        ShipDate = DateTime.Now,
-                        ShippingAddress = new ShippingAddress
-                        {
-                            City = "HCM",
-                            District = "Quan 9",
-                            FullName = "Bao",
-                            PhoneNumber = "1234567890",
-                            ShippingAddressId = 1,
-                            StreetAddress = "16/61/2a duong so 7 phuong tranh thanh quan 9 hcm",
-                            Ward = "truong thanh"
-                        },
-                        ShippingAddressId = 1,
-                        Status = OrderStatus.Completed,
-                        TotalPrice = 40,
-                        UserId = (int)userId,
-                        OrderDetails = orderDetails
-
-                    },
-                    AllReview = true,
-                };
-                listOrder.Add(o);
-                listOrder.Add(o1);
             }
             var orderDetail = listOrder.SingleOrDefault(od => od.Order.OrderId == OrderId);
             return View(orderDetail);
