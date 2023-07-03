@@ -116,6 +116,8 @@ namespace DataAccess.DAOs
                             .ThenInclude(orderDetail => orderDetail.Meal)
                         .Include(order => order.OrderDetails)
                             .ThenInclude(orderDetail => orderDetail.Product)
+                        .Include(order => order.OrderDetails)
+                            .ThenInclude(orderDetail => orderDetail.Feedbacks)
                         .Select(order => new
                         {
                             Order = order,
