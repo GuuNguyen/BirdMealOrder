@@ -41,10 +41,10 @@ namespace WebClient.Controllers
             List<Product>? listProduct = null;
             List<int> listMealId = new List<int>();
             List<int> listProductId = new List<int>();
-            if (strCart == null) return Redirect("/Login/Login");
+            if (userId == null) return Redirect("/Login/Login");
             if (string.IsNullOrEmpty(strCart))
             {
-                List<GetCartViewModel> data = new List<GetCartViewModel>();
+                GetCartViewModel data = new GetCartViewModel();
                 return View(data);
             }
             var list = JsonSerializer.Deserialize<List<CartItem>>(strCart);
@@ -99,7 +99,8 @@ namespace WebClient.Controllers
         public async Task<IActionResult> AddToCart(string code, int quantity)
         {
             var strCart = HttpContext.Session.GetString("cart");
-            if (strCart == null) return Json(new { redirectToLogin = true });
+            var userId = HttpContext.Session.GetInt32("userID");
+            if (userId == null) return Json(new { redirectToLogin = true });
             var list = JsonSerializer.Deserialize<List<CartItem>>(strCart);
             var options = new JsonSerializerOptions
             {
@@ -134,7 +135,7 @@ namespace WebClient.Controllers
                 HttpContext.Session.SetString("cart", JsonSerializer.Serialize(list));
                 return Ok();
             }
-            if (!list.Any(f => f.MealId == meal?.MealId) || !list.Any(p => p.ProductId == product?.ProductId))
+            else if (!list.Any(f => f.MealId == meal?.MealId) || !list.Any(p => p.ProductId == product?.ProductId))
             {
                 CartItem cart = new CartItem
                 {
@@ -229,7 +230,6 @@ namespace WebClient.Controllers
                                 ErrorMessage = $"The quantity of {responseObj.MealName} is only {responseObj.QuantityAvailable} "
                             }));
                         }
-
                     }
                 }
                 var newOrder = new CreateOrderDTO
@@ -243,7 +243,9 @@ namespace WebClient.Controllers
                 HttpResponseMessage listCartResponse = await _client.PostAsync(OrderAPIUrl, contentData);
                 if (listCartResponse.IsSuccessStatusCode)
                 {
-                    HttpContext.Session.SetString("cart", string.Empty);
+                    HttpContext.Session.Remove("cart");
+                    var cart = new List<CartItem>();
+                    HttpContext.Session.SetString("cart", JsonSerializer.Serialize(cart));
                     return Ok(Json(new JsonMessageViewModel
                     {
                         SuccessMessage = "Your order is successfully created"

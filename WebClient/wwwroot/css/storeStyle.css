@@ -1000,6 +1000,9 @@ body {
     height: 100px;
 }
 .cart-item-content-main{
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
     gap: 2%;
     width: 42%;
     display: flex;

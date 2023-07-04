@@ -1,4 +1,23 @@
 ﻿// ajax-functions.js
+$(document).ready(function () {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+});
 
 document.querySelectorAll(".button-atc").forEach((button) =>
     button.addEventListener("click", (e) => {
@@ -36,7 +55,7 @@ function addToCart(itemCode, quantity) {
             if (response.redirectToLogin) {
                 window.location.href = '/Login/Login';
             } else {
-                $('#successMessage').text("Added to cart successfully!").show().delay(3000).fadeOut();
+                toastr.success('Added to cart successfully!')
             }
         },
         error: function (xhr, status, error) {
@@ -44,6 +63,8 @@ function addToCart(itemCode, quantity) {
         }
     });
 }
+
+
 
 $(document).ready(function () {
     $("#addNewDelivery").click(function (e) {
@@ -66,15 +87,12 @@ $(document).ready(function () {
             modal.css("display", "none");
         }
     });
+
     $(document).on('click', '.delivery-submit-btn button:first-child', function () {
         var modal = $(".delivery-information-modal");
         modal.css("display", "none");
     });
-});
 
-
-
-$(document).ready(function () {
     $(document).on('change', '#citySelect', function () {
         var cityCodeName = $(this).val();
         var selectedCity = $(this).val();
@@ -90,8 +108,8 @@ $(document).ready(function () {
             data: { cityCodeName: cityCodeName },
             success: function (result) {
                 var districtSelect = $('#districtSelect');
-                districtSelect.empty(); 
-                districtSelect.append($('<option></option>').val('').text('Select District')); 
+                districtSelect.empty();
+                districtSelect.append($('<option></option>').val('').text('Select District'));
                 $.each(result, function (i, district) {
                     districtSelect.append($('<option></option>').val(district.codename).text(district.name));
                 });
@@ -115,13 +133,37 @@ $(document).ready(function () {
             success: function (result) {
                 var wardSelect = $('#wardSelect');
                 wardSelect.empty();
-                wardSelect.append($('<option></option>').val('').text('Select Ward')); 
+                wardSelect.append($('<option></option>').val('').text('Select Ward'));
                 $.each(result, function (i, ward) {
                     wardSelect.append($('<option></option>').val(ward.codename).text(ward.name));
                 });
             }
         });
     });
+
+    function updateShippingAddresses() {
+        $.ajax({
+            url: "/ShippingAddress/GetDeliveryAddresses",
+            type: "GET",
+            success: function (data) {
+                var html = '';
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    html += '<div class="hero-shipping-address-item">';
+                    html += '<input type="radio" class="delivery-radio" name="selectedAddress" value="' + item.shippingAddressId + '" />';
+                    html += '<div class="shipping-address-item">';
+                    html += '<p>' + item.fullName + '</p>';
+                    html += '<p>' + item.city + '</p>';
+                    html += '<p>+84 ' + item.phoneNumber + '</p>';
+                    html += '</div></div>';
+                }
+                $(".hero-delivery-table").html(html);
+                $(".delivery-information-modal").css("display", "none");
+            },
+            error: function () {
+            }
+        });
+    }
 
     $(document).on('submit', '.delivery-information-modal-content', function (event) {
         event.preventDefault();
@@ -142,14 +184,13 @@ $(document).ready(function () {
             Ward: ward,
             StreetAddress: streetAddress
         };
-        console.log(deliveryData)
         $.ajax({
             url: "/ShippingAddress/Create",
             type: "POST",
             data: deliveryData,
             success: function (response) {
-                console.log(response)
-                window.location.reload();
+                toastr.success(response.value.successMessage);
+                updateShippingAddresses();
             },
             error: function () {
             }
@@ -288,20 +329,16 @@ $(document).ready(function () {
         var subtotal = price * quantity;
         cartItem.find('.cart-item-content-money p#itemSubPrice').text(subtotal.toFixed(2));
     }
-});
 
 
 
-
-
-
-$(document).ready(function () {
-    $('.checkout-btn').on('click', function () {
+    $('.checkout-btn').on('click', function (event) {
+        event.preventDefault();
         var selectedAddress = $('input[name="selectedAddress"]:checked').val();
         if (selectedAddress) {
             createOrder(selectedAddress);
         } else {
-            alert('Please select a shipping address.');
+            toastr.warning('Please select a shipping address!!');
         }
     });
 
@@ -311,23 +348,28 @@ $(document).ready(function () {
             type: 'POST',
             data: { shippingAddressId: shippingAddressId },
             success: function (response) {
-                if (response.cartIsEmpty) {
-                    alert('Cart is empty.');
-                }else if (response.successMessage) {
-                    alert(response.successMessage);
+                var responseMessage = response.value;
+                if (responseMessage.errorMessage != null) {
+                    toastr.error('Cart is empty.');
+                } else {
+                    toastr.success(responseMessage.successMessage);
+                    $('.cart-item').remove();
+                    updateCartDisplay();
                 }
             },
             error: function (xhr) {
-                var response = xhr.responseJSON;
-                if (response && response.errorMessage) {
-                    alert(response.errorMessage);
-                } else {
+                if (xhr.status === 400) {
+                    var response = xhr.responseJSON.value;
+                    toastr.error(response.errorMessage);
+                }
+                else {
                     alert('An error occurred while creating the order.');
                 }
             }
         });
     }
-
 });
+
+
 
 
