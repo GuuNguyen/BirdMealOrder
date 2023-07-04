@@ -1,28 +1,54 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Net.Http;
+using Repositories.DTOs.ShippingAddressDTO;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using WebClient.Models;
 using WebClient.ViewModels;
 
-namespace WebClient.Controllers
+public class ShippingAddressController : Controller
 {
-    public class ShippingAddressController : Controller
-    {
-        private readonly HttpClient _client;
-        private string ProviceAPIUrl = "";
-        private List<City> _cityList = new List<City>();
-        private List<District> _districtList = new List<District>();
-        public ShippingAddressController()
-        {
-            _client = new HttpClient();
-            var contentType = new MediaTypeWithQualityHeaderValue("application/json");
-            _client.DefaultRequestHeaders.Accept.Add(contentType);
-            ProviceAPIUrl = "https://provinces.open-api.vn/api/?depth=3";
-        }
+    private readonly HttpClient _client;
+    private string ProviceAPIUrl = "";
+    private string SAAPIUrl = "";
 
-        public async Task<IActionResult> _DeliveryModal()
+    public ShippingAddressController()
+    {
+        _client = new HttpClient();
+        var contentType = new MediaTypeWithQualityHeaderValue("application/json");
+        _client.DefaultRequestHeaders.Accept.Add(contentType);
+        ProviceAPIUrl = "https://provinces.open-api.vn/api/?depth=3";
+        SAAPIUrl = "https://localhost:7022/api/ShippingAddress";
+    }
+
+    public async Task<IActionResult> GetDeliveryAddresses()
+    {
+        var userId = HttpContext.Session.GetInt32("userID");
+        HttpResponseMessage SAResponse = await _client.GetAsync(SAAPIUrl + $"/ListBy/{userId}");       
+        if(SAResponse.IsSuccessStatusCode)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            string SAStrData = await SAResponse.Content.ReadAsStringAsync();
+            var listSA = JsonSerializer.Deserialize<List<GetSADTO>>(SAStrData, options);
+            return Ok(listSA);
+        }
+        return BadRequest();
+    }
+
+    public async Task<IActionResult> _DeliveryModal()
+    {
+        List<City> _cityList;
+        List<District> _districtList;
+
+        if (HttpContext.Session.TryGetValue("CityList", out var cityListBytes) &&
+            HttpContext.Session.TryGetValue("DistrictList", out var districtListBytes))
+        {
+            _cityList = JsonSerializer.Deserialize<List<City>>(cityListBytes);
+            _districtList = JsonSerializer.Deserialize<List<District>>(districtListBytes);
+        }
+        else
         {
             HttpResponseMessage response = await _client.GetAsync(ProviceAPIUrl);
             var options = new JsonSerializerOptions
@@ -35,41 +61,88 @@ namespace WebClient.Controllers
                 var content = await response.Content.ReadAsStringAsync();
                 var cities = JsonSerializer.Deserialize<List<City>>(content, options);
 
-                _cityList.AddRange(cities);
-                foreach (var city in cities)
+                _cityList = cities.Select(city => new City
                 {
-                    _districtList.AddRange(city.Districts);
-                }
-                var model = new ShippingAddressViewModel
-                {
-                    Cities = _cityList,
-                    SelectedCity = cities?.FirstOrDefault()?.Name
-                };
-                return PartialView("_DeliveryModal", model);
+                    Codename = city.Codename,
+                    Name = city.Name,
+                    Districts = city.Districts.Select(district => new District
+                    {
+                        Codename = district.Codename,
+                        Name = district.Name,
+                        Wards = district.Wards.Select(ward => new Ward
+                        {
+                            Codename = ward.Codename,
+                            Name = ward.Name
+                        }).ToList()
+                    }).ToList()
+                }).ToList();
+
+                _districtList = _cityList.SelectMany(city => city.Districts).ToList();
+
+                HttpContext.Session.Set("CityList", JsonSerializer.SerializeToUtf8Bytes(_cityList));
+                HttpContext.Session.Set("DistrictList", JsonSerializer.SerializeToUtf8Bytes(_districtList));
             }
-            return View("Error");
+            else
+            {
+                return View("Error");
+            }
         }
 
-        [HttpGet]
-        public JsonResult GetDistricts(string cityCodeName)
+        var model = new ShippingAddressViewModel
         {
-            var selectedCity = _cityList.FirstOrDefault(c => c.Codename == cityCodeName);
+            Cities = _cityList,
+        };
+
+        return PartialView("_DeliveryModal", model);
+    }
+
+    [HttpGet]
+    public JsonResult GetDistricts(string cityCodeName)
+    {
+        var cityListBytes = HttpContext.Session.Get("CityList");
+        if (cityListBytes != null)
+        {
+            var cityList = JsonSerializer.Deserialize<List<City>>(cityListBytes);
+            var selectedCity = cityList.FirstOrDefault(c => c.Codename == cityCodeName);
             if (selectedCity != null)
             {
                 return Json(selectedCity.Districts);
             }
-            return Json(new List<District>());
         }
+        return Json(new List<District>());
+    }
 
-        [HttpGet]
-        public JsonResult GetWards(string districtCodeName)
+    [HttpGet]
+    public JsonResult GetWards(string districtCodeName)
+    {
+        var districtListBytes = HttpContext.Session.Get("DistrictList");
+        if (districtListBytes != null)
         {
-            var selectedDistrict = _districtList.FirstOrDefault(d => d.Codename == districtCodeName);
+            var districtList = JsonSerializer.Deserialize<List<District>>(districtListBytes);
+            var selectedDistrict = districtList.FirstOrDefault(d => d.Codename == districtCodeName);
             if (selectedDistrict != null)
             {
                 return Json(selectedDistrict.Wards);
             }
-            return Json(new List<Ward>());
         }
+        return Json(new List<Ward>());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateSADTO sADTO)
+    {
+        var userId = HttpContext.Session.GetInt32("userID");
+        sADTO.UserId = (int)userId;
+        string strData = JsonSerializer.Serialize(sADTO);
+        var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await _client.PostAsync(SAAPIUrl, contentData);
+        if (response.IsSuccessStatusCode)
+        {
+            return Ok(Json(new JsonMessageViewModel
+            {
+                SuccessMessage = "Your delivery address is successfully created"
+            }));
+        }
+        return BadRequest();
     }
 }

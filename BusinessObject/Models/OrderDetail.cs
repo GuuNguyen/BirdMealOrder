@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject.Models
 {
@@ -18,6 +19,7 @@ namespace BusinessObject.Models
         public decimal UnitPrice { get; set; }
 
         public virtual Meal? Meal { get; set; }
+        [JsonIgnore]
         public virtual Order Order { get; set; } = null!;
         public virtual Product? Product { get; set; }
         public virtual ICollection<Feedback> Feedbacks { get; set; }

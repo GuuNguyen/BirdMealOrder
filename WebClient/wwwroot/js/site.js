@@ -33,17 +33,6 @@ document.addEventListener("click", function (event) {
 });
 
 
-
-document.querySelectorAll(".button-atc").forEach((button) =>
-    button.addEventListener("click", (e) => {
-        if (!button.classList.contains("loading")) {
-            button.classList.add("loading");
-            setTimeout(() => button.classList.remove("loading"), 3700);
-        }
-        e.preventDefault();
-    })
-);
-
 $(document).ready(function() {
   var filterTable = $("#filterTable");
 
@@ -77,7 +66,9 @@ $(document).ready(function () {
     $(".detail-btn-plus").click(function () {
         var quantityInput = $("#quantityInput");
         var currentValue = parseInt(quantityInput.val());
-        quantityInput.val(currentValue + 1);
+        if (currentValue < 1000) {
+            quantityInput.val(currentValue + 1);
+        }
     });
 
     $(".detail-btn-minus").click(function () {
@@ -87,23 +78,14 @@ $(document).ready(function () {
             quantityInput.val(currentValue - 1);
         }
     });
+
+    $("#quantityInput").on("input", function () {
+        var quantityInput = $(this);
+        var currentValue = parseInt(quantityInput.val());
+        if (currentValue < 1 || isNaN(currentValue)) {
+            quantityInput.val(1);
+        } else if (currentValue > 1000) {
+            quantityInput.val(1000);
+        }
+    });
 });
-
-/*========== delivery model ==========*/
-var modal = document.getElementById("deliveryModal");
-var btn = document.getElementById("addNewDelivery");
-var closeBtn = document.getElementsByClassName("delivery-information-modal-close")[0];
-
-btn.onclick = function () {
-    modal.style.display = "block";
-}
-
-closeBtn.onclick = function () {
-    modal.style.display = "none";
-}
-
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}

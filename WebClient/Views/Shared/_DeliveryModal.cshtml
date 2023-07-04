@@ -1,48 +1,49 @@
-﻿@model WebClient.ViewModels.ShippingAddressViewModel
-
+﻿
 <div id="deliveryModal" class="delivery-information-modal">
-    <div class="delivery-information-modal-content">
-        <span class="delivery-information-modal-close">&times;</span>
+    <form class="delivery-information-modal-content">
         <h4>ADD NEW ADDRESS</h4>
         <div class="container-delivery-modal">
             <div class="delivery-item delivery-username">
                 <label>Full Name</label>
-                <input class="delivery-input-text" placeholder="Full Name" />
+                <input class="delivery-input-text" placeholder="Full Name" name="FullName" required/>
             </div>
             <div class="delivery-item delivery-phonenumber">
                 <label>Phone Number</label>
-                <input class="delivery-input-text" placeholder="Phone Number" />
+                <input class="delivery-input-text" placeholder="Phone Number" name="PhoneNumber" required/>
             </div>
             <div class="delivery-item delivery-city">
                 <label>City</label>
-                <select id="citySelect" class="delivery-input-text" name="SelectedCity">
-                    @if(Model.Cities != null)
+                <select id="citySelect" class="delivery-input-text" name="SelectedCity" required>
+                    <option value="" disabled selected style="display:none;">Select City</option>
+                    @foreach (var city in Model.Cities)
                     {
-                        @foreach (var city in Model.Cities)
-                        {
-                            <option value="@city.Codename">@city.Name</option>
-                        }
+                        <option value="@city.Codename">@city.Name</option>
                     }
-                    else
-                    {
-                        <option >None</option>
-                    }
-
                 </select>
             </div>
             <div class="delivery-item delivery-district">
                 <label>District</label>
-                <select id="districtSelect" class="delivery-input-text" name="SelectedDistrict"></select>
+                <select id="districtSelect" class="delivery-input-text" name="SelectedDistrict" disabled required>
+                    <option value="">Select District</option>
+                </select>
             </div>
             <div class="delivery-item delivery-ward">
                 <label>Ward</label>
-                <select id="wardSelect" class="delivery-input-text" name="SelectedWard"></select>
+                <select id="wardSelect" class="delivery-input-text" name="SelectedWard" disabled required>
+                    <option value="">Select Ward</option>
+                </select>
             </div>
             <div class="delivery-item delivery-streetaddress">
                 <label>Street Address</label>
-                <input class="delivery-input-text" placeholder="Street Address" />
+                <textarea class="delivery-input-text" name="StreetAddress" placeholder="Street Address" required></textarea>
             </div>
         </div>
-    </div>
+        <div class="delivery-submit-container">
+            <div class="delivery-submit-btn">
+                <button>Cancel</button>
+                <button type="submit" class="createDeliveryBtn">Create</button>
+            </div>            
+        </div>
+    </form>
 </div>
 
