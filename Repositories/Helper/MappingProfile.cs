@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject.Models;
+using Repositories.DTOs.FeedbackDTO;
 using Repositories.DTOs.MealDTO;
 using Repositories.DTOs.OrderDTO;
 using Repositories.DTOs.ProductDTO;
@@ -27,9 +28,10 @@ namespace Repositories.Helper
             CreateMap<Meal, UpdateMealDTO>().ReverseMap();
             CreateMap<User, CreateUserDTOFull>().ReverseMap();
             CreateMap<User, UpdateUserDTO>().ReverseMap();
-            CreateMap<ShippingAddress, GetSADTO>().ReverseMap();     
-            CreateMap<ShippingAddress, UpdateSADTO>().ReverseMap();     
-            CreateMap<ShippingAddress, CreateSADTO>().ReverseMap();     
+            CreateMap<ShippingAddress, GetSADTO>().ReverseMap();
+            CreateMap<ShippingAddress, UpdateSADTO>().ReverseMap();
+            CreateMap<ShippingAddress, CreateSADTO>().ReverseMap();
+            CreateMap<Feedback, CreateFeedbackDTO>().ReverseMap();
         }
     }
 }

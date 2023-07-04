@@ -40,7 +40,7 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
-            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "GetOrderByUserId/" + userId);
+            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "/GetOrdersAndCheckHasReviewByUserId/" + userId);
 
             string strData = await response.Content.ReadAsStringAsync();
 
@@ -53,36 +53,33 @@ namespace WebClient.Controllers
             {
                 listOrder = JsonSerializer.Deserialize<List<OrderHistoryViewModel>>(strData, options);
             }
-            else
+
+
+            return View(listOrder.OrderByDescending(o => o.Order.OrderId));
+        }
+
+        public async Task<IActionResult> OrderDetail(int OrderId)
+        {
+            var userId = HttpContext.Session.GetInt32("userID");
+            if (userId == null)
             {
-                var o = new OrderHistoryViewModel
-                {
-                    Order = new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        OrderId = 1,
-                        ShipDate = DateTime.Now,
-                        ShippingAddress = new ShippingAddress
-                        {
-                            City = "HCM",
-                            District = "Quan 9",
-                            FullName = "Bao",
-                            PhoneNumber = "1234567890",
-                            ShippingAddressId = 1,
-                            StreetAddress = "alo",
-                            Ward = "truong thanh"
-                        },
-                        ShippingAddressId = 1,
-                        Status = OrderStatus.Pending,
-                        TotalPrice = 0,
-                        UserId = (int)userId,
-
-                    }
-                };
-                listOrder.Add(o);
+                return Redirect("/Login/Login");
             }
+            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "/GetOrdersAndCheckHasReviewByUserId/" + userId);
 
-            return View(listOrder);
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<OrderHistoryViewModel> listOrder = new List<OrderHistoryViewModel>();
+            if (!string.IsNullOrEmpty(strData))
+            {
+                listOrder = JsonSerializer.Deserialize<List<OrderHistoryViewModel>>(strData, options);
+            }
+            var orderDetail = listOrder.SingleOrDefault(od => od.Order.OrderId == OrderId);
+            return View(orderDetail);
         }
     }
 }

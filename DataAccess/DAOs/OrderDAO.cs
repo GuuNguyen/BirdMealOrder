@@ -112,6 +112,13 @@ namespace DataAccess.DAOs
                 {
                     var ordersInfo = context.Orders
                         .Where(order => order.UserId == userId)
+                        .Include(order => order.OrderDetails)
+                            .ThenInclude(orderDetail => orderDetail.Meal)
+                        .Include(order => order.OrderDetails)
+                            .ThenInclude(orderDetail => orderDetail.Product)
+                        .Include(order => order.OrderDetails)
+                            .ThenInclude(orderDetail => orderDetail.Feedbacks)
+                        .Include(o => o.ShippingAddress)
                         .Select(order => new
                         {
                             Order = order,
@@ -127,6 +134,34 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static bool CheckOrderCompleteByOrderDetailId(int orderDetailId)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    var order = context.Orders
+                        .Include(o => o.OrderDetails)
+                        .FirstOrDefault(o => o.OrderDetails.Any(od => od.OrderDetailId == orderDetailId));
+
+                    if (order != null && order.Status == BusinessObject.Enums.OrderStatus.Completed)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
 
     }
 }
