@@ -72,5 +72,17 @@ namespace WebAPI.Controllers
             var isSuccess = _repo.DeleteChangeOrderStatus(id);
             return isSuccess ? Ok("Successfull updated!") : BadRequest("Fail update!");
         }
+
+        [HttpGet("GetBestSeller")]
+        public IActionResult GetBestSeller()
+        {
+            return Ok(_repo.GetListBestSeller());
+        }
+
+        [HttpGet("RecommendList")]
+        public IActionResult GetRecommendList()
+        {
+            return Ok(_repo.GetListRecommend());
+        }
     }
 }

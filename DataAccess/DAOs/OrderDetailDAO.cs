@@ -10,6 +10,20 @@ namespace DataAccess.DAOs
 {
     public class OrderDetailDAO
     {
+        public static List<OrderDetail> GetListAllOrderDetail()
+        {
+            try
+            {
+                using(var _context = new BirdMealOrderDBContext())
+                {
+                    return _context.OrderDetails.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public static void CreateOrderDetail(OrderDetail orderDetail)
         {
             try

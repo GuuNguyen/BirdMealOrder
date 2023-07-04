@@ -149,6 +149,7 @@ $(document).ready(function () {
                 var html = '';
                 for (var i = 0; i < data.length; i++) {
                     var item = data[i];
+                    html += '<a href="#" id="addNewDelivery" class="add-new-delivery">+ ADD NEW</a>';
                     html += '<div class="hero-shipping-address-item">';
                     html += '<input type="radio" class="delivery-radio" name="selectedAddress" value="' + item.shippingAddressId + '" />';
                     html += '<div class="shipping-address-item">';

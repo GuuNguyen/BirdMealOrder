@@ -20,5 +20,7 @@ namespace Repositories.Repositories.OrderRepositories
         List<object> GetOrdersAndCheckHasReviewByUserId(int userId);
         bool ChangeOrderStatus(ChangeOrderStatusDTO order);
         bool DeleteChangeOrderStatus(int id);
+        List<object> GetListBestSeller();
+        List<object> GetListRecommend();
     }
 }

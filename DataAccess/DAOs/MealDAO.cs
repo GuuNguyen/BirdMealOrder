@@ -153,5 +153,20 @@ namespace DataAccess.DAOs
                 throw new Exception(e.Message);
             }
         }
+
+        public static List<Meal> GetMealsByBirdId(int id)
+        {
+            try
+            {
+                using(var context = new BirdMealOrderDBContext())
+                {
+                    return context.BirdMeals.Where(bm => bm.BirdId == id).Select(m => m.Meal).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }
