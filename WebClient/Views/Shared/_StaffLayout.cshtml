@@ -118,6 +118,13 @@
                                     <span class="hide-menu text-dark">Order</span>
                                 </a>
                             </li>
+                            <li class="sidebar-item">
+                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
+                                   aria-expanded="false" onclick="redirectToReport()">
+                                    <i class="fa-solid fa-square-poll-vertical"></i>
+                                    <span class="hide-menu text-dark">Report</span>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="sidebar-item">
@@ -199,6 +206,9 @@
         }
         function redirectToOrderIndex() {
             window.location.href = "/Staff/Order_Index";
+        }
+        function redirectToReport() {
+            window.location.href = "/Staff/Report_Index";
         }
     </script>
     @await RenderSectionAsync("Scripts", required: false)

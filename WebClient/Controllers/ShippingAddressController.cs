@@ -20,22 +20,36 @@ public class ShippingAddressController : Controller
         SAAPIUrl = "https://localhost:7022/api/ShippingAddress";
     }
 
+    public async Task<IActionResult> GetDeliveryAddresses()
+    {
+        var userId = HttpContext.Session.GetInt32("userID");
+        HttpResponseMessage SAResponse = await _client.GetAsync(SAAPIUrl + $"/ListBy/{userId}");       
+        if(SAResponse.IsSuccessStatusCode)
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            string SAStrData = await SAResponse.Content.ReadAsStringAsync();
+            var listSA = JsonSerializer.Deserialize<List<GetSADTO>>(SAStrData, options);
+            return Ok(listSA);
+        }
+        return BadRequest();
+    }
+
     public async Task<IActionResult> _DeliveryModal()
     {
         List<City> _cityList;
         List<District> _districtList;
 
-        // Kiểm tra xem danh sách đã được lưu trong session chưa
         if (HttpContext.Session.TryGetValue("CityList", out var cityListBytes) &&
             HttpContext.Session.TryGetValue("DistrictList", out var districtListBytes))
         {
-            // Đã có danh sách trong session, sử dụng danh sách đã lưu
             _cityList = JsonSerializer.Deserialize<List<City>>(cityListBytes);
             _districtList = JsonSerializer.Deserialize<List<District>>(districtListBytes);
         }
         else
         {
-            // Chưa có danh sách trong session, tải dữ liệu từ API và lưu vào session
             HttpResponseMessage response = await _client.GetAsync(ProviceAPIUrl);
             var options = new JsonSerializerOptions
             {
@@ -65,7 +79,6 @@ public class ShippingAddressController : Controller
 
                 _districtList = _cityList.SelectMany(city => city.Districts).ToList();
 
-                // Lưu danh sách vào session
                 HttpContext.Session.Set("CityList", JsonSerializer.SerializeToUtf8Bytes(_cityList));
                 HttpContext.Session.Set("DistrictList", JsonSerializer.SerializeToUtf8Bytes(_districtList));
             }
@@ -125,7 +138,10 @@ public class ShippingAddressController : Controller
         HttpResponseMessage response = await _client.PostAsync(SAAPIUrl, contentData);
         if (response.IsSuccessStatusCode)
         {
-            return Ok();
+            return Ok(Json(new JsonMessageViewModel
+            {
+                SuccessMessage = "Your delivery address is successfully created"
+            }));
         }
         return BadRequest();
     }

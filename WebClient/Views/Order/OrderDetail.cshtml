@@ -1,0 +1,744 @@
+﻿@model WebClient.ViewModels.OrderHistoryViewModel
+
+@{
+    ViewData["Title"] = "OrderHistory";
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    var selectedStatus = ViewData["SelectedStatus"] as string;
+    var Emessage = TempData["ErrMessage"] as string;
+}
+
+<div class="container-body page-container">
+    <div class="best_seller-container">
+        <div class="hero-content">
+            <div class="item-text-page">
+                <p>Order Detail</p>
+            </div>
+            @if (!string.IsNullOrEmpty(Emessage))
+            {
+                <div id="notification" class="alert alert-danger row-cols-md-6" role="alert">
+                    @Emessage
+                </div>
+            }
+            <div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <form method="post" asp-action="Feedback" asp-controller="Feedback" class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="text-right cross" data-dismiss="modal" aria-hidden="true"> <i class="fa fa-times mr-2"></i> </div>
+                        <div class="card-body text-center">
+                            <input id="orderId" type="hidden" name="OrderID" />
+                            <input id="orderDetailId" type="hidden" name="OrderDetailID" />
+                            <input id="mealCode" type="hidden" name="MealCode" />
+                            <input id="productCode" type="hidden" name="ProductCode" />
+                            <img src=" https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-and-lines-1/2/66-512.png" height="100" width="100">
+                            <div class="comment-box text-center">
+                                <h4>Add your feedback</h4>
+                                <div class="rating">
+                                    <input type="radio" name="Rating" value="5" id="5"><label for="5">☆</label>
+                                    <input type="radio" name="Rating" value="4" id="4"><label for="4">☆</label>
+                                    <input type="radio" name="Rating" value="3" id="3"><label for="3">☆</label>
+                                    <input type="radio" name="Rating" value="2" id="2"><label for="2">☆</label>
+                                    <input type="radio" name="Rating" value="1" id="1"><label for="1">☆</label>
+                                </div>
+                                <div class="comment-area">
+                                    <textarea class="form-control" name="Feedback" placeholder="what is your view?" rows="4"></textarea>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button  type="submit" class="btn btn-success send px-5">Submit feedback <i class="fa fa-long-arrow-right ml-1"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <div class="cmp831">
+                    <div class="DM1xQK"></div>
+                </div>
+                <div class="mu8SJw">
+                    <div class="_0Ihttg">
+                        <div class="PW9gQm">Shipping address</div>
+                        <div class="P9zS+I">
+                            <div class="g5X7+k">
+                                <div>
+                                    <div>Bird Meal Store</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wMj1t2">
+                        <div class="iWu+Gv">
+                            <div class="KZmoHt">@Model.Order.ShippingAddress.FullName</div>
+                            <div class="AnJAa1">
+                                <span>@Model.Order.ShippingAddress.PhoneNumber</span>
+                                @{
+                                    var address = Model.Order.ShippingAddress.StreetAddress + ", " + Model.Order.ShippingAddress.Ward + ", "
+                                    + Model.Order.ShippingAddress.District + ", " + Model.Order.ShippingAddress.City;
+                                }
+                                <br>@address
+                            </div>
+                        </div>
+                        <div class="ifE+r-">
+                            <div>
+                                <div class="rqUx-N cuJgPF">
+                                    <div class="_4yfsbS"></div>
+                                    <div class="JNurwA">
+                                        <div class="rVemEI">
+                                            <img class="AXDO-g" title="image" src="https://cf.shopee.vn/file/order_placed_3x">
+                                        </div>
+                                        <div class="B3MLEe">@Model.Order.Status</div>
+                                        <div class="u4VSsO">
+                                            <p class="_0P1byN">Order Status</p>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rqUx-N">
+                                    <div class="_4yfsbS"></div>
+                                    <div class="JNurwA">
+                                        <div class="rVemEI">
+                                            <img class="AXDO-g" title="image" src="https://cf.shopee.vn/file/domestic_transit_3x">
+                                        </div>
+                                        <div class="B3MLEe">@Model.Order.OrderDate</div>
+                                        <div class="u4VSsO">
+                                            <p class="_0P1byN">Order Date</p>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rqUx-N">
+                                    <div class="_4yfsbS"></div>
+                                    <div class="JNurwA">
+                                        <div class="rVemEI">
+                                            <div class="qrqTFX"></div>
+                                        </div>
+                                        @if (Model.Order.Status != BusinessObject.Enums.OrderStatus.Pending)
+                                        {
+                                            <div class="B3MLEe">@Model.Order.ShipDate</div>
+                                            <div class="u4VSsO">
+                                                <p class="_0P1byN"></p>
+                                                <p>Ship Date</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @foreach (var item in Model.Order.OrderDetails)
+                {
+                    if (item.Meal == null)
+                    {
+                        <div class="container-order">
+                            <div class="row header-order" style="padding: 12px">
+                                <div class="col-md-2">
+                                    <img src="@item.Product.ProductImage" alt="Your Image" class="img-fluid">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h3>@item.Product.ProductName</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 12px">
+                                            <p>x@(item.Quantity)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row unit-price">Unit Price: @item.UnitPrice.ToString("0.00")</div>
+                                </div>
+                            </div>
+                            <div class="row2-order">
+                                <div class="line line-left"></div>
+                                <div class="line line-right"></div>
+                            </div>
+                            <div class="total">
+                                <div class="total-content">
+                                    @if (item.Feedbacks.Count() <= 0 && Model.Order.Status == BusinessObject.Enums.OrderStatus.Completed)
+                                    {
+                                        <div class="btn-right-footer">
+                                            <a class="btn btn-content" data-toggle="modal" data-target="#form" onclick="setId('@Model.Order.OrderId', '@item.OrderDetailId', null, '@item.Product.ProductCode')">Feedback Now</a>
+                                        </div>
+                                    }
+                                    <div class="container-icon-total">
+                                        <svg width="16" height="17" viewBox="0 0 253 263" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M126.5 0.389801C126.5 0.389801 82.61 27.8998 5.75 26.8598C5.08763 26.8507 4.43006 26.9733 3.81548 27.2205C3.20091 27.4677 2.64159 27.8346 2.17 28.2998C1.69998 28.7657 1.32713 29.3203 1.07307 29.9314C0.819019 30.5425 0.688805 31.198 0.689995 31.8598V106.97C0.687073 131.07 6.77532 154.78 18.3892 175.898C30.003 197.015 46.7657 214.855 67.12 227.76L118.47 260.28C120.872 261.802 123.657 262.61 126.5 262.61C129.343 262.61 132.128 261.802 134.53 260.28L185.88 227.73C206.234 214.825 222.997 196.985 234.611 175.868C246.225 154.75 252.313 131.04 252.31 106.94V31.8598C252.31 31.1973 252.178 30.5414 251.922 29.9303C251.667 29.3191 251.292 28.7649 250.82 28.2998C250.35 27.8358 249.792 27.4696 249.179 27.2225C248.566 26.9753 247.911 26.852 247.25 26.8598C170.39 27.8998 126.5 0.389801 126.5 0.389801Z" fill="#538a50"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M207.7 149.66L119.61 107.03C116.386 105.472 113.914 102.697 112.736 99.3154C111.558 95.9342 111.772 92.2235 113.33 88.9998C114.888 85.7761 117.663 83.3034 121.044 82.1257C124.426 80.948 128.136 81.1617 131.36 82.7198L215.43 123.38C215.7 120.38 215.85 117.38 215.85 114.31V61.0298C215.848 60.5592 215.753 60.0936 215.57 59.6598C215.393 59.2232 215.128 58.8281 214.79 58.4998C214.457 58.1705 214.063 57.909 213.63 57.7298C213.194 57.5576 212.729 57.4727 212.26 57.4798C157.69 58.2298 126.5 38.6798 126.5 38.6798C126.5 38.6798 95.31 58.2298 40.71 57.4798C40.2401 57.4732 39.7735 57.5602 39.3376 57.7357C38.9017 57.9113 38.5051 58.1719 38.1709 58.5023C37.8367 58.8328 37.5717 59.2264 37.3913 59.6604C37.2108 60.0943 37.1186 60.5599 37.12 61.0298V108.03L118.84 147.57C121.591 148.902 123.808 151.128 125.129 153.884C126.45 156.64 126.797 159.762 126.113 162.741C125.429 165.72 123.755 168.378 121.363 170.282C118.972 172.185 116.006 173.221 112.95 173.22C110.919 173.221 108.915 172.76 107.09 171.87L40.24 139.48C46.6407 164.573 62.3785 186.277 84.24 200.16L124.49 225.7C125.061 226.053 125.719 226.24 126.39 226.24C127.061 226.24 127.719 226.053 128.29 225.7L168.57 200.16C187.187 188.399 201.464 170.892 209.24 150.29C208.715 150.11 208.2 149.9 207.7 149.66Z" fill="#fff"></path></svg>
+                                    </div>
+                                    <div class="container-total-text">Total: </div>
+                                    @{
+                                        var t = item.Quantity * item.UnitPrice;
+                                    }
+                                    <div class="container-total-number">@t.ToString("0.00")</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="container-order">
+                            <div class="row header-order" style="padding: 12px">
+                                <div class="col-md-2">
+                                    <img src="@item.Meal.MealImage" alt="Your Image" class="img-fluid">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h3>@item.Meal.MealName</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-top: 12px">
+                                            <p>x@(item.Quantity)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row unit-price">Unit Price: @item.UnitPrice.ToString("0.00")</div>
+                                </div>
+                            </div>
+                            <div class="row2-order">
+                                <div class="line line-left"></div>
+                                <div class="line line-right"></div>
+                            </div>
+                            <div class="total">
+                                <div class="total-content">
+                                    @if (item.Feedbacks.Count() <= 0 && Model.Order.Status == BusinessObject.Enums.OrderStatus.Completed)
+                                    {
+                                        <div class="btn-right-footer">
+                                            <a class="btn btn-content" data-toggle="modal" data-target="#form" onclick="setId('@Model.Order.OrderId', '@item.OrderDetailId', null, '@item.Meal.MealCode')">Feedback Now</a>
+                                        </div>
+                                    }
+                                    <div class="container-icon-total">
+                                        <svg width="16" height="17" viewBox="0 0 253 263" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M126.5 0.389801C126.5 0.389801 82.61 27.8998 5.75 26.8598C5.08763 26.8507 4.43006 26.9733 3.81548 27.2205C3.20091 27.4677 2.64159 27.8346 2.17 28.2998C1.69998 28.7657 1.32713 29.3203 1.07307 29.9314C0.819019 30.5425 0.688805 31.198 0.689995 31.8598V106.97C0.687073 131.07 6.77532 154.78 18.3892 175.898C30.003 197.015 46.7657 214.855 67.12 227.76L118.47 260.28C120.872 261.802 123.657 262.61 126.5 262.61C129.343 262.61 132.128 261.802 134.53 260.28L185.88 227.73C206.234 214.825 222.997 196.985 234.611 175.868C246.225 154.75 252.313 131.04 252.31 106.94V31.8598C252.31 31.1973 252.178 30.5414 251.922 29.9303C251.667 29.3191 251.292 28.7649 250.82 28.2998C250.35 27.8358 249.792 27.4696 249.179 27.2225C248.566 26.9753 247.911 26.852 247.25 26.8598C170.39 27.8998 126.5 0.389801 126.5 0.389801Z" fill="#538a50"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M207.7 149.66L119.61 107.03C116.386 105.472 113.914 102.697 112.736 99.3154C111.558 95.9342 111.772 92.2235 113.33 88.9998C114.888 85.7761 117.663 83.3034 121.044 82.1257C124.426 80.948 128.136 81.1617 131.36 82.7198L215.43 123.38C215.7 120.38 215.85 117.38 215.85 114.31V61.0298C215.848 60.5592 215.753 60.0936 215.57 59.6598C215.393 59.2232 215.128 58.8281 214.79 58.4998C214.457 58.1705 214.063 57.909 213.63 57.7298C213.194 57.5576 212.729 57.4727 212.26 57.4798C157.69 58.2298 126.5 38.6798 126.5 38.6798C126.5 38.6798 95.31 58.2298 40.71 57.4798C40.2401 57.4732 39.7735 57.5602 39.3376 57.7357C38.9017 57.9113 38.5051 58.1719 38.1709 58.5023C37.8367 58.8328 37.5717 59.2264 37.3913 59.6604C37.2108 60.0943 37.1186 60.5599 37.12 61.0298V108.03L118.84 147.57C121.591 148.902 123.808 151.128 125.129 153.884C126.45 156.64 126.797 159.762 126.113 162.741C125.429 165.72 123.755 168.378 121.363 170.282C118.972 172.185 116.006 173.221 112.95 173.22C110.919 173.221 108.915 172.76 107.09 171.87L40.24 139.48C46.6407 164.573 62.3785 186.277 84.24 200.16L124.49 225.7C125.061 226.053 125.719 226.24 126.39 226.24C127.061 226.24 127.719 226.053 128.29 225.7L168.57 200.16C187.187 188.399 201.464 170.892 209.24 150.29C208.715 150.11 208.2 149.9 207.7 149.66Z" fill="#fff"></path></svg>
+                                    </div>
+                                    <div class="container-total-text">Total: </div>
+                                    @{
+                                        var t = item.Quantity * item.UnitPrice;
+                                    }
+                                    <div class="container-total-number">@t.ToString("0.00")</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                <div class="RZJjTX">
+                    <div class="TokOv1">
+                        <div class="_8kMYJ3">
+                            <span>Total Payment</span>
+                        </div>
+                        <div class="CxyZBG">
+                            <div>@Model.Order.TotalPrice?.ToString("0.00") $</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ga0VXk"><svg height="16" width="16" viewBox="0 0 16 16" class="shopee-svg-icon _5Fq+5W"><g fill-rule="evenodd"><path d="m8 15c-3.8596721 0-7-3.1397891-7-6.9994612 0-3.8602109 3.1403279-7.0005388 7-7.0005388 3.8602109 0 7 3.1403279 7 7.0005388 0 3.8596721-3.1397891 6.9994612-7 6.9994612z" fill="none" stroke-width="1" stroke="currentColor"></path><path d="m10.4132188 9.3999583h-5.050999c-.204396 0-.3841766-.1081321-.4918691-.297583-.0404396-.0712089-.1556047-.3239567.0413188-.6303309.0694507-.1248354.1643959-.2835171.2738467-.4593416.1050552-.1701102.1969235-.3371435.2791214-.5112098.086154-.1789015.1617586-.3705502.2259345-.5709901.0553847-.1771432.0839562-.3674733.0839562-.5652758 0-.2738467.0404396-.5287923.1204398-.7556059.075165-.2197807.1797806-.4193415.3098907-.5934078.125275-.1674729.2747258-.3151655.4457152-.4382426.1397805-.0989013.2826379-.1775828.4276932-.2369235.6247463-.29029 1.6628604-.0523078 1.6487945.0083517.1424179.0589012.2707698.1279123.3890118.2096707.1767036.1217585.333627.2747258.4646163.4540668.1283519.1784619.2312092.3810997.3050556.6013199.0760441.2232971.1147255.4738471.1147255.7437377 0 .1912092.0281319.3802205.0848353.5626385.0637364.2052751.1397805.3995612.2268136.5780231.0887914.1850553.1832971.3542864.2821984.5050559.1046156.1604399.1982421.297583.2826379.4123085.0874727.1160442.1296706.2505499.122198.3876931-.0061539.1107695-.0404396.2162642-.0989013.3041764-.0562639.0870331-.1305497.1591212-.2101103.2026378-.0685716.0404396-.1665937.0892309-.2769236.0892309zm-3.9906114.7572683h3.0423323c-.1878895.8170573-.6949449 1.2255859-1.5211662 1.2255859s-1.3332766-.4085286-1.5211662-1.2255859z" stroke="none" fill="currentColor"></path></g></svg><div class="_4aGAAO"><span>Please pay <span class="WAB0Vg">@Model.Order.TotalPrice?.ToString("0.00")$</span> upon receipt. </span></div></div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .img-fluid {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+
+    .container-order {
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+        border-radius: 0.125rem;
+        background-color: #f5f7f5;
+        border-bottom: double #538a50;
+    }
+
+    .img-notOrder {
+        background-position: 50%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 100px;
+        height: 100px;
+        background-image: url(https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/5fafbb923393b712b96488590b8f781f.png);
+    }
+
+    .container-content-notOrder {
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,.05);
+        border-radius: 0.125rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: #fff;
+    }
+
+    .text-notOrder {
+        margin: 20px 0 0;
+        font-size: 18px;
+        line-height: 1.4;
+        color: rgba(0,0,0,.8);
+    }
+
+    .container-status-order {
+        width: 100%;
+        margin-bottom: 12px;
+        display: flex;
+        overflow: hidden;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #fff;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    .status-order {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        padding: 16px 0;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+        color: rgba(0,0,0,.8);
+        background: #fff;
+        border-bottom: 2px solid rgba(0,0,0,.09);
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+        align-items: center;
+        justify-content: center;
+        transition: color .2s;
+    }
+
+        .status-order:hover {
+            color: #16cc0c;
+        }
+
+    .status-all {
+        color: #16cc0c;
+        border-color: #16cc0c;
+    }
+
+    .unit-price {
+        color: #538a50;
+        margin-top: 25px;
+    }
+
+    .container-footer-order {
+        border-bottom: double;
+        padding: 12px 24px 18px;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-content: center;
+        background: #f5f7f5;
+    }
+
+    .content-left-footer {
+        min-width: 300px;
+        max-width: 400px;
+        display: flex;
+        align-items: center;
+        grid-gap: 4px;
+        gap: 4px;
+        flex-grow: 1;
+        word-wrap: break-word;
+        text-align: left;
+        font-size: 12px;
+        line-height: 16px;
+        color: rgba(0,0,0,.54);
+    }
+
+    .content-right-footer {
+        display: flex;
+    }
+
+    .btn-right-footer {
+        margin: 0 15px 0 0;
+        display: flex;
+        align-items: center;
+        text-overflow: ellipsis;
+    }
+
+    .row2-order {
+        width: 100%;
+        height: 0;
+        border-bottom: 1px dotted rgba(0,0,0,.09);
+        position: relative;
+    }
+
+    .total {
+        padding: 15px 24px 10px;
+        background: #f5f7f5;
+    }
+
+    .total-content {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .btn-content {
+        color: #555;
+        border: 1px solid #538a50;
+        font-weight: 400;
+        font-size: 14px;
+        border-radius: 4px;
+        padding: 8px 10px;
+    }
+
+        .btn-content:hover {
+            color: white;
+            background-color: #538a50;
+        }
+
+    .container-icon-total {
+        cursor: pointer;
+        user-select: none;
+        margin: 0 5px 0 0;
+        line-height: 0;
+    }
+
+    .container-total-text {
+        margin: 0 10px 0 0;
+        font-size: 14px;
+        line-height: 20px;
+        color: rgba(0,0,0,.8);
+    }
+
+    .container-total-number {
+        color: #538a50;
+        font-size: 24px;
+        line-height: 30px;
+    }
+
+    .line {
+        box-sizing: border-box;
+        background: #f5f5f5;
+        width: 0.4375rem;
+        height: 0.4375rem rem;
+        border-radius: 50%;
+        z-index: 1;
+        position: absolute;
+        top: 0;
+    }
+
+    .line-left {
+        left: 0;
+        transform: translate(-50%,-50%);
+    }
+
+    .line-right {
+        right: 0;
+        transform: translate(50%,-50%);
+    }
+
+    .cmp831 {
+        padding: 3px 0;
+    }
+
+    .DM1xQK {
+        height: 0.1875rem;
+        width: 100%;
+        background-position-x: -1.875rem;
+        background-size: 7.25rem 0.1875rem;
+        background-image: repeating-linear-gradient(45deg,#6fa6d6,#6fa6d6 33px,transparent 0,transparent 41px,#f18d9b 0,#f18d9b 74px,transparent 0,transparent 82px);
+    }
+
+    .mu8SJw {
+        padding: 20px 24px 24px;
+    }
+
+    ._0Ihttg {
+        padding: 0 0 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .PW9gQm {
+        text-transform: capitalize;
+        color: rgba(0,0,0,.8);
+        font-size: 20px;
+        line-height: 24px;
+    }
+
+    .P9zS\+I {
+        display: flex;
+        align-items: flex-start;
+        line-height: 14px;
+        max-width: 50%;
+    }
+
+    .g5X7\+k {
+        text-align: right;
+        font-size: 12px;
+        word-wrap: break-word;
+        color: rgba(0,0,0,.54);
+    }
+
+    .wMj1t2 {
+        display: flex;
+    }
+
+    .iWu\+Gv {
+        max-width: 100%;
+        padding: 10px 24px 0 0;
+        line-height: 22px;
+        flex: 1;
+    }
+
+    .KZmoHt {
+        max-width: 100%;
+        margin: 0 0 7px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: rgba(0,0,0,.8);
+    }
+
+    .AnJAa1 {
+        color: rgba(0,0,0,.54);
+        font-size: 12px;
+    }
+
+    .ifE\+r- {
+        width: 620px;
+        padding: 4px 0 0 12px;
+        border-left: 1px solid rgba(0,0,0,.09);
+    }
+
+    .rqUx-N {
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        padding: 0;
+        grid-gap: 12px;
+        gap: 12px;
+    }
+
+    ._4yfsbS {
+        width: 1px;
+        height: 100%;
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: #d8d8d8;
+    }
+
+    .JNurwA {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        width: 100%;
+        color: rgba(0,0,0,.54);
+        font-size: 14px;
+    }
+
+
+    .rVemEI {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 24px;
+        width: 24px;
+        min-width: 24px;
+    }
+
+        .rVemEI .AXDO-g {
+            position: relative;
+            height: 24px;
+            width: 24px;
+            z-index: 2;
+        }
+
+    .B3MLEe {
+        width: 170px;
+        margin-top: 3px;
+        flex-shrink: 0;
+        color: rgba(0,0,0,.8);
+        padding: 0 12px;
+    }
+
+    .u4VSsO {
+        min-width: 0;
+    }
+
+    .yG4MyU {
+        color: #05a;
+        font-weight: 700;
+        padding-left: 170px;
+        cursor: pointer;
+    }
+
+    .RZJjTX {
+        background-color: #fafafa;
+        border-top: 1px solid rgba(0,0,0,.09);
+    }
+
+    .TokOv1 {
+        padding: 0 24px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        text-align: right;
+        border-bottom: 1px dotted rgba(0,0,0,.09);
+    }
+
+    ._8kMYJ3 {
+        padding: 13px 10px;
+        color: rgba(0,0,0,.54);
+        font-size: 12px;
+    }
+
+    .CxyZBG {
+        padding: 13px 0 13px 10px;
+        width: 240px;
+        border-left: 1px dotted rgba(0,0,0,.09);
+        justify-content: flex-end;
+        word-wrap: break-word;
+        color: rgba(0,0,0,.8);
+        color: #ee4d2d;
+        font-size: 24px;
+    }
+
+    .ga0VXk {
+        padding: 12px 23px;
+        margin: 0 0 6px;
+        display: flex;
+        align-items: center;
+        background: #fffefb;
+        border: 1px solid rgba(224,168,0,.4);
+        border-radius: 2px;
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+
+    ._5Fq\+5W {
+        color: #ffbf00;
+    }
+
+    {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        fill: currentColor;
+        position: relative;
+    }
+
+    ._4aGAAO {
+        padding: 0 0 0 8px;
+        flex: 1;
+        font-size: 12px;
+        line-height: 14px;
+        color: rgba(0,0,0,.54);
+    }
+    /*-----modal-----*/
+    .cross {
+        padding: 10px;
+        color: #538a50;
+        cursor: pointer;
+        font-size: 23px;
+    }
+
+        .cross i {
+            margin-top: -5px;
+            cursor: pointer;
+        }
+
+    .comment-box {
+        padding: 5px
+    }
+
+    .comment-area textarea {
+        resize: none;
+        border: 1px solid #538a50
+    }
+
+    .form-control:focus {
+        color: #495057;
+        background-color: #fff;
+        border-color: #ffffff;
+        outline: 0;
+        box-shadow: 0 0 0 1px #538a50 !important
+    }
+
+    .send {
+        color: #fff;
+        background-color: #538a50;
+        border-color: #538a50
+    }
+
+        .send:hover {
+            color: #fff;
+            background-color: #538a50;
+            border-color: #538a50
+        }
+
+    .rating {
+        display: inline-flex;
+        margin-top: -10px;
+        flex-direction: row-reverse;
+    }
+
+        .rating > input {
+            display: none
+        }
+
+        .rating > label {
+            position: relative;
+            width: 28px;
+            font-size: 35px;
+            color: #ffbf00;
+            cursor: pointer;
+        }
+
+            .rating > label::before {
+                content: "\2605";
+                position: absolute;
+                opacity: 0
+            }
+
+            .rating > label:hover:before,
+            .rating > label:hover ~ label:before {
+                opacity: 1 !important
+            }
+
+        .rating > input:checked ~ label:before {
+            opacity: 1
+        }
+
+        .rating:hover > input:checked ~ label:before {
+            opacity: 0.4
+        }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+@section scripts {
+    <script>
+        function setId(orderId, orderDetailId, productCode, mealCode) {
+            var oId = document.getElementById("orderId");
+            var odId = document.getElementById("orderDetailId");
+            var mCode = document.getElementById("mealCode");
+            var pCode = document.getElementById("productCode");
+            oId.value = orderId;
+            odId.value = orderDetailId;
+            mCode.value = mealCode;
+            pCode.value = productCode;
+        }
+        setTimeout(function () {
+            var notification = document.getElementById('notification');
+            if (notification) {
+                notification.style.display = 'none';
+            }
+        }, 3000);
+    </script>
+}

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Repositories.DTOs.OrderDTO;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using WebClient.ViewModels;
 
 namespace WebClient.Controllers
 {
@@ -16,6 +17,7 @@ namespace WebClient.Controllers
         private string MealApiUrl = "";
         private string BirdApiUrl = "";
         private string OrderApiUrl = "";
+        private string OrderDetailApiUrl = "";
 
         public StaffController()
         {
@@ -27,6 +29,7 @@ namespace WebClient.Controllers
             MealApiUrl = "https://localhost:7022/api/Meal";
             BirdApiUrl = "https://localhost:7022/api/Bird";
             OrderApiUrl = "https://localhost:7022/api/Order";
+            OrderDetailApiUrl = "https://localhost:7022/api/OrderDetail";
         }
         public async Task<IActionResult> Product_Index()
         {
@@ -81,6 +84,20 @@ namespace WebClient.Controllers
             };
             List<Bird> listBird = JsonSerializer.Deserialize<List<Bird>>(strData, options);
             return View(listBird);
+        }
+
+        public async Task<IActionResult> Report_Index()
+        {
+            HttpResponseMessage response = await client.GetAsync(OrderDetailApiUrl);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<SalesReportViewModel> salesReportViewModels = JsonSerializer.Deserialize<List<SalesReportViewModel>>(strData, options);
+            return View(salesReportViewModels.Where(s => s.Order.Status != BusinessObject.Enums.OrderStatus.Pending && s.Order.Status != BusinessObject.Enums.OrderStatus.Processing).ToList());
         }
         public async Task<IActionResult> Order_Index()
         {
