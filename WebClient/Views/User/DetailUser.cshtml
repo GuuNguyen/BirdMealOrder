@@ -168,35 +168,41 @@
     </div>
     <div class="container">
         <div class="left-column">
-            <div class="button-container"> <button class="btn-saveChange" onclick="updateUser()">Save Change</button> </div>
-            <div class="avatar-container">
-                <div class="avatar">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/bird-images%2Fchim-oanh-co-do.jpg?alt=media&token=0a9bc387-70aa-4693-94ca-f989ac5d09d0" alt="Avatar">
+            <form asp-action="EditUser" asp-controller="User">
+                <div class="button-container">
+                    <button type="submit" class="btn-saveChange" onclick="updateUser()">
+                        Save Change
+                    </button>
                 </div>
-            </div>
-            <div class="user-info">
-                <p>
-                    <span id="userName" class="display-value" onclick="showInput('userName')" >@Html.DisplayFor(model => model.UserName)</span><br />
-                    <input id="userNameInput" type="text" class="input-container" value="@Html.DisplayFor(model => model.UserName)" onblur="hideInput('userName')" />
-                </p>
-                <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
-            </div>
-            <div class="info-row">
-                <div class="info-column bd1">
-                    <p>Full Name</p>
+                <div class="avatar-container">
+                    <div class="avatar">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/bird-images%2Fchim-oanh-co-do.jpg?alt=media&token=0a9bc387-70aa-4693-94ca-f989ac5d09d0" alt="Avatar">
+                    </div>
+                </div>
+                <div class="user-info">
                     <p>
-                        <span id="fullName" class="display-value" onclick="showInput('fullName')">@Html.DisplayFor(model => model.FullName)</span><br />
-                        <input id="fullNameInput" type="text" class="input-container" value="@Html.DisplayFor(model => model.FullName)" onblur="hideInput('fullName')" />
+                        <span id="userName" class="display-value" onclick="showInput('userName')">@Html.DisplayFor(model => model.UserName)</span><br />
+                        <input id="userNameInput" type="text" class="input-container" name="userName" value="@Html.DisplayFor(model => model.UserName)" onblur="hideInput('userName')" />
                     </p>
+                    <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
                 </div>
-                <div class="info-column">
-                    <p>Phone Number</p>
-                    <p>
-                        <span id="phoneNumber" class="display-value" onclick="showInput('phoneNumber')">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
-                        <input id="phoneNumberInput" type="text" class="input-container" value="@Html.DisplayFor(model => model.PhoneNumber)" onblur="hideInput('phoneNumber')" />
-                    </p>
+                <div class="info-row">
+                    <div class="info-column bd1">
+                        <p>Full Name</p>
+                        <p>
+                            <span id="fullName" class="display-value" onclick="showInput('fullName')">@Html.DisplayFor(model => model.FullName)</span><br />
+                            <input id="fullNameInput" type="text" class="input-container" name="fullName" value="@Html.DisplayFor(model => model.FullName)" onblur="hideInput('fullName')" />
+                        </p>
+                    </div>
+                    <div class="info-column">
+                        <p>Phone Number</p>
+                        <p>
+                            <span id="phoneNumber" class="display-value" onclick="showInput('phoneNumber')">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
+                            <input id="phoneNumberInput" type="text" class="input-container" name="phoneNumber" value="@Html.DisplayFor(model => model.PhoneNumber)" onblur="hideInput('phoneNumber')" />
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
         <div class="right-column">
             <p>Hello World</p>
@@ -210,7 +216,7 @@
     </div>
 
 
-    
+
 
 
 
@@ -225,58 +231,15 @@
         }
 
         function hideInput(field) {
-           const displayElement = document.getElementById(field);
+            const displayElement = document.getElementById(field);
             const inputElement = document.getElementById(field + "Input");
 
             displayElement.style.display = 'inline-block';
             inputElement.style.display = 'none';
         }
-        //----------------------------------------
-        $(document).ready(function () {
-            $('.input-container').hide();
+                        //----------------------------------------
 
-            $('.display-value').click(function () {
-                const field = $(this).attr('id');
-                $(this).hide();
-                $(`#${field}Input`).show();
-            });
-        });
 
-        function updateUser() {
-            const username = $('#userNameInput').val();
-            const fullName = $('#fullNameInput').val();
-            const phoneNumber = $('#phoneNumberInput').val();
-
-            const updatedUserData = {
-                username: username,
-                fullName: fullName,
-                phoneNumber: phoneNumber
-            };
-
-            $.ajax({
-                url: "https://localhost:7022/api/User" +"/"+ @profileUser,
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(updatedUserData),
-                success: function (data) {
-                    console.log(data);
-                    if (data.success) {
-                        $('#userName').text(username).show();
-                        $('#fullName').text(fullName).show();
-                        $('#phoneNumber').text(phoneNumber).show();
-
-                        $('.input-container').hide();
-                    } else {
-                        // Xử lý lỗi từ API
-                        // ...
-                    }
-                },
-                error: function (error) {
-                    // Xử lý lỗi mạng hoặc yêu cầu
-                    // ...
-                }
-            });
-        }
     </script>
 </body>
 
