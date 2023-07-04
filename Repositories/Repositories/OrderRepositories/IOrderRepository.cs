@@ -1,4 +1,5 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Enums;
+using BusinessObject.Models;
 using Repositories.DTOs.OrderDTO;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,7 @@ namespace Repositories.Repositories.OrderRepositories
         List<Order> GetOrdersByUserId(int userId);
         Order GetOrder(int id);
         List<object> GetOrdersAndCheckHasReviewByUserId(int userId);
+        bool ChangeOrderStatus(ChangeOrderStatusDTO order);
+        bool DeleteChangeOrderStatus(int id);
     }
 }
