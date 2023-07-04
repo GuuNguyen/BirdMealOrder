@@ -99,5 +99,105 @@ namespace Repositories.Repositories.OrderRepositories
         {
             return OrderDAO.GetOrdersAndCheckHasReviewByUserId(userId);
         }
+
+        public List<object> GetListBestSeller()
+        {
+            var listOrder = OrderDetailDAO.GetListAllOrderDetail();
+            Dictionary<string, int> productQuantities = new Dictionary<string, int>();
+
+            foreach (var orderDetail in listOrder)
+            {
+                int quantity = orderDetail.Quantity;
+                string product = "";
+
+                if (orderDetail.ProductId.HasValue)
+                {
+                    product = ProductDAO.GetProductById(orderDetail.ProductId.Value).ProductCode;
+                }
+                else
+                {
+                    product = MealDAO.GetMeal(orderDetail.MealId.Value).MealCode;
+                }
+
+                if (!string.IsNullOrEmpty(product))
+                {
+                    if (productQuantities.ContainsKey(product))
+                    {
+                        productQuantities[product] += quantity;
+                    }
+                    else
+                    {
+                        productQuantities.Add(product, quantity);
+                    }
+                }
+            }
+
+            var sortedProducts = productQuantities.OrderByDescending(pair => pair.Value);
+
+            List<object> bestSellers = new List<object>();
+            foreach (var pair in sortedProducts)
+            {
+                string prefix = pair.Key.Substring(0, 2);
+                switch(prefix)
+                {
+                    case "ME":
+                        var meal = MealDAO.GetMealByCode(pair.Key); 
+                        bestSellers.Add(meal);
+                        break;
+                    case "FO":
+                        var product = ProductDAO.GetProductByCode(pair.Key);
+                        bestSellers.Add(product);
+                        break;
+                }
+            }
+            return bestSellers;
+        }
+
+        public List<object> GetListRecommend()
+        {
+            var productList = (from od in _context.OrderDetails
+                               join f in _context.Feedbacks on od.OrderDetailId equals f.OrderDetailId
+                               where f.Rating == 5 && od.ProductId != null
+                               group od by od.ProductId into g
+                               orderby g.Count() descending
+                               select new
+                               {
+                                   ProductId = g.Key,
+                                   Count = g.Count()
+                               }).ToList();
+
+            var mealList = (from od in _context.OrderDetails
+                            join f in _context.Feedbacks on od.OrderDetailId equals f.OrderDetailId
+                            where f.Rating == 5 && od.MealId != null
+                            group od by od.MealId into g
+                            orderby g.Count() descending
+                            select new
+                            {
+                                MealId = g.Key,
+                                Count = g.Count()
+                            }).ToList();
+
+            var listRecommend = new List<object>();
+            foreach (var item in productList)
+            {
+                var product = ProductDAO.GetProductById(item.ProductId.Value);
+                if (product != null)
+                {
+                    listRecommend.Add(product);
+                }
+            }
+
+            foreach (var item in mealList)
+            {
+                var meal = MealDAO.GetMeal(item.MealId.Value);
+                if (meal != null)
+                {
+                    listRecommend.Add(meal);
+                }
+            }
+
+            return listRecommend;
+        }
+
     }
 }

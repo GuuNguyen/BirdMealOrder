@@ -1,8 +1,12 @@
-﻿@model WebClient.VIewModels.HomeViewModel
+﻿@using BusinessObject.Models;
+@using Newtonsoft.Json.Linq;
+@model WebClient.VIewModels.HomeViewModel
 
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
     ViewData["Title"] = "View";
+    Random random = new Random();
+    var randomBirds = Model.Birds.OrderBy(x => random.Next()).Take(5).ToList();
 }
 
 <div class="banner-container">
@@ -20,13 +24,14 @@
 </div>
 <div class="container-body">
     <div>
-        <div class="item-text">
+        <div class="item-text bird-hero-text">
             <p>Bird category</p>
+            <a asp-area="" asp-controller="Home" asp-action="Bird">View All</a>
         </div>
         <div class="grid-view-bird">
-            @foreach (var item in Model.Birds)
+            @foreach (var item in randomBirds)
             {
-                <a class="grid-item-bird">
+                <a asp-route-id="@item.BirdId" asp-area="" asp-controller="Home" asp-action="MealsByBirdId" class="grid-item-bird">
                     <img src="@item.BirdImage" alt="Image 1">
                     <div class="item-content-bird ">@item.BirdName</div>
                 </a>
@@ -39,9 +44,19 @@
             <p>Best seller</p>
         </div>
         <div class="grid-view-meal">
-            @foreach (var item in Model.Meals.Take(4).ToList())
+            @foreach (object item in Model.BestSellers.Take(4).ToList())
             {
-                @Html.Partial("_ListMeal", item)
+                var temp = JObject.Parse(item.ToString());
+                if (temp.ContainsKey("mealId"))
+                {
+                    Meal meal = temp.ToObject<Meal>();
+                    @Html.Partial("_ListMeal", meal)
+                }
+                else if (temp.ContainsKey("productId"))
+                {
+                    Product product = temp.ToObject<Product>();;
+                    @Html.Partial("_ListProduct", product)
+                }              
             }
         </div>
     </div>
@@ -64,12 +79,22 @@
     <div>
         <div class="best_seller-container">
             <div class="item-text">
-                <p>Todays Best Deals For You!</p>
+                <p>Highly recommended</p>
             </div>
             <div class="grid-view-meal">
-                @foreach (var item in Model.Meals.Take(8).ToList())
+                @foreach (var item in Model.HighlyRecommends.Take(8).ToList())
                 {
-                    @Html.Partial("_ListMeal", item)
+                    var temp = JObject.Parse(item.ToString());
+                    if (temp.ContainsKey("mealId"))
+                    {
+                        Meal meal = temp.ToObject<Meal>();
+                        @Html.Partial("_ListMeal", meal)
+                    }
+                    else if (temp.ContainsKey("productId"))
+                    {
+                        Product product = temp.ToObject<Product>(); ;
+                        @Html.Partial("_ListProduct", product)
+                    }
                 }
             </div>
         </div>

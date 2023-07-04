@@ -57,5 +57,17 @@ namespace WebAPI.Controllers
         {
             return Ok(_repo.GetOrdersAndCheckHasReviewByUserId(userId));
         }
+
+        [HttpGet("GetBestSeller")]
+        public IActionResult GetBestSeller()
+        {
+            return Ok(_repo.GetListBestSeller());
+        }
+
+        [HttpGet("RecommendList")]
+        public IActionResult GetRecommendList()
+        {
+            return Ok(_repo.GetListRecommend());
+        }
     }
 }
