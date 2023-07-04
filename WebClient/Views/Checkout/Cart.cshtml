@@ -24,13 +24,13 @@
                             {
                                 var quantity = Model.CartItems?.Where(c => c.MealId == item.MealId).Select(c => c.Quantity).SingleOrDefault();
                                 <div class="cart-item" data-id="@item.MealId">
-                                    <div class="cart-item-content-main">
+                                    <a class="cart-item-content-main" asp-route-code="@item.MealCode" asp-area="" asp-controller="Home" asp-action="Detail">
                                         <img src="@item.MealImage" />
                                         <div class="cart-item-content">
                                             <h5>@item.MealName</h5>
                                             <p>@item.MealCode</p>
                                         </div>
-                                    </div>
+                                    </a>
                                     <div class="cart-item-content-money">
                                         <i class="fa-solid fa-dollar-sign"></i>
                                         <p id="itemPrice">@item.Price</p>
@@ -56,13 +56,13 @@
                             {
                                 var quantity = Model.CartItems?.Where(c => c.ProductId == item.ProductId).Select(c => c.Quantity).SingleOrDefault();
                                 <div class="cart-item" data-id="@item.ProductId">
-                                    <div class="cart-item-content-main">
+                                    <a class="cart-item-content-main" asp-route-code="@item.ProductCode" asp-area="" asp-controller="Home" asp-action="Detail">
                                         <img src="@item.ProductImage" />
                                         <div class="cart-item-content">
                                             <h5>@item.ProductName</h5>
                                             <p>@item.ProductCode</p>
                                         </div>
-                                    </div>
+                                    </a>
                                     <div class="cart-item-content-money">
                                         <i class="fa-solid fa-dollar-sign"></i>
                                         <p id="itemPrice">@item.Price</p>
