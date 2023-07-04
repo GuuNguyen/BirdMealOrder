@@ -20,7 +20,7 @@ namespace BusinessObject.Models
         public string PhoneNumber { get; set; } = null!;
         public int RoleId { get; set; }
         public UserStatus Status { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual Role Role { get; set; } = null!;
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ShippingAddress> ShippingAddresses { get; set; }

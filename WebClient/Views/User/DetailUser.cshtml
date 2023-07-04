@@ -1,12 +1,290 @@
 ﻿@model BusinessObject.Models.User
 
 @{
+    //Layout = "~/Views/Shared/_StoreLayout.cshtml";
     ViewData["Title"] = "DetailUser";
+    var profileUser = Context.Session.GetInt32("userID");
+
 }
 
-<h1>DetailUser</h1>
 
-<div>
+<style>
+    body {
+        /*background-color: #EEE9E9;*/
+        background-image: linear-gradient(to right,#00b09b, #538a50, #96c93d);
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 78px;
+    }
+
+    .left-column {
+        width: 66vw;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 25px;
+        margin-left: 16px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .right-column {
+        width: 30vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 25px;
+        margin-left: 17px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .avatar-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .user-info {
+        text-align: center;
+        margin-top: 20px;
+        font-family: system-ui;
+    }
+
+        .user-info #userName {
+            margin-bottom: 10px;
+            font-size: 33px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+        }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .info-column {
+        width: 50%;
+        font-size: 20px;
+        font-weight: bold;
+        font-family: system-ui;
+    }
+
+        .info-column p:first-child {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+
+
+    .bd1 {
+        border-right: solid #828282;
+    }
+
+    .right-column p {
+        text-align: center;
+    }
+
+    .titleProfile {
+        background-color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+        border-radius: 25px;
+        margin-left: 23px;
+    }
+
+    .text {
+        font-size: 65px;
+        font-weight: bolder;
+        background: -webkit-linear-gradient(#96c93d, #00b09b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 7px;
+    }
+
+    .btn-saveChange {
+        display: flex;
+        margin-right: 5px;
+        align-items: center;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 0.7em 1.4em 0.7em 1.1em;
+        color: white;
+        background: #ad5389;
+        background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+        border: none;
+        box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+        letter-spacing: 0.05em;
+        border-radius: 20em;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .btn-saveChange:hover {
+            box-shadow: 0 0.5em 1.5em -0.7em #14a73e98;
+        }
+
+        .btn-saveChange:active {
+            box-shadow: 0 0.3em 1em -0.7em #14a73e98;
+        }
+
+    .input-container {
+        display: none; /* Ẩn các ô nhập liệu ban đầu */
+    }
+
+    .display-value {
+        display: inline-block; /* Hiển thị các giá trị ban đầu */
+    }
+</style>
+
+<body>
+    <div class="titleProfile">
+        <h1 class="text">USER PROFILE</h1>
+    </div>
+    <div class="container">
+        <div class="left-column">
+            <div class="button-container"> <button class="btn-saveChange" onclick="updateUser()">Save Change</button> </div>
+            <div class="avatar-container">
+                <div class="avatar">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/bird-images%2Fchim-oanh-co-do.jpg?alt=media&token=0a9bc387-70aa-4693-94ca-f989ac5d09d0" alt="Avatar">
+                </div>
+            </div>
+            <div class="user-info">
+                <p>
+                    <span id="userName" class="display-value" onclick="showInput('userName')" >@Html.DisplayFor(model => model.UserName)</span><br />
+                    <input id="userNameInput" type="text" class="input-container" value="@Html.DisplayFor(model => model.UserName)" onblur="hideInput('userName')" />
+                </p>
+                <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
+            </div>
+            <div class="info-row">
+                <div class="info-column bd1">
+                    <p>Full Name</p>
+                    <p>
+                        <span id="fullName" class="display-value" onclick="showInput('fullName')">@Html.DisplayFor(model => model.FullName)</span><br />
+                        <input id="fullNameInput" type="text" class="input-container" value="@Html.DisplayFor(model => model.FullName)" onblur="hideInput('fullName')" />
+                    </p>
+                </div>
+                <div class="info-column">
+                    <p>Phone Number</p>
+                    <p>
+                        <span id="phoneNumber" class="display-value" onclick="showInput('phoneNumber')">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
+                        <input id="phoneNumberInput" type="text" class="input-container" value="@Html.DisplayFor(model => model.PhoneNumber)" onblur="hideInput('phoneNumber')" />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+        </div>
+    </div>
+
+
+    
+
+
+
+    <script>
+        function showInput(field) {
+            const displayElement = document.getElementById(field);
+            const inputElement = document.getElementById(field + "Input");
+
+            displayElement.style.display = 'none';
+            inputElement.style.display = 'inline-block';
+            inputElement.focus();
+        }
+
+        function hideInput(field) {
+           const displayElement = document.getElementById(field);
+            const inputElement = document.getElementById(field + "Input");
+
+            displayElement.style.display = 'inline-block';
+            inputElement.style.display = 'none';
+        }
+        //----------------------------------------
+        $(document).ready(function () {
+            $('.input-container').hide();
+
+            $('.display-value').click(function () {
+                const field = $(this).attr('id');
+                $(this).hide();
+                $(`#${field}Input`).show();
+            });
+        });
+
+        function updateUser() {
+            const username = $('#userNameInput').val();
+            const fullName = $('#fullNameInput').val();
+            const phoneNumber = $('#phoneNumberInput').val();
+
+            const updatedUserData = {
+                username: username,
+                fullName: fullName,
+                phoneNumber: phoneNumber
+            };
+
+            $.ajax({
+                url: "https://localhost:7022/api/User" +"/"+ @profileUser,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedUserData),
+                success: function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        $('#userName').text(username).show();
+                        $('#fullName').text(fullName).show();
+                        $('#phoneNumber').text(phoneNumber).show();
+
+                        $('.input-container').hide();
+                    } else {
+                        // Xử lý lỗi từ API
+                        // ...
+                    }
+                },
+                error: function (error) {
+                    // Xử lý lỗi mạng hoặc yêu cầu
+                    // ...
+                }
+            });
+        }
+    </script>
+</body>
+
+
+
+
+
+@*<div>
     <h4>User</h4>
     <hr />
     <dl class="row">
@@ -47,8 +325,5 @@
             @Html.DisplayFor(model => model.Role.RoleName)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
+
