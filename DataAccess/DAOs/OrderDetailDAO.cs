@@ -57,5 +57,28 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static List<object> GetOrderDetails()
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    return context.OrderDetails.Include(o => o.Meal).Include(o => o.Product)
+                                    .Join(context.Orders, od => od.OrderId, o => o.OrderId, (od, o) => new { OrderDetail = od, Order = o })
+                                    .Join(context.Users, o => o.Order.UserId, u => u.UserId, (o, u) => new { OrderDetail = o.OrderDetail, Order = o.Order, User = u })
+                                    .Select(result => new
+                                    {
+                                        OrderDetail = result.OrderDetail,
+                                        UserName = result.User.UserName,
+                                        Order = result.Order,
+                                    }).ToList<object>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
