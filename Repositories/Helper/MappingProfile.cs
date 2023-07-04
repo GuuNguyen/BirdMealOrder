@@ -28,10 +28,11 @@ namespace Repositories.Helper
             CreateMap<Meal, UpdateMealDTO>().ReverseMap();
             CreateMap<User, CreateUserDTOFull>().ReverseMap();
             CreateMap<User, UpdateUserDTO>().ReverseMap();
-            CreateMap<ShippingAddress, GetSADTO>().ReverseMap();
-            CreateMap<ShippingAddress, UpdateSADTO>().ReverseMap();
-            CreateMap<ShippingAddress, CreateSADTO>().ReverseMap();
             CreateMap<Feedback, CreateFeedbackDTO>().ReverseMap();
+            CreateMap<ShippingAddress, GetSADTO>().ReverseMap();     
+            CreateMap<ShippingAddress, UpdateSADTO>().ReverseMap();     
+            CreateMap<ShippingAddress, CreateSADTO>().ReverseMap();     
+            CreateMap<Order, ChangeOrderStatusDTO>().ReverseMap(); 
         }
     }
 }
