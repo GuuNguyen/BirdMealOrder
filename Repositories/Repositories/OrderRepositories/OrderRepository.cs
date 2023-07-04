@@ -99,5 +99,34 @@ namespace Repositories.Repositories.OrderRepositories
         {
             return OrderDAO.GetOrdersAndCheckHasReviewByUserId(userId);
         }
+
+        public bool ChangeOrderStatus(ChangeOrderStatusDTO order)
+        {
+            var check = OrderDAO.GetOrder(order.OrderId);
+            if (check == null) return false;
+            if(order.Status == OrderStatus.Processing)
+            {
+                order.ShipDate = DateTime.Now.AddDays(1);
+            }
+            else if(order.Status == OrderStatus.Completed)
+            {
+                order.ShipDate = check.ShipDate;
+            }
+            else
+            {
+                order.ShipDate = new DateTime(1753, 1, 1);
+            }
+            var updateOrder = _mapper.Map(order, check);
+            OrderDAO.ChangeOrderStatus(updateOrder);
+            return true;
+        }
+
+        public bool DeleteChangeOrderStatus(int id)
+        {
+            var check = OrderDAO.GetOrder(id);
+            if (check == null) return false;
+            OrderDAO.DeleteChangeOrderStatus(id);
+            return true;
+        }
     }
 }

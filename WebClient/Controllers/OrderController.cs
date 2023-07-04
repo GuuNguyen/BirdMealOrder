@@ -19,19 +19,7 @@ namespace WebClient.Controllers
             client.DefaultRequestHeaders.Accept.Add(contentType);
             OrderApiUrl = "https://localhost:7022/api/Order";
         }
-        public async Task<IActionResult> Order_Index()
-        {
-            HttpResponseMessage response = await client.GetAsync(OrderApiUrl);
 
-            string strData = await response.Content.ReadAsStringAsync();
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            List<Order> listOrder = JsonSerializer.Deserialize<List<Order>>(strData, options);
-            return View(listOrder);
-        }
         [HttpGet]
         public async Task<IActionResult> OrderHistory()
         {

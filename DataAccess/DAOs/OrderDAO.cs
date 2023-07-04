@@ -1,4 +1,5 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Enums;
+using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace DataAccess.DAOs
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
-                    return _context.Orders.ToList();
+                    return _context.Orders.Include(c => c.User).ToList();
                 }
             }
             catch (Exception ex)
@@ -127,6 +128,37 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+        public static void ChangeOrderStatus(Order order)
+        {
+            using (var context = new BirdMealOrderDBContext())
+            {
+                context.Orders.Update(order);
+                context.SaveChanges();
+            }
+        }
 
+        public static void DeleteChangeOrderStatus(int id)
+        {
+            try
+            {
+                using (var _context = new BirdMealOrderDBContext())
+                {
+                    var order = _context.Orders.Find(id);
+                    if (order != null)
+                    {
+                        if (order.Status == OrderStatus.Pending || order.Status == OrderStatus.Completed || order.Status == OrderStatus.Processing)
+                        {
+                            order.Status = OrderStatus.Canceled;
+                        }
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
+

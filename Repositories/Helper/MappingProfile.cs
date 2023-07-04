@@ -30,6 +30,7 @@ namespace Repositories.Helper
             CreateMap<ShippingAddress, GetSADTO>().ReverseMap();     
             CreateMap<ShippingAddress, UpdateSADTO>().ReverseMap();     
             CreateMap<ShippingAddress, CreateSADTO>().ReverseMap();     
+            CreateMap<Order, ChangeOrderStatusDTO>().ReverseMap(); 
         }
     }
 }
