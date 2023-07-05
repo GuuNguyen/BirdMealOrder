@@ -33,6 +33,10 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> Product_Index()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -48,6 +52,10 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> User_Index()
         {
+            if (HttpContext.Session.GetString("role") != "Admin")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(UserApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -61,6 +69,10 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> Meal_Index()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(MealApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -74,6 +86,10 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> Bird_Index()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(BirdApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -88,6 +104,10 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Report_Index()
         {
+            if (HttpContext.Session.GetString("role") != "Admin")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(OrderDetailApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -99,8 +119,13 @@ namespace WebClient.Controllers
             List<SalesReportViewModel> salesReportViewModels = JsonSerializer.Deserialize<List<SalesReportViewModel>>(strData, options);
             return View(salesReportViewModels.Where(s => s.Order.Status != BusinessObject.Enums.OrderStatus.Pending && s.Order.Status != BusinessObject.Enums.OrderStatus.Processing).ToList());
         }
+
         public async Task<IActionResult> Order_Index()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(OrderApiUrl);
             string strData = await response.Content.ReadAsStringAsync();
 
@@ -109,7 +134,7 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true
             };
             List<Order> listOrder = JsonSerializer.Deserialize<List<Order>>(strData, options);
-            
+
             ViewBag.OrderStatus = GetOrderStatusSelectList();
             ViewBag.OrderStatusNoneCompleted = GetOrderStatusSelectListNoneComppleted();
 

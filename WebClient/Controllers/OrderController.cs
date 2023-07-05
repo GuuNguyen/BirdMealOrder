@@ -74,7 +74,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> ListOrderDetail(int id)
         {
-            HttpResponseMessage response = await client.GetAsync(OrderDetailApiUrl + "/ListOderDetailByOderId/" + id);
+            HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "/" + id);
 
             string strData = await response.Content.ReadAsStringAsync();
 
@@ -82,8 +82,8 @@ namespace WebClient.Controllers
             {
                 PropertyNameCaseInsensitive = true
             };
-            List<OrderDetail> listOrderDetail = JsonSerializer.Deserialize<List<OrderDetail>>(strData, options);
-            return View(listOrderDetail);
+            Order? order = JsonSerializer.Deserialize<Order>(strData, options);
+            return View(order);
         }
     }
 }

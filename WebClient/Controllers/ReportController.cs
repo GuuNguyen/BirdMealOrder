@@ -32,6 +32,15 @@ namespace WebClient.Controllers
             {
                 return RedirectToAction("Report_Index", "Staff");
             }
+            if(endDate == default(DateTime))
+            {
+                endDate = DateTime.Now.Date;
+            }
+            if (startDate.Date > endDate.Date)
+            {
+                TempData["error"] = "Start date can not larger than end date";
+                return RedirectToAction("Report_Index", "Staff");
+            }
             var onlyDateStart = startDate.Date.ToString("dd/MM/yyyy");
             var onlyDateEnd = endDate.Date.ToString("dd/MM/yyyy");
             TempData["period"] = $"Report from {onlyDateStart} to {onlyDateEnd}";

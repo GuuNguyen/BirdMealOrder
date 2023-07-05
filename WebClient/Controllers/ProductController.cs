@@ -17,6 +17,7 @@ namespace WebClient.Controllers
 
         public ProductController()
         {
+
             client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
@@ -25,6 +26,10 @@ namespace WebClient.Controllers
 
         public async Task<ActionResult> Index()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -39,6 +44,10 @@ namespace WebClient.Controllers
 
         public ActionResult Create()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
 
             return View();
         }
@@ -76,6 +85,10 @@ namespace WebClient.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl + "/" + id.ToString());
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -139,6 +152,10 @@ namespace WebClient.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl + "/" + id);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -169,6 +186,10 @@ namespace WebClient.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl + "/" + id);
 
             string strData = await response.Content.ReadAsStringAsync();

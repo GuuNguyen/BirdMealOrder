@@ -17,7 +17,7 @@ namespace DataAccess.DAOs
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
-                    return _context.Orders.Include(c => c.User).ToList();
+                    return _context.Orders.Include(c => c.User).Include(s => s.ShippingAddress).ToList();
                 }
             }
             catch (Exception ex)
@@ -26,13 +26,19 @@ namespace DataAccess.DAOs
             }
         }
 
-        public static Order GetOrder(int id)
+        public static Order? GetOrder(int id)
         {
             try
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
-                    return _context.Orders.Find(id);
+                    return _context.Orders.Include(u => u.User)
+                        .Include(o => o.OrderDetails)
+                        .ThenInclude(m => m.Meal)
+                        .Include(s => s.ShippingAddress)
+                        .Include(od => od.OrderDetails)
+                        .ThenInclude(p => p.Product)
+                        .Where(i => i.OrderId == id).SingleOrDefault();
                 }
             }
             catch (Exception ex)
