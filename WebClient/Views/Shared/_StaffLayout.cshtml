@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var name = Context.Session.GetString("userName");
+}
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -49,9 +53,12 @@
                     </li>
                     <li>
                         <a class="profile-pic" href="#">
-                            <img src="~/Admin/plugins/images/users/varun.jpg" alt="user-img" width="36"
-                                 class="img-circle"><span class="text-white font-medium">Steave</span>
+                            <img src="~/Admin/plugins/images/users/varun.jpg" alt="user-img" width="36" class="img-circle">
+                            <span style="font-size: 18px" class="text-white font-medium">@name</span>
                         </a>
+                        <div class="menu">
+                            <a href="/Login/Logout">Logout</a>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -63,96 +70,44 @@
                 <ul id="sidebarnav">
                     <li class="sidebar-item pt-2">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="dashboard.html"
-                           aria-expanded="false">
-                            <i class="far fa-clock" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Dashboard</span>
+                           aria-expanded="false" onclick="redirectToProductIndex()">
+                            <i class="fas fa-box" aria-hidden="true"></i>
+                            <span style="font-weight: bold" class="hide-menu text-dark">Product</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html"
-                           aria-expanded="false">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Profile</span>
+                           aria-expanded="false" onclick="redirectToUserIndex()">
+                            <i class="fas fa-user" aria-hidden="true"></i>
+                            <span style="font-weight: bold" class="hide-menu text-dark">User</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="basic-table.html"
-                           aria-expanded="false">
-                            <i class="fa fa-table" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Table</span>
-                        </a>
-                        <ul class="sidebar-submenu" style="display: none;">
-                            <!-- Các item của menu con -->
-                            <li class="sidebar-item">
-                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
-                                   aria-expanded="false" onclick="redirectToProductIndex()">
-                                    <i class="fas fa-box" aria-hidden="true"></i>
-                                    <span class="hide-menu text-dark">Product</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
-                                   aria-expanded="false" onclick="redirectToUserIndex()">
-                                    <i class="fas fa-user" aria-hidden="true"></i>
-                                    <span class="hide-menu text-dark">User</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
-                                   aria-expanded="false" onclick="redirectToMealIndex()">
-                                    <i class="fa-solid fa-utensils" aria-hidden="true"></i>
-                                    <span class="hide-menu text-dark">Meal</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
-                                   aria-expanded="false" onclick="redirectToBirdIndex()">
-                                    <i class="fa-solid fa-dove" aria-hidden="true"></i>
-                                    <span class="hide-menu text-dark">Bird</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
-                                   aria-expanded="false" onclick="redirectToOrderIndex()">
-                                   <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
-                                    <span class="hide-menu text-dark">Order</span>
-                                </a>
-                            </li>
-                            <li class="sidebar-item">
-                                <a style="padding-left: 25px" class="sidebar-link waves-effect waves-dark sidebar-link"
-                                   aria-expanded="false" onclick="redirectToReport()">
-                                    <i class="fa-solid fa-square-poll-vertical"></i>
-                                    <span class="hide-menu text-dark">Report</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="fontawesome.html"
-                           aria-expanded="false">
-                            <i class="fa fa-font" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Icon</span>
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html"
+                           aria-expanded="false" onclick="redirectToMealIndex()">
+                            <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+                            <span style="font-weight: bold" class="hide-menu text-dark">Meal</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="map-google.html"
-                           aria-expanded="false">
-                            <i class="fa fa-globe" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Google Map</span>
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html"
+                           aria-expanded="false" onclick="redirectToBirdIndex()">
+                            <i class="fa-solid fa-dove" aria-hidden="true"></i>
+                            <span style="font-weight: bold" class="hide-menu text-dark">Bird</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="blank.html"
-                           aria-expanded="false">
-                            <i class="fa fa-columns" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Blank Page</span>
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html"
+                           aria-expanded="false" onclick="redirectToOrderIndex()">
+                            <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+                            <span style="font-weight: bold" class="hide-menu text-dark">Order</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="404.html"
-                           aria-expanded="false">
-                            <i class="fa fa-info-circle" aria-hidden="true"></i>
-                            <span style="font-weight: bold" class="hide-menu text-dark">Error 404</span>
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="profile.html"
+                           aria-expanded="false" onclick="redirectToReport()">
+                            <i class="fa-solid fa-square-poll-vertical"></i>
+                            <span style="font-weight: bold" class="hide-menu text-dark">Report</span>
                         </a>
                     </li>
                 </ul>
@@ -173,44 +128,107 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script>
-        $(document).ready(function() {
-            // Khi nhấp vào liên kết "Table"
-            $('.sidebar-item > .sidebar-link').click(function(e) {
-                e.preventDefault();
+          $(document).ready(function() {
+              // Khi nhấp vào liên kết "Table"
+              $('.sidebar-item > .sidebar-link').click(function(e) {
+                  e.preventDefault();
 
-                // Tìm phần tử ul (menu con) tiếp theo
-                var submenu = $(this).next('.sidebar-submenu');
+                  // Tìm phần tử ul (menu con) tiếp theo
+                  var submenu = $(this).next('.sidebar-submenu');
 
-                // Kiểm tra trạng thái hiện tại của menu con
-                if (submenu.is(':visible')) {
-                    // Nếu đã hiển thị, ẩn đi
-                    submenu.slideUp();
-                } else {
-                    // Nếu đang ẩn, hiển thị lên
-                    submenu.slideDown();
-                }
-            });
+                  // Kiểm tra trạng thái hiện tại của menu con
+                  if (submenu.is(':visible')) {
+                      // Nếu đã hiển thị, ẩn đi
+                      submenu.slideUp();
+                  } else {
+                      // Nếu đang ẩn, hiển thị lên
+                      submenu.slideDown();
+                  }
+              });
+          });
+          document.addEventListener("DOMContentLoaded", function() {
+          var link = document.querySelector(".profile-pic");
+          var menu = document.querySelector(".menu");
+
+          var isMenuVisible = false; // Biến lưu trạng thái hiển thị của menu
+
+          link.addEventListener("click", function(event) {
+            event.preventDefault();
+            isMenuVisible = !isMenuVisible; // Đảo ngược trạng thái hiển thị menu
+
+            if (isMenuVisible) {
+              menu.style.display = "block";
+            } else {
+              menu.style.display = "none";
+            }
+          });
+
+          document.addEventListener("click", function(event) {
+            if (!link.contains(event.target) && event.target !== menu) {
+              menu.style.display = "none";
+              isMenuVisible = false; // Đặt lại trạng thái hiển thị menu khi click ra ngoài menu
+            }
+          });
         });
-
-        function redirectToProductIndex() {
-            window.location.href = "/Staff/Product_Index";
-        }
-        function redirectToUserIndex() {
-            window.location.href = "/Staff/User_Index";
-        }
-        function redirectToMealIndex() {
-            window.location.href = "/Staff/Meal_Index";
-        }
-        function redirectToBirdIndex() {
-            window.location.href = "/Staff/Bird_Index";
-        }
-        function redirectToOrderIndex() {
-            window.location.href = "/Staff/Order_Index";
-        }
-        function redirectToReport() {
-            window.location.href = "/Staff/Report_Index";
-        }
+          function redirectToProductIndex() {
+              window.location.href = "/Staff/Product_Index";
+          }
+          function redirectToUserIndex() {
+              window.location.href = "/Staff/User_Index";
+          }
+          function redirectToMealIndex() {
+              window.location.href = "/Staff/Meal_Index";
+          }
+          function redirectToBirdIndex() {
+              window.location.href = "/Staff/Bird_Index";
+          }
+          function redirectToOrderIndex() {
+              window.location.href = "/Staff/Order_Index";
+          }
+          function redirectToReport() {
+              window.location.href = "/Staff/Report_Index";
+          }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+    <style>
+        .menu {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px; /* Để bo góc 5px */
+            right: 10px; /* Để lệch trái 20px */
+            padding: 10px; /* Để tạo khoảng cách giữa nội dung và viền menu */
+        }
+
+            .menu a {
+                color: black;
+                padding: 8px 12px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .menu a:hover {
+                    background-color: #ddd;
+                    border-radius: 5px;
+                }
+
+                    .menu a:hover span {
+                        color: #ff0000; /* Đổi màu chữ khi hover */
+                    }
+
+                    .menu a:hover::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 4px; /* Độ rộng của đường viền */
+                        height: 100%;
+                        background-color: #558b51; /* Màu của đường viền */
+                    }
+    </style>
+
 </body>
 </html>

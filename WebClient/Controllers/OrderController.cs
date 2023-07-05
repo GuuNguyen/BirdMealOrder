@@ -11,6 +11,7 @@ namespace WebClient.Controllers
     {
         private readonly HttpClient client;
         private string OrderApiUrl = "";
+        private string OrderDetailApiUrl = "";
 
         public OrderController()
         {
@@ -18,6 +19,7 @@ namespace WebClient.Controllers
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             client.DefaultRequestHeaders.Accept.Add(contentType);
             OrderApiUrl = "https://localhost:7022/api/Order";
+            OrderDetailApiUrl = "https://localhost:7022/api/OrderDetail";
         }
 
         [HttpGet]
@@ -68,6 +70,20 @@ namespace WebClient.Controllers
             }
             var orderDetail = listOrder.SingleOrDefault(od => od.Order.OrderId == OrderId);
             return View(orderDetail);
+        }
+
+        public async Task<IActionResult> ListOrderDetail(int id)
+        {
+            HttpResponseMessage response = await client.GetAsync(OrderDetailApiUrl + "/ListOderDetailByOderId/" + id);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<OrderDetail> listOrderDetail = JsonSerializer.Deserialize<List<OrderDetail>>(strData, options);
+            return View(listOrderDetail);
         }
     }
 }

@@ -109,8 +109,9 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true
             };
             List<Order> listOrder = JsonSerializer.Deserialize<List<Order>>(strData, options);
-
+            
             ViewBag.OrderStatus = GetOrderStatusSelectList();
+            ViewBag.OrderStatusNoneCompleted = GetOrderStatusSelectListNoneComppleted();
 
             return View(listOrder);
         }
@@ -120,6 +121,12 @@ namespace WebClient.Controllers
             var orderStatuses = Enum.GetValues(typeof(OrderStatus));
             return new SelectList(orderStatuses);
         }
+        private SelectList GetOrderStatusSelectListNoneComppleted()
+        {
+            var orderStatuses = new List<OrderStatus> { OrderStatus.Pending, OrderStatus.Processing, OrderStatus.Canceled };
+            return new SelectList(orderStatuses);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> ChangeOrderStatus(ChangeOrderStatusDTO order)
