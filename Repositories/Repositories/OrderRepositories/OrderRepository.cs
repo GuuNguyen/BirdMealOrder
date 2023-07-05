@@ -104,13 +104,34 @@ namespace Repositories.Repositories.OrderRepositories
         {
             var check = OrderDAO.GetOrder(order.OrderId);
             if (check == null) return false;
-            if(order.Status == OrderStatus.Processing)
+            if (order.Status == OrderStatus.Processing)
             {
                 order.ShipDate = DateTime.Now.AddDays(1);
             }
-            else if(order.Status == OrderStatus.Completed || order.Status == OrderStatus.Canceled)
+            else if (order.Status == OrderStatus.Completed || order.Status == OrderStatus.Canceled)
             {
                 order.ShipDate = check.ShipDate;
+                if (order.Status == OrderStatus.Canceled)
+                {
+                    var orderDetails = OrderDetailDAO.ListOderDetailByOderId(order.OrderId);
+                    Dictionary<int, int> productQuantityRefund = new Dictionary<int, int>();
+                    Dictionary<int, int> mealQuantityRefund = new Dictionary<int, int>();
+                    foreach (var o in orderDetails)
+                    {
+                        if (o.ProductId != null)
+                        {
+                            productQuantityRefund.Add((int)o.ProductId, o.Quantity);
+                            var checkRefund = ProductDAO.RefundQuantityProduct(productQuantityRefund);
+                            if (!checkRefund) return false;
+                        }
+                        if (o.MealId != null)
+                        {
+                            mealQuantityRefund.Add((int)o.MealId, o.Quantity);
+                            var checkRefund = MealDAO.RefundQuantityMeal(mealQuantityRefund);
+                            if (!checkRefund) return false;
+                        }
+                    }
+                }
             }
             else
             {
@@ -167,10 +188,10 @@ namespace Repositories.Repositories.OrderRepositories
             foreach (var pair in sortedProducts)
             {
                 string prefix = pair.Key.Substring(0, 2);
-                switch(prefix)
+                switch (prefix)
                 {
                     case "ME":
-                        var meal = MealDAO.GetMealByCode(pair.Key); 
+                        var meal = MealDAO.GetMealByCode(pair.Key);
                         bestSellers.Add(meal);
                         break;
                     case "FO":
