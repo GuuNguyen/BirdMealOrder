@@ -90,26 +90,43 @@ namespace WebClient.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ProductDTO product, IFormFile productImage)
+        public async Task<ActionResult> Edit(ProductDTO product, IFormFile pImage)
         {
-            if (productImage != null && productImage.Length > 0)
+            var oldFile = Path.GetFileName(product.ProductImage);
+
+            var startIndex = oldFile.IndexOf("product-images%2F") + "product-images%2F".Length;
+            var endIndex = oldFile.IndexOf("?alt=media&token=");
+
+            var cleanFileName = oldFile.Substring(startIndex, endIndex - startIndex);
+
+            if (pImage != null && pImage.Length > 0)
             {
+                var newFileName = Path.GetFileName(pImage.FileName);
+
                 var task = new FirebaseStorage("groupprojectprn.appspot.com")
-            .Child("product-images")
-            .Child(Path.GetFileName(productImage.FileName))
-            .PutAsync(productImage.OpenReadStream());
+                    .Child("meal-images")
+                    .Child(newFileName)
+                    .PutAsync(pImage.OpenReadStream());
 
                 // Chờ upload hoàn thành
-                var imageUrl = await task;
+                var newImageUrl = await task;
 
-                // Lưu URL vào database
-                product.ProductImage = imageUrl;
+                // Lưu URL mới vào updateMealDTO
+                product.ProductImage = newImageUrl;
             }
+
             string strData = JsonSerializer.Serialize(product);
             var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PutAsync(ProductApiUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
+                if (pImage != null && pImage.Length > 0)
+                {
+                    await new FirebaseStorage("groupprojectprn.appspot.com")
+                        .Child("meal-images")
+                        .Child(cleanFileName)
+                        .DeleteAsync();
+                }
                 TempData["msg"] = "Update successfully!";
             }
             else
