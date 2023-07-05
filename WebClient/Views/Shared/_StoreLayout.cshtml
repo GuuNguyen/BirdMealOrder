@@ -1,5 +1,6 @@
 ﻿@{
     var name = Context.Session.GetString("userName");
+    var profileUser = Context.Session.GetInt32("userID");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -77,7 +78,7 @@
                                         <ul>
                                             <li class="dropdown-list-item">
                                                 <i class="fa-regular fa-address-card"></i>
-                                                <a href="#">My profile</a>
+                                                <a href="/User/DetailUser/@profileUser">My profile</a>
                                             </li>
                                             <li class="dropdown-list-item">
                                                 <i class="fa-regular fa-pen-to-square"></i>
