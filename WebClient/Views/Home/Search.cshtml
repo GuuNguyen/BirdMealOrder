@@ -12,23 +12,64 @@
                 <p>Result for searching: </p>
             </div>
         </div>
-        <div class="grid-view-meal">
-            @if (Model.Meals.Count > 0)
+        
+            @if(Model.Meals.Count == 0 && Model.Products.Count == 0)
             {
-                foreach (var item in Model.Meals)
+                <div class="shopee-search-empty-result-section">
+                    <img src="https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/a60759ad1dabe909c46a817ecbf71878.png" class="shopee-search-empty-result-section__icon">
+                    <div class="shopee-search-empty-result-section__title">Không tìm thấy kết quả nào</div>
+                    <div class="shopee-search-empty-result-section__hint">Hãy thử sử dụng các từ khóa chung chung hơn</div>
+                </div>
+            }else
+        {
+            <div class="grid-view-meal">
+                @if (Model.Meals.Count > 0)
                 {
-                    @Html.Partial("_ListMeal", item)
+                    foreach (var item in Model.Meals)
+                    {
+                        @Html.Partial("_ListMeal", item)
+                    }
                 }
-            }
-            @if (Model.Products.Count > 0)
-            {
-                foreach (var item in Model.Products)
+                @if (Model.Products.Count > 0)
                 {
-                    @Html.Partial("_ListProduct", item)
+                    foreach (var item in Model.Products)
+                    {
+                        @Html.Partial("_ListProduct", item)
+                    }
                 }
+            </div>
             }
 
-        </div>
+        
     </div>
 </div>
 
+<style>
+    .shopee-search-empty-result-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 6.25rem 0 7.5rem;
+    }
+
+    .shopee-search-empty-result-section__icon {
+        width: 8.375rem;
+    }
+
+    img {
+        overflow-clip-margin: content-box;
+        overflow: clip;
+    }
+
+    .shopee-search-empty-result-section__title {
+        margin: 0.9375rem 0 0.625rem;
+        color: rgba(0,0,0,.87);
+        font-size: 1.125rem;
+    }
+
+    .shopee-search-empty-result-section__hint {
+        font-size: 1.125rem;
+        color: rgba(0,0,0,.54);
+    }
+</style>
