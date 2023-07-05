@@ -41,7 +41,8 @@
                         <label asp-for="ProductImage" class="control-label"></label>
                         <div class="product-edit-item-image row">
                             <div class="col-lg-9">
-                                <input type="file" id="productimage" name="productImage" accept="image/*" class="form-control" onchange="handleImageUpload(event)">
+                                <input type="file" id="product-image" name="pImage" accept="image/*" class="form-control" onchange="handleImageUpload(event)">
+                                <input asp-for ="ProductImage" type="hidden" class="form-control" id="ProductImage" name="ProductImage" value="@Model.ProductImage">
                             </div>
                             <div class="col-lg-3">
                                 <img id="product-image-preview" style="height: 100px" src="@Model.ProductImage" class="form-control" />
@@ -66,15 +67,15 @@
 </div>
 
 <script>
-    function handleImageUpload(event) {
-        var input = event.target;
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var imageElement = document.querySelector("#product-image-preview");
-                imageElement.src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+      function handleImageUpload(event) {
+          var input = event.target;
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                  var imageElement = document.querySelector("#product-image-preview");
+                  imageElement.src = e.target.result;
+              };
+              reader.readAsDataURL(input.files[0]);
+          }
+      }
 </script>
