@@ -21,7 +21,6 @@ namespace BusinessObject.Models
         public OrderStatus Status { get; set; }
         public virtual ShippingAddress ShippingAddress { get; set; } = null!;
         public virtual User User { get; set; } = null!;
-        [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
