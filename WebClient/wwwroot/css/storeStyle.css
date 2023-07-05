@@ -11,6 +11,13 @@ body {
 * p , h5{
     margin: 0;
 }
+.out-of-stock p{
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    text-align: center;
+    font-weight: 400;
+    color: red;
+}
 /*============================= breadcrumb =======================*/
 .breadcrumb {
     list-style: none;
@@ -116,9 +123,11 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
+    text-decoration: none;
+    color: black;
 }
 .bird-hero-text a:hover{
-    color: orange;
+    color: #56894f;
 }
 .grid-view-bird {
     display: grid;
@@ -545,10 +554,22 @@ body {
     box-shadow: none;
 }
 
+.bird-sort-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: .5em;
+}
+
+.img-none-result-search{
+    display: none;
+    text-align: center;
+}
+
+.img-none-result-search img{
+    width: 25vw;
+}
+
 /*================================================== details page ============================================*/
-
-
-
 .container-product-detail {
     display: flex;
     justify-content: center;
@@ -602,6 +623,11 @@ body {
 .hero-product-detail-atc-btn{
     display:flex;
     gap: 2em;
+}
+
+.hero-product-detail-atc-btn .out-of-stock p{
+    text-align: center;
+    font-size: 30px;
 }
 
 .hero-btn-plus-minus{
@@ -1191,6 +1217,41 @@ body {
         box-shadow: #0c024d 0 3px 7px inset;
         transform: translateY(2px);
     }
+
+
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
 /*==================== delivery information modal ===========*/
 .delivery-information-modal {
     position: fixed;

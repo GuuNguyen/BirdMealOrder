@@ -33,6 +33,17 @@ namespace WebAPI.Controllers
             return Ok(bird);
         }
 
+        [HttpGet("ByMeal/{mealId}")]
+        public IActionResult GetBirdsByMealId(int mealId)
+        {
+            var bird = _birdRepo.GetBirdsByMealId(mealId);
+            if (bird == null)
+            {
+                return NotFound("No bird have this birdId");
+            }
+            return Ok(bird);
+        }
+
         [HttpPost]
         public IActionResult CreateBird(Bird bird)
         {

@@ -342,8 +342,11 @@ $(document).ready(function () {
             toastr.warning('Please select a shipping address!!');
         }
     });
-
+ 
+    
     function createOrder(shippingAddressId) {
+        $('.container-checkout-body').append('<div id="loaderOverlay" class="loader-overlay"><div class="loader"></div></div>');
+
         $.ajax({
             url: '/Checkout/Order',
             type: 'POST',
@@ -366,6 +369,9 @@ $(document).ready(function () {
                 else {
                     alert('An error occurred while creating the order.');
                 }
+            },
+            complete: function () {
+                $('#loaderOverlay').remove();
             }
         });
     }
@@ -374,3 +380,147 @@ $(document).ready(function () {
 
 
 
+
+$(document).ready(function () {
+    var filterTable = $("#filterTable");
+
+    $("#filterButton").click(function (event) {
+        filterTable.toggle();
+        event.stopPropagation();
+    });
+
+    $("#applyFilterButton").click(function () {
+        $("#errorImage").css("display", "none");
+        applyFilter();
+    });
+
+    $(document).click(function (event) {
+        var target = $(event.target);
+        if (!target.closest("#filterButton").length && !target.closest("#filterTable").length) {
+            filterTable.hide();
+        }
+    });
+
+    var pageType = $(".hero-filter").data("page-type");
+    console.log("Page type:", pageType);
+
+    function applyFilter() {
+        var selectedPrice = $("input[name='price']:checked").map(function () {
+            var priceRange = this.value.split('-');
+            var minPrice = 0;
+            var maxPrice = 0;
+            var onlyPrice = 0; 
+
+            if (priceRange.length === 2) {
+                minPrice = parseInt(priceRange[0]);
+                maxPrice = parseInt(priceRange[1]);
+            } else {
+                onlyPrice = parseInt(this.value);
+            }          
+            return {
+                Min: minPrice,
+                Max: maxPrice,
+                Only: onlyPrice
+            };
+        }).get()[0];
+
+
+        var selectedBirds = $("input[name='birdId']:checked").map(function () {
+            return parseInt(this.value);
+        }).get();
+
+        var sortValue = {
+            PageType: pageType,
+            SelectedPrice: selectedPrice,
+            SelectedBirds: selectedBirds
+        };
+        
+
+        $.ajax({
+            url: "/Home/ApplyFilter",
+            type: "POST",
+            data: sortValue,
+            success: function (response) {
+                if (sortValue.PageType === "Meal") {
+                    var mealContainer = $("#mealContainer");
+                    mealContainer.empty(); 
+
+                    for (var i = 0; i < response.length; i++) {
+                        var mealItem = response[i];
+
+                        var gridItemMeal = $('<div class="grid-item-meal"></div>');
+
+                        var aLink = $('<a class="a-text-link"></a>')
+                            .attr('href', '/Home/Detail?code=' + mealItem.mealCode);
+
+                        var itemImage = $('<div class="item-image"></div>')
+                            .append($('<img />').attr('src', mealItem.mealImage).attr('alt', mealItem.mealName));
+
+                        var itemDetails = $('<div class="item-details"></div>')
+                            .append($('<h5></h5>').text(mealItem.mealName))
+                            .append($('<p></p>').html('<i class="fa-solid fa-dollar-sign"></i>' + mealItem.price.toFixed(2)));
+
+                        var buttonATC = $('<button class="button-atc"></button>')
+                            .attr('data-code', mealItem.mealCode)
+                            .append($('<span>Add to cart</span>'))
+                            .append($('<div class="cart"></div>')
+                                .append($('<svg viewBox="0 0 36 26"><polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline><polyline points="15 13.5 17 15.5 22 10.5"></polyline></svg>')));
+
+                        aLink.append(itemImage);
+                        aLink.append(itemDetails);
+                        gridItemMeal.append(aLink);
+                        gridItemMeal.append(buttonATC);
+
+                        mealContainer.append(gridItemMeal);
+                    }
+                }
+                else {
+                    var productContainer = $("#foodContainer");
+                    productContainer.empty(); 
+
+                    for (var i = 0; i < response.length; i++) {
+                        var productItem = response[i];
+
+                        var gridItemProduct = $('<div class="grid-item-meal"></div>');
+
+                        var aLink = $('<a class="a-text-link"></a>')
+                            .attr('href', '/Home/Detail?code=' + productItem.productCode);
+
+                        var itemImage = $('<div class="item-image"></div>')
+                            .append($('<img />').attr('src', productItem.productImage).attr('alt', productItem.productName));
+
+                        var itemDetails = $('<div class="item-details"></div>')
+                            .append($('<h5></h5>').text(productItem.productName))
+                            .append($('<p></p>').html('<i class="fa-solid fa-dollar-sign"></i>' + productItem.price.toFixed(2)));
+
+                        var buttonATC = $('<button class="button-atc"></button>')
+                            .attr('data-code', productItem.productCode)
+                            .append($('<span>Add to cart</span>'))
+                            .append($('<div class="cart"></div>')
+                                .append($('<svg viewBox="0 0 36 26"><polyline points="1 2.5 6 2.5 10 18.5 25.5 18.5 28.5 7.5 7.5 7.5"></polyline><polyline points="15 13.5 17 15.5 22 10.5"></polyline></svg>')));
+
+                        aLink.append(itemImage);
+                        aLink.append(itemDetails);
+                        gridItemProduct.append(aLink);
+                        gridItemProduct.append(buttonATC);
+
+                        productContainer.append(gridItemProduct);
+                    }
+                }
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status === 404) {
+                    if (sortValue.PageType === "Meal") {
+                        var mealContainer = $("#mealContainer");
+                        mealContainer.empty();
+                    } else {
+                        var productContainer = $("#foodContainer");
+                        productContainer.empty(); 
+                    }
+                    $("#errorImage").css("display", "block");
+                } 
+            }
+        });
+        filterTable.hide();
+    }
+});

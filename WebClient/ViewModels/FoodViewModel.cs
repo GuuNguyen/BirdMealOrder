@@ -7,5 +7,6 @@ namespace WebClient.ViewModels
         public List<BreadCrumb> Breadcrumbs { get; set; }
         public List<Product> Products { get; set; }
         public List<Bird> Birds { get; set; }
+        public string PageType { get; set; }
     }
 }

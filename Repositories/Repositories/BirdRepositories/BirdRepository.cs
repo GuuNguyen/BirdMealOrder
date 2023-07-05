@@ -52,5 +52,7 @@ namespace Repositories.Repositories.BirdRepositories
             BirdDAO.UpdateBird(bird);
             return true;
         }
+
+        public List<Bird> GetBirdsByMealId(int id) => BirdDAO.GetBirdsByMealId(id);
     }
 }
