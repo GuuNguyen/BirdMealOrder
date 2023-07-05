@@ -155,7 +155,7 @@ namespace WebClient.Controllers
             return View(meal);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(UpdateMealDTO updateMealDTO, IFormFile mImage)
+        public async Task<ActionResult> Edit(UpdateMealDTO updateMealDTO, IFormFile mImage)
         {
             var productIds = new List<int>();
             foreach (var product in updateMealDTO.ProductRequireds)

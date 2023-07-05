@@ -104,7 +104,7 @@ namespace WebClient.Controllers
                 var newFileName = Path.GetFileName(pImage.FileName);
 
                 var task = new FirebaseStorage("groupprojectprn.appspot.com")
-                    .Child("meal-images")
+                    .Child("product-images")
                     .Child(newFileName)
                     .PutAsync(pImage.OpenReadStream());
 
@@ -120,14 +120,15 @@ namespace WebClient.Controllers
             HttpResponseMessage response = await client.PutAsync(ProductApiUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
-                if (pImage != null && pImage.Length > 0)
-                {
-                    await new FirebaseStorage("groupprojectprn.appspot.com")
-                        .Child("meal-images")
-                        .Child(cleanFileName)
-                        .DeleteAsync();
-                }
+                //if (pImage != null && pImage.Length > 0)
+                //{
+                //    await new FirebaseStorage("groupprojectprn.appspot.com")
+                //        .Child("product-images")
+                //        .Child(cleanFileName)
+                //        .DeleteAsync();
+                //}
                 TempData["msg"] = "Update successfully!";
+                return RedirectToAction("Product_Index", "Staff");
             }
             else
             {
