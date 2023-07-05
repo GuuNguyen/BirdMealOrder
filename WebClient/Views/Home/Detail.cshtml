@@ -168,7 +168,17 @@
                     <div class="line" style="margin-top:20px"></div>
                 </div>
             }
-
+        </div>
+        <!-- Phân trang -->
+        <div class="pagination mt-3">
+            @if (Model.ListFeedbackViewModel.FeedbackList.Count > 0)
+            {
+                int totalPages = (int)Math.Ceiling((double)Model.ListFeedbackViewModel.FeedbackList.Count / 5);
+                for (int i = 1; i <= totalPages; i++)
+                {
+                    <button class="page-link" onclick="changePage(@i)">@i</button>
+                }
+            }
         </div>
 
 
@@ -204,6 +214,9 @@
 </div>
 
 <style>
+    .container-body {
+        padding: 0px 10em 0em 10em;
+    }
     .container-review {
         padding-top: 20px;
     }
@@ -327,6 +340,11 @@
         .rating:hover > input:checked ~ label:before {
             opacity: 0.4
         }
+
+    .active > .page-link, .page-link.active {
+        background-color: #538a50;
+        border-color: #538a50;
+    }
 </style>
 @section scripts {
     <script>
@@ -352,5 +370,32 @@
                 $('.item-feedback[data-status="' + status + '"]').show();
             }
         }
+
+        var currentPage = 1;
+        var itemsPerPage = 5;
+
+        function showItemsOnPage(page) {
+            var items = $('.list-feedback .item-feedback');
+            var startIndex = (page - 1) * itemsPerPage;
+            var endIndex = startIndex + itemsPerPage;
+
+            items.hide();
+            items.slice(startIndex, endIndex).show();
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            showItemsOnPage(currentPage);
+
+            // Tùy chỉnh CSS cho trang hiện tại
+            $('.pagination .page-link').removeClass('active');
+            $('.pagination .page-link').eq(currentPage - 1).addClass('active');
+        }
+
+        $(document).ready(function () {
+            showItemsOnPage(currentPage);
+
+            $('.pagination .page-link').eq(currentPage - 1).addClass('active');
+        });
     </script>
 }
