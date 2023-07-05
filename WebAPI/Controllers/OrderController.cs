@@ -1,4 +1,5 @@
-﻿using BusinessObject.Models;
+﻿using BusinessObject.Enums;
+using BusinessObject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.OrderDTO;
@@ -56,6 +57,32 @@ namespace WebAPI.Controllers
         public IActionResult GetOrdersAndCheckHasReviewByUserId(int userId)
         {
             return Ok(_repo.GetOrdersAndCheckHasReviewByUserId(userId));
+        }
+
+        [HttpPut("ChangeOrderStatus")]
+        public IActionResult ChangeOrderStatus(ChangeOrderStatusDTO order)
+        {
+            var isSuccess = _repo.ChangeOrderStatus(order);
+            return isSuccess ? Ok("Successfull updated!") : BadRequest("Fail update!");
+        }
+        
+        [HttpPut("DeleteChangeOrderStatus/{id}")]
+        public IActionResult DeleteChangeOrderStatus(int id)
+        {
+            var isSuccess = _repo.DeleteChangeOrderStatus(id);
+            return isSuccess ? Ok("Successfull updated!") : BadRequest("Fail update!");
+        }
+
+        [HttpGet("GetBestSeller")]
+        public IActionResult GetBestSeller()
+        {
+            return Ok(_repo.GetListBestSeller());
+        }
+
+        [HttpGet("RecommendList")]
+        public IActionResult GetRecommendList()
+        {
+            return Ok(_repo.GetListRecommend());
         }
     }
 }

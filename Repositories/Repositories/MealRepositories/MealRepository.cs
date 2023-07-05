@@ -179,5 +179,7 @@ namespace Repositories.Repositories.MealRepositories
         {
             return MealProductDAO.GetProductsByMealId(mealId);
         }
+
+        public List<Meal> GetMealsByBirdId(int birdId) => MealDAO.GetMealsByBirdId(birdId);
     }
 }
