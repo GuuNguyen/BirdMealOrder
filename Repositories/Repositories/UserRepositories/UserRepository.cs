@@ -28,7 +28,7 @@ namespace Repositories.Repositories.UserRepositories
         {
             if (userDTO.FullName != null && userDTO.UserName != null && userDTO.PhoneNumber != null && userDTO.Password != null)
             {
-                if (!UserDAO.isExitedUserName(userDTO.FullName) && !UserDAO.isExitedPhoneNumber(userDTO.PhoneNumber))
+                if (!UserDAO.isExitedUserName(userDTO.UserName) && !UserDAO.isExitedPhoneNumber(userDTO.PhoneNumber))
                 {
                     var newUser = _mapper.Map<User>(userDTO);
                     newUser.RoleId = 3;

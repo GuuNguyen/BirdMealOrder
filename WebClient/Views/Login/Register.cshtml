@@ -9,9 +9,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@200;300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="~/css/loginStyle.css">
+    <link rel="stylesheet" href="~/toastr/build/toastr.css" />
 </head>
 
 <body>
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 col-md-7 intro-section">
@@ -63,6 +65,16 @@
             </div>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/toastr/toastr.js"></script>
+    @if (!string.IsNullOrEmpty(ViewData["ErrorMessage"] as string))
+    {
+        <script>
+            $(document).ready(function () {
+                toastr.error('@ViewData["ErrorMessage"]');
+            });
+        </script>
+    }
 </body>
 
 </html>
