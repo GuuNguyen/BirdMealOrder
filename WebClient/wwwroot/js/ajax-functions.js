@@ -5,7 +5,7 @@ $(document).ready(function () {
         "debug": false,
         "newestOnTop": true,
         "progressBar": true,
-        "positionClass": "toast-top-center",
+        "positionClass": "toast-top-right",
         "preventDuplicates": false,
         "onclick": null,
         "showDuration": "300",
@@ -18,6 +18,32 @@ $(document).ready(function () {
         "hideMethod": "fadeOut"
     };
 });
+$(document).ready(function () {
+    $('#login-form').on('submit', function (event) {
+        event.preventDefault();
+
+        // Xử lý đăng nhập
+        var formData = $(this).serialize();
+        $.ajax({
+            url: 'Login/Login',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                toastr.success('Login Success!');
+                window.location.href = response.redirectUrl;
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status == 400) {
+                    toastr.error('Login Fail!');
+                }
+                console.error(error);
+            }
+        });
+    });
+});
+
+
+
 
 document.querySelectorAll(".button-atc").forEach((button) =>
     button.addEventListener("click", (e) => {
@@ -149,7 +175,6 @@ $(document).ready(function () {
                 var html = '';
                 for (var i = 0; i < data.length; i++) {
                     var item = data[i];
-                    html += '<a href="#" id="addNewDelivery" class="add-new-delivery">+ ADD NEW</a>';
                     html += '<div class="hero-shipping-address-item">';
                     html += '<input type="radio" class="delivery-radio" name="selectedAddress" value="' + item.shippingAddressId + '" />';
                     html += '<div class="shipping-address-item">';
