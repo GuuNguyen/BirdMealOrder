@@ -12,5 +12,7 @@ namespace WebClient.ViewModels
         public Meal? Meal { get; set; }
         public Product? Product { get; set; }
         public List<MealProduct> MealProducts { get; set; }
+
+        public ListFeedbackViewModel ListFeedbackViewModel { get; set; }
     }
 }

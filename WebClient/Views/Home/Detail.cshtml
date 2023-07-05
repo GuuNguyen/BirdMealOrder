@@ -97,6 +97,98 @@
     </div>
 </div>
 <div class="line"></div>
+<div class="container-space">
+</div>
+<div class="line"></div>
+<div class=" container-body">
+    <div class="product-ratings">
+        <div class="item-text-detail product-detail-under-container">
+            <p>REVIEW</p>
+        </div>
+        <div class="product-rating-overview">
+            <div class="product-rating-overview__briefing">
+                <div class="product-rating-overview__score-wrapper">
+                    @if(Model.ListFeedbackViewModel.FeedbackList.Count <= 0)
+                    {
+                        <span class="product-rating-overview__rating-score">No reviews yet</span>
+                    }else
+                    {
+                        <span class="product-rating-overview__rating-score">@Model.ListFeedbackViewModel.AvgRating</span>
+                        <span class="product-rating-overview__rating-score-out-of"> trên 5 </span>
+                    }
+                    
+                </div>
+            </div>
+            <div class="product-rating-overview__filters">
+                <div class="product-rating-overview__filter status-all" title="All" onclick="filterOrders('All')">All</div>
+                <div class="product-rating-overview__filter" title="5" onclick="filterOrders('5')">5 Star (@Model.ListFeedbackViewModel.Rating5Count)</div>
+                <div class="product-rating-overview__filter" title="4" onclick="filterOrders('4')">4 Star (@Model.ListFeedbackViewModel.Rating4Count)</div>
+                <div class="product-rating-overview__filter" title="3" onclick="filterOrders('3')">3 Star (@Model.ListFeedbackViewModel.Rating3Count)</div>
+                <div class="product-rating-overview__filter" title="2" onclick="filterOrders('2')">2 Star (@Model.ListFeedbackViewModel.Rating2Count)</div>
+                <div class="product-rating-overview__filter" title="1" onclick="filterOrders('1')">1 Star (@Model.ListFeedbackViewModel.Rating1Count)</div>
+            </div>
+        </div>
+        <div class="list-feedback">
+            @foreach(var item in Model.ListFeedbackViewModel.FeedbackList)
+            {
+                <div class="item-feedback" data-status=@item.Rating>
+                    @{
+                        var index = Model.ListFeedbackViewModel.FeedbackList.IndexOf(item);
+                        var user = Model.ListFeedbackViewModel.User[index];
+                    }
+                    <div class="container-user-feedback d-flex mt-3">
+                        <div class="FullName fw-bold h5">@user.FullName</div>
+                        <div class="ms-4 text-success h8">
+                            <i class="fa-solid fa-circle-check"></i> Purchased at BirdMealStore
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <input type="radio" value="5" @if (item.Rating == 5)
+                        {
+                            <text>checked</text>
+                        }><label for="5">☆</label>
+                        <input type="radio" value="4" @if (item.Rating == 4)
+                        {
+                            <text>checked</text>
+                        }><label for="4">☆</label>
+                        <input type="radio" value="3" @if (item.Rating == 3)
+                        {
+                            <text>checked</text>
+                        }><label for="3">☆</label>
+                        <input type="radio" value="2" @if (item.Rating == 2)
+                        {
+                            <text>checked</text>
+                        }><label for="2">☆</label>
+                        <input type="radio" value="1" @if (item.Rating == 1)
+                        {
+                            <text>checked</text>
+                        }><label for="1">☆</label>
+                    </div>
+                    <div class="commet">@item.Feedback1</div>
+                    <div class="line" style="margin-top:20px"></div>
+                </div>
+            }
+        </div>
+        <!-- Phân trang -->
+        <div class="pagination mt-3">
+            @if (Model.ListFeedbackViewModel.FeedbackList.Count > 0)
+            {
+                int totalPages = (int)Math.Ceiling((double)Model.ListFeedbackViewModel.FeedbackList.Count / 5);
+                for (int i = 1; i <= totalPages; i++)
+                {
+                    <button class="page-link" onclick="changePage(@i)">@i</button>
+                }
+            }
+        </div>
+
+
+
+    </div>
+</div>
+<div class="line"></div>
+<div class="container-space">
+</div>
+<div class="line"></div>
 <div class="container-body page-container">
     <div class="product-detail-under-container">
         <div class="item-text-detail">
@@ -121,4 +213,189 @@
     </div>
 </div>
 
+<style>
+    .container-body {
+        padding: 0px 10em 0em 10em;
+    }
+    .container-review {
+        padding-top: 20px;
+    }
 
+    .container-space {
+        background-color: aliceblue;
+        padding: 15px 0 15px 0;
+    }
+
+    .product-rating-overview {
+        justify-content: space-around;
+        background-color: #fffbf8;
+        min-height: 5rem;
+        border: 1px solid #f9ede5;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        border-radius: 2px;
+        box-sizing: border-box;
+        padding: 1.875rem;
+    }
+
+    .product-rating-overview__briefing {
+        text-align: center;
+        margin-right: 1.875rem;
+    }
+
+    .product-rating-overview__score-wrapper {
+        color: #ee4d2d;
+        font-size: 1.125rem;
+    }
+
+    .product-rating-overview__rating-score {
+        font-size: 1.875rem;
+    }
+
+    .product-rating-overview__score-wrapper {
+        color: #ee4d2d;
+        font-size: 1.125rem;
+    }
+
+    .product-rating-overview__filters {
+        margin-left: 0.9375rem;
+    }
+
+    .status-all {
+        color: #16cc0c!important;
+        border-color: #16cc0c!important;
+    }
+
+    .product-rating-overview__filter {
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        height: 2rem;
+        line-height: 2rem;
+        min-width: 6.25rem;
+        text-align: center;
+        padding: 0 0.625rem;
+        color: rgba(0,0,0,.8);
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.09);
+        box-sizing: border-box;
+        display: inline-block;
+        margin-right: 0.5rem;
+        text-decoration: none;
+        color: rgba(0,0,0,.87);
+        text-transform: capitalize;
+        border-radius: 2px;
+        margin-bottom: 0.3125rem;
+        margin-top: 0.3125rem;
+    }
+
+    .product-ratings {
+        border-radius: 0.125rem;
+        overflow: hidden;
+        background: #fff;
+        margin-top: 0.9375rem;
+        padding: 1.5625rem;
+        overflow: visible;
+    }
+
+    .item-text-detail {
+        margin: 0 auto 20px;
+    }
+
+    .rating {
+        display: inline-flex;
+        margin-top: -10px;
+        flex-direction: row-reverse;
+    }
+
+        .rating > input {
+            display: none
+        }
+
+        .rating > label {
+            position: relative;
+            width: 28px;
+            font-size: 35px;
+            color: #ffbf00;
+            cursor: pointer;
+        }
+
+            .rating > label::before {
+                content: "\2605";
+                position: absolute;
+                opacity: 0
+            }
+
+            .rating > label:hover:before,
+            .rating > label:hover ~ label:before {
+                opacity: 1 !important
+            }
+
+        .rating > input:checked ~ label:before {
+            opacity: 1
+        }
+
+        .rating:hover > input:checked ~ label:before {
+            opacity: 0.4
+        }
+
+    .active > .page-link, .page-link.active {
+        background-color: #538a50;
+        border-color: #538a50;
+    }
+</style>
+@section scripts {
+    <script>
+        function filterOrders(status) {
+            var statusOrders = document.getElementsByClassName("product-rating-overview__filter");
+
+            // Xóa lớp CSS "status-all" khỏi tất cả các thẻ
+            for (var i = 0; i < statusOrders.length; i++) {
+                statusOrders[i].classList.remove("status-all");
+            }
+
+            // Thêm lớp CSS "status-all" cho thẻ vừa chọn
+            var selectedStatusOrder = document.querySelector('[title="' + status + '"]');
+            selectedStatusOrder.classList.add("status-all");
+
+            $('.product-rating-overview__filter').removeClass('active');
+            $('.product-rating-overview__filter[data-status="' + status + '"]').addClass('active');
+
+            $('.item-feedback').hide();
+            if (status === 'All') {
+                $('.item-feedback').show();
+            } else {
+                $('.item-feedback[data-status="' + status + '"]').show();
+            }
+        }
+
+        var currentPage = 1;
+        var itemsPerPage = 5;
+
+        function showItemsOnPage(page) {
+            var items = $('.list-feedback .item-feedback');
+            var startIndex = (page - 1) * itemsPerPage;
+            var endIndex = startIndex + itemsPerPage;
+
+            items.hide();
+            items.slice(startIndex, endIndex).show();
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            showItemsOnPage(currentPage);
+
+            // Tùy chỉnh CSS cho trang hiện tại
+            $('.pagination .page-link').removeClass('active');
+            $('.pagination .page-link').eq(currentPage - 1).addClass('active');
+        }
+
+        $(document).ready(function () {
+            showItemsOnPage(currentPage);
+
+            $('.pagination .page-link').eq(currentPage - 1).addClass('active');
+        });
+    </script>
+}

@@ -25,5 +25,15 @@ namespace Repositories.Repositories.FeedbackRepositories
             };
             FeedbackDAO.Create(feedback);
         }
+
+        public object GetListFeedbackByMeald(int mealId)
+        {
+            return FeedbackDAO.GetListFeedbackByMeald(mealId);
+        }
+
+        public object GetListFeedbackByProductId(int productId)
+        {
+            return FeedbackDAO.GetListFeedbackByProductId(productId);
+        }
     }
 }
