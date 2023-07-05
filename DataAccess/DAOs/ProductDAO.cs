@@ -123,9 +123,18 @@ namespace DataAccess.DAOs
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
-                    var p = _context.Products.Find(id);
-                    _context.Remove(p);
-                    _context.SaveChanges();
+                    var checkProductInDetails = _context.OrderDetails.Where(o => o.ProductId == id).FirstOrDefault();
+                    if (checkProductInDetails != null)
+                    {
+                        ChangeProductStatus(id);
+                    }
+                    else
+                    {
+                        var p = _context.Products.Find(id);
+                        _context.Remove(p);
+                        _context.SaveChanges();
+                    }
+
                 }
             }
             catch (Exception ex)
