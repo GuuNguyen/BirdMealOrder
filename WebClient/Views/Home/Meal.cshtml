@@ -5,7 +5,7 @@
     ViewData["Title"] = "View";
 }
 
-<div class="container-body page-container">
+<div  class="container-body page-container">
     @Html.Partial("_BreadCrumb")
     <div class="best_seller-container">
         <div class="hero-content">
@@ -21,12 +21,15 @@
             </div>
             @Html.Partial("_TopContainer")
         </div>
-        <div class="grid-view-meal">
+        <div id="mealContainer" class="grid-view-meal">
             @foreach (var item in Model.Meals)
             {
                 @Html.Partial("_ListMeal", item)
             }
         </div>
+        <div id="errorImage" class="img-none-result-search">
+            <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/home-images%2FnoneResult.png?alt=media&token=221fd545-b840-424e-8ffe-a42fdc77c2ff" alt="Error Image" />
+        </div>     
     </div>
 </div>
 

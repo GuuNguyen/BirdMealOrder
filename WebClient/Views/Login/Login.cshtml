@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@200;300;400;500&display=swap" rel="stylesheet">
     <link href="~/css/loginStyle.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/toastr/build/toastr.css" />
 </head>
 
 <body>
@@ -37,14 +38,14 @@
             <div class="col-sm-6 col-md-5 form-section">
                 <div class="login-wrapper">
                     <h2 class="login-title">Sign in</h2>
-                    <form method="post" action="Login">
+                    <form id="login-form">
                         <div class="form-group">
                             <label for="username" class="sr-only">Username</label>
-                            <input name="Username" class="form-control" placeholder="Username">
+                            <input name="Username" class="form-control" placeholder="Username" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="password" class="sr-only">Password</label>
-                            <input type="Password" name="password" class="form-control" placeholder="Password">
+                            <input type="Password" name="password" class="form-control" placeholder="Password" required>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-5">
                             <button name="login" id="login" class="btn login-btn" type="submit">Login</button>
@@ -56,6 +57,9 @@
             </div>
         </div>
     </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/ajax-functions.js" asp-append-version="true"></script>
+    <script src="~/toastr/toastr.js"></script>
 </body>
 
 </html>

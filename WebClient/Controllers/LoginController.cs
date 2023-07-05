@@ -64,23 +64,22 @@ namespace WebClient.Controllers
                 if (roleString == "Admin")
                 {
                     HttpContext.Session.SetInt32("userID", parseUserId);
-                    return RedirectToAction("User_Index", "Staff");
+                    return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
                 else if(roleString == "Staff")
                 {
                     HttpContext.Session.SetInt32("userID", parseUserId);
-                    return RedirectToAction("User_Index", "Staff");
+                    return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
                 else
                 {
                     HttpContext.Session.SetInt32("userID", parseUserId);
                     var cart = new List<CartItem>();
                     HttpContext.Session.SetString("cart", JsonSerializer.Serialize(cart));
-                    return RedirectToAction("Index", "Home");
+                    return Json(new { redirectUrl = Url.Action("Index", "Home") });
                 }
             }
-            ViewBag.ErrorMessage = "Your login has failed!"; 
-            return View();
+            return BadRequest();
         }
 
         public IActionResult Register()
@@ -98,6 +97,7 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            ViewData["ErrorMessage"] = "Register Fail";
             return View();
         }
 

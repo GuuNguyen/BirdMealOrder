@@ -10,6 +10,7 @@ namespace Repositories.Repositories.BirdRepositories
     public interface IBirdRepository
     {
         List<Bird> GetAllBirds();
+        List<Bird> GetBirdsByMealId(int id);
         Bird GetBirdById(int id);
         bool CreateBird(Bird bird);
         bool UpdateBird(Bird bird);
