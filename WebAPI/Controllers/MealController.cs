@@ -36,6 +36,12 @@ namespace WebAPI.Controllers
             return Ok(_mealRepo.GetMealByCode(mealCode));
         }
 
+        [HttpGet("ByBirdId/{birdId}")]
+        public IActionResult GetMealsByBirdId(int birdId)
+        {
+            return Ok(_mealRepo.GetMealsByBirdId(birdId));
+        }
+
         [HttpPost("Meals")]
         public IActionResult CreateMeal(List<int> mealIds)
         {

@@ -1,0 +1,33 @@
+﻿@model WebClient.ViewModels.BirdViewModel
+
+@{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
+    ViewData["Title"] = "View";
+}
+
+<div class="container-body page-container">
+    @Html.Partial("_BreadCrumb")
+    <div class="best_seller-container">
+        <div class="hero-content">
+            <div class="item-text-page">
+                <p>Bird</p>
+            </div>
+            <div class="desc-text">
+                <p>
+                    Birds have feathers, wings, a beak, and they can fly in the sky. 
+                    They have colourful feathers like peacock, parrots, flamingo etc. 
+                    They build nests and lay eggs. Some birds can swim like duck, geese, swans, penguins etc.
+                </p>
+            </div>
+        </div>
+        <div class="grid-view-bird">
+            @foreach (var item in Model.Birds)
+            {
+                <a asp-route-id="@item.BirdId" asp-area="" asp-controller="Home" asp-action="MealsByBirdId" class="grid-item-bird">
+                    <img src="@item.BirdImage" alt="Image 1">
+                    <div class="item-content-bird ">@item.BirdName</div>
+                </a>
+            }
+        </div>
+    </div>
+</div>

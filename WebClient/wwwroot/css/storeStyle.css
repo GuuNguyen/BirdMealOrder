@@ -107,6 +107,19 @@ body {
 }
 /*============================= grid bird =======================*/
 
+.bird-hero-text{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bird-hero-text a{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.bird-hero-text a:hover{
+    color: orange;
+}
 .grid-view-bird {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

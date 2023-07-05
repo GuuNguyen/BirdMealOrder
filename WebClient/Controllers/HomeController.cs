@@ -15,6 +15,7 @@ namespace WebClient.Controllers
         private string MealAPIUrl = "";
         private string BirdAPIUrl = "";
         private string ProductUrl = "";
+        private string OrderAPIUrl = "";
         private string FeedbackUrl = "";
 
         public HomeController()
@@ -25,6 +26,7 @@ namespace WebClient.Controllers
             MealAPIUrl = "https://localhost:7022/api/Meal";
             BirdAPIUrl = "https://localhost:7022/api/Bird";
             ProductUrl = "https://localhost:7022/api/Product";
+            OrderAPIUrl = "https://localhost:7022/api/Order";
             FeedbackUrl = "https://localhost:7022/api/Feedback";
         }
 
@@ -32,8 +34,13 @@ namespace WebClient.Controllers
         {
             HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl);
             HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
+            HttpResponseMessage bestSellerResponse = await _client.GetAsync(OrderAPIUrl + "/GetBestSeller");
+            HttpResponseMessage recommendResponse = await _client.GetAsync(OrderAPIUrl + "/RecommendList");
+
             string mealStrData = await mealResponse.Content.ReadAsStringAsync();
             string birdStrData = await birdResponse.Content.ReadAsStringAsync();
+            string bestSellerData = await bestSellerResponse.Content.ReadAsStringAsync();
+            string recommendData = await recommendResponse.Content.ReadAsStringAsync();
 
             var options = new JsonSerializerOptions
             {
@@ -42,13 +49,19 @@ namespace WebClient.Controllers
 
             List<Meal> listMeal = new List<Meal>();
             List<Bird> listBird = new List<Bird>();
+            List<object> listBestSellers = new List<object>();
+            List<object> listRecommends = new List<object>();
             listMeal = JsonSerializer.Deserialize<List<Meal>>(mealStrData, options);
             listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+            listBestSellers = JsonSerializer.Deserialize<List<object>>(bestSellerData, options);
+            listRecommends = JsonSerializer.Deserialize<List<object>>(recommendData, options);
 
             var finalList = new HomeViewModel
             {
                 Meals = listMeal,
-                Birds = listBird
+                Birds = listBird,
+                BestSellers = listBestSellers,
+                HighlyRecommends = listRecommends
             };
 
             return View(finalList);
@@ -84,6 +97,45 @@ namespace WebClient.Controllers
                 Birds = listBird
             };
             return View(finalResult);
+        }
+
+        public async Task<IActionResult> MealsByBirdId(int id)
+        {
+            HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl + $"/ByBirdId/{id}");
+            HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
+            HttpResponseMessage birdSpecificResponse = await _client.GetAsync(BirdAPIUrl + $"/{id}");
+            string mealStrData = await mealResponse.Content.ReadAsStringAsync();
+            string birdStrData = await birdResponse.Content.ReadAsStringAsync();
+            string birdSpecificStrData = await birdSpecificResponse.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            List<Meal> listMeal = new List<Meal>();
+            listMeal = JsonSerializer.Deserialize<List<Meal>>(mealStrData, options);
+
+            List<Bird> listBird = new List<Bird>();
+            listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+
+            Bird birdSpecific = new Bird();
+            birdSpecific = JsonSerializer.Deserialize<Bird>(birdSpecificStrData, options);
+
+            var breadcrumbs = new List<BreadCrumb>
+            {
+                new BreadCrumb { Text = "Home", Url = "/" },
+                new BreadCrumb { Text = "Bird", Url = "/Home/Bird" },
+                new BreadCrumb { Text = birdSpecific.BirdName, Url = "#" },
+                new BreadCrumb { Text = "Meal", Url = "/Home/Meal" },
+            };
+            var finalResult = new MealViewModel
+            {
+                Breadcrumbs = breadcrumbs,
+                Meals = listMeal,
+                Birds = listBird
+            };
+            return View("Meal", finalResult);
         }
 
         public async Task<IActionResult> Food()
@@ -126,14 +178,14 @@ namespace WebClient.Controllers
                 {
                     PropertyNameCaseInsensitive = true
                 };
-                Meal meal = null;
-                Product product = null;
-                List<Meal> listMeal = null;
-                List<Product> listProduct = null;
-                List<Bird> listBird = new List<Bird>();
-                List<Product> productIngredients = null;
-                List<MealProduct> listMealProduct = null;
-                ListFeedbackViewModel listFeedbackViewModel = null;
+                Meal? meal = null;
+                Product? product = null;
+                List<Meal>? listMeal = null;
+                List<Product>? listProduct = null;
+                List<Bird>? listBird = new List<Bird>();
+                List<Product>? productIngredients = null;
+                List<MealProduct>? listMealProduct = null;
+                ListFeedbackViewModel? listFeedbackViewModel = null;
                 var breadcrumbs = new List<BreadCrumb>
                 {
                     new BreadCrumb { Text = "Home", Url = "/" },
@@ -204,5 +256,31 @@ namespace WebClient.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> Bird()
+        {
+            HttpResponseMessage response = await _client.GetAsync(BirdAPIUrl);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            List<Bird> listBird = JsonSerializer.Deserialize<List<Bird>>(strData, options);
+
+            var breadcrumbs = new List<BreadCrumb>
+            {
+                new BreadCrumb { Text = "Home", Url = "/" },
+                new BreadCrumb { Text = "Bird", Url = "/Home/Bird" }
+            };
+            var finalResult = new BirdViewModel
+            {
+                Breadcrumbs = breadcrumbs,
+                Birds = listBird
+            };
+            return View(finalResult);
+        }
+
     }
 }
