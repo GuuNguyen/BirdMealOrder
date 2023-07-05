@@ -249,7 +249,7 @@
                     <div>
                         <span id="userName" class="display-value">@Html.DisplayFor(model => model.UserName)</span><br />
                         @* <label asp-for="UserName" class="control-label"></label>*@
-                        <input asp-for="UserName" id="userNameInput" type="text" class="input-container" style="display: none;" />
+                        <input asp-for="UserName" id="userNameInput" type="text" class="input-container" style="display: none;" readonly />
                     </div>
                     <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
                 </div>
@@ -326,12 +326,12 @@
                 editProfileBtn.style.display = "none";
                 saveChangeBtn.style.display = "block";
 
-                userNameValue.style.display = "none";
+                userNameValue.style.display = "block"; //---------------
                 fullNameValue.style.display = "none";
                 phoneNumberValue.style.display = "none";
                 passwordValue.style.display = "none";
 
-                userNameInput.style.display = "block";
+                userNameInput.style.display = "none"; //-------------
                 fullNameInput.style.display = "block";
                 phoneNumberInput.style.display = "block";
                 passwordInput.style.display = "block";
