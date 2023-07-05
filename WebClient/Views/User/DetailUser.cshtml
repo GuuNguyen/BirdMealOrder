@@ -19,6 +19,7 @@
         flex-direction: row;
         justify-content: space-between;
         margin-top: 78px;
+        margin-bottom: 70px;
     }
 
     .left-column {
@@ -65,6 +66,11 @@
         font-family: system-ui;
     }
 
+        .user-info div {
+            display: flex;
+            justify-content: center;
+        }
+
         .user-info #userName {
             margin-bottom: 10px;
             font-size: 33px;
@@ -94,6 +100,10 @@
             color: green;
         }
 
+        .info-column div {
+            display: flex;
+            justify-content: center;
+        }
 
     .bd1 {
         border-right: solid #828282;
@@ -154,12 +164,58 @@
             box-shadow: 0 0.3em 1em -0.7em #14a73e98;
         }
 
+    .btn-editProfile {
+        display: flex;
+        margin-right: 5px;
+        align-items: center;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 0.7em 1.4em 0.7em 1.1em;
+        color: white;
+        background: #ad5389;
+        background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+        border: none;
+        box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+        letter-spacing: 0.05em;
+        border-radius: 20em;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .btn-editProfile:hover {
+            box-shadow: 0 0.5em 1.5em -0.7em #14a73e98;
+        }
+
+    .btn-saveChange:active {
+        box-shadow: 0 0.3em 1em -0.7em #14a73e98;
+    }
+
+
     .input-container {
-        display: none; 
+        display: none;
+        border: 3px solid #14a73e98;
+        border-radius: 5px;
+        height: 50px;
+        line-height: normal;
+        color: #282828;
+        display: block;
+        
+        box-sizing: border-box;
+        user-select: auto;
+        font-size: 16px;
+        padding: 0 6px;
+        padding-left: 12px;
+        
+
+    
+
     }
 
     .display-value {
-        display: inline-block; 
+        display: inline-block;
     }
 </style>
 
@@ -170,12 +226,17 @@
     <div class="container">
         <div class="left-column">
             <form asp-action="EditUserProfile" asp-controller="User" method="post">
-                <input type="hidden" asp-for="UserId"/>
-               @* <input asp-for="Password" type="hidden" />*@
-                <input asp-for="RoleId" type="hidden" />
+                <input type="hidden" asp-for="UserId" readonly />
+                @* <input asp-for="Password" type="hidden" />*@
+                <input asp-for="RoleId" type="hidden" readonly />
                 <input asp-for="Status" type="hidden" readonly />
                 <div class="button-container">
-                    <button type="submit" class="btn-saveChange">
+
+                    <button type="button" id="editProfileBtn" class="btn-editProfile" onclick="toggleEditMode()">
+                        Edit Profile
+                    </button>
+
+                    <button type="submit" id="saveChangeBtn" class="btn-saveChange" style="display: none;">
                         Save Change
                     </button>
                 </div>
@@ -185,37 +246,37 @@
                     </div>
                 </div>
                 <div class="user-info">
-                    <p>
-                        <span id="userName" class="display-value" onclick="showInput('userName')">@Html.DisplayFor(model => model.UserName)</span><br />
-                       @* <label asp-for="UserName" class="control-label"></label>*@
-                        <input asp-for="UserName" id="userNameInput" type="text" class="input-container" onblur="hideInput('userName')" />
-                    </p>
+                    <div>
+                        <span id="userName" class="display-value">@Html.DisplayFor(model => model.UserName)</span><br />
+                        @* <label asp-for="UserName" class="control-label"></label>*@
+                        <input asp-for="UserName" id="userNameInput" type="text" class="input-container" style="display: none;" readonly />
+                    </div>
                     <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
                 </div>
                 <div class="info-row">
                     <div class="info-column ">
                         <p>Full Name</p>
-                        <p>
-                            <span id="fullName" class="display-value" onclick="showInput('fullName')">@Html.DisplayFor(model => model.FullName)</span><br />
-                             @*<label asp-for="FullName" class="control-label"></label>*@
-                            <input asp-for="FullName" id="fullNameInput" type="text" class="input-container" onblur="hideInput('fullName')" />
-                        </p>
+                        <div>
+                            <span id="fullName" class="display-value">@Html.DisplayFor(model => model.FullName)</span><br />
+                            @*<label asp-for="FullName" class="control-label"></label>*@
+                            <input asp-for="FullName" id="fullNameInput" type="text" class="input-container" style="display: none;" />
+                        </div>
                     </div>
                     <div class="info-column bd1">
                         <p>Phone Number</p>
-                        <p>
-                            <span id="phoneNumber" class="display-value" onclick="showInput('phoneNumber')">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
+                        <div>
+                            <span id="phoneNumber" class="display-value">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
                             @* <label asp-for="PhoneNumber" class="control-label"></label>*@
-                            <input asp-for="PhoneNumber" id="phoneNumberInput" type="text" class="input-container" onblur="hideInput('phoneNumber')" />
-                        </p>
+                            <input asp-for="PhoneNumber" id="phoneNumberInput" type="text" class="input-container" style="display: none;" />
+                        </div>
                     </div>
                     <div class="info-column">
                         <p>Password</p>
-                        <p>
-                            <span id="password" class="display-value" onclick="showInput('password')">@Html.DisplayFor(model => model.Password)</span><br />
+                        <div>
+                            <span id="password" class="display-value">@Html.DisplayFor(model => model.Password)</span><br />
                             @* <label asp-for="PhoneNumber" class="control-label"></label>*@
-                            <input asp-for="Password" id="passwordInput" type="text" class="input-container" onblur="hideInput('password')" />
-                        </p>
+                            <input asp-for="Password" id="passwordInput" type="text" class="input-container" style="display: none;" />
+                        </div>
                     </div>
                 </div>
             </form>
@@ -233,27 +294,53 @@
 
 
 
-
-
-
     <script>
-        function showInput(field) {
-            const displayElement = document.getElementById(field);
-            const inputElement = document.getElementById(field + "Input");
+       
 
-            displayElement.style.display = 'none';
-            inputElement.style.display = 'inline-block';
-            inputElement.focus();
+        function toggleEditMode() {
+            var editProfileBtn = document.getElementById("editProfileBtn");
+            var saveChangeBtn = document.getElementById("saveChangeBtn");
+            var userNameValue = document.getElementById("userName");
+            var fullNameValue = document.getElementById("fullName");
+            var phoneNumberValue = document.getElementById("phoneNumber");
+            var passwordValue = document.getElementById("password");
+            var userNameInput = document.getElementById("userNameInput");
+            var fullNameInput = document.getElementById("fullNameInput");
+            var phoneNumberInput = document.getElementById("phoneNumberInput");
+            var passwordInput = document.getElementById("passwordInput");
+
+            if (editProfileBtn.style.display === "none") {
+                editProfileBtn.style.display = "block";
+                saveChangeBtn.style.display = "none";
+
+                userNameValue.style.display = "block";
+                fullNameValue.style.display = "block";
+                phoneNumberValue.style.display = "block";
+                passwordValue.style.display = "block";
+
+                userNameInput.style.display = "none";
+                fullNameInput.style.display = "none";
+                phoneNumberInput.style.display = "none";
+                passwordInput.style.display = "none";
+            } else {
+                editProfileBtn.style.display = "none";
+                saveChangeBtn.style.display = "block";
+
+                userNameValue.style.display = "block"; //---------------
+                fullNameValue.style.display = "none";
+                phoneNumberValue.style.display = "none";
+                passwordValue.style.display = "none";
+
+                userNameInput.style.display = "none"; //-------------
+                fullNameInput.style.display = "block";
+                phoneNumberInput.style.display = "block";
+                passwordInput.style.display = "block";
+            }
         }
 
-        function hideInput(field) {
-            const displayElement = document.getElementById(field);
-            const inputElement = document.getElementById(field + "Input");
 
-            displayElement.style.display = 'inline-block';
-            inputElement.style.display = 'none';
-        }
-                                               
+
+
     </script>
 </body>
 
