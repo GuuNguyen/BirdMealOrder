@@ -104,9 +104,9 @@
                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                                     </div>
                                                     <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.ProductId">Edit</a>
-                                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId">Details</a>
-                                                        <a data-product-id="@item.ProductId" onclick="showDeleteConfirmation(this)">Delete</a>
+                                                        <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.ProductId"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
+                                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
+                                                        <a data-product-id="@item.ProductId" onclick="showDeleteConfirmation(this)" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
