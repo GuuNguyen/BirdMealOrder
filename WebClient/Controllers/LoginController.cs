@@ -29,6 +29,19 @@ namespace WebClient.Controllers
 
         public IActionResult Login()
         {
+            if(HttpContext.Session.GetString("role") == "Admin")
+            {
+                return RedirectToAction("User_Index", "Staff");
+            }
+            if(HttpContext.Session.GetString("role") == "Staff")
+            {
+                return RedirectToAction("Product_Index", "Staff");
+
+            }
+            if (HttpContext.Session.GetString("role") == "Customer")
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -59,6 +72,7 @@ namespace WebClient.Controllers
                     splipedName = userFullName.Substring(lastSpaceIndex + 1);
                 }
                 HttpContext.Session.SetString("userName", splipedName);
+                HttpContext.Session.SetString("role", roleString);
                 var parseUserId = Int32.Parse(userId);
 
                 if (roleString == "Admin")

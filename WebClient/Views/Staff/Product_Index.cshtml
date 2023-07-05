@@ -72,11 +72,11 @@
                                             <td>
                                                 @if (string.IsNullOrEmpty(item.ProductImage))
                                                 {
-                                                    <img class="product-img" src="~/Admin/plugins/images/no-image.png" width="100" height="100" />
+                                                    <img style = "border-radius: 10px" class="product-img" src="~/Admin/plugins/images/no-image.png" width="100" height="100" />
                                                 }
                                                 else
                                                 {
-                                                    <img class="product-img" src="@item.ProductImage" width="100" height="100" />
+                                                    <img style = "border-radius: 10px" class="product-img" src="@item.ProductImage" width="100" height="100" />
                                                 }
                                             </td>
                                             <td>
