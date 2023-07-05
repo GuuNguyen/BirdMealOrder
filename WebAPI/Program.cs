@@ -10,6 +10,7 @@ using Repositories.Repositories.MealRepositories;
 using Repositories.Repositories.OrderRepositories;
 using Repositories.Repositories.ProductRepositories;
 using Repositories.Repositories.ShippingAddressRepositories;
+using Repositories.Repositories.SortRepositories;
 using Repositories.Repositories.UserRepositories;
 using System.Text;
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 builder.Services.AddScoped<IShippingAddressRepository, ShippingAddressRepository>();
 builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+builder.Services.AddScoped<ISortRepository, SortRepository>();
 
 builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 builder.Services.AddDbContext<BirdMealOrderDBContext>(option =>

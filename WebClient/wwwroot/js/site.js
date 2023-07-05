@@ -33,34 +33,6 @@ document.addEventListener("click", function (event) {
 });
 
 
-$(document).ready(function() {
-  var filterTable = $("#filterTable");
-
-  $("#filterButton").click(function() {
-    filterTable.toggle();
-    event.stopPropagation();
-  });
-
-  $("#applyFilterButton").click(function() {
-    applyFilter();
-  });
-
-  $(document).click(function(event) {
-    var target = $(event.target);
-    if (!target.closest("#filterButton").length && !target.closest("#filterTable").length) {
-      filterTable.hide();
-    }
-  });
-
-  function applyFilter() {
-    var selectedPrices = $("input[name='price']:checked").map(function() {
-      return this.value;
-    }).get();
-
-    console.log(selectedPrices);
-    filterTable.hide();
-  }
-});
 
 $(document).ready(function () {
     $(".detail-btn-plus").click(function () {

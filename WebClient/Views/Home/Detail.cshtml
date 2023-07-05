@@ -43,20 +43,28 @@
                 }
             </div>
             <div class="hero-product-detail-atc-btn">
-                <div class="hero-btn-plus-minus">
-                    <button class="btn-plus-minus detail-btn-minus">-</button>
-                    <input class="btn-plus-minus-count" id="quantityInput" type="number" min="1" max="1000" required value="1" />
-                    <button class="btn-plus-minus detail-btn-plus">+</button>
-                </div>
-                @if (Model.Meal != null)
+                @if (Model.Meal != null && Model.Meal.QuantityAvailable > 0)
                 {
+                    <div class="hero-btn-plus-minus">
+                        <button class="btn-plus-minus detail-btn-minus">-</button>
+                        <input class="btn-plus-minus-count" id="quantityInput" type="number" min="1" max="1000" required value="1" />
+                        <button class="btn-plus-minus detail-btn-plus">+</button>
+                    </div>
                     <button class="product-detail-atc-btn" role="button" data-code="@Model.Meal.MealCode">ADD TO CART</button>
                 }
-                else
+                else if (Model.Product != null && Model.Product.QuantityAvailable > 0)
                 {
+                    <div class="hero-btn-plus-minus">
+                        <button class="btn-plus-minus detail-btn-minus">-</button>
+                        <input class="btn-plus-minus-count" id="quantityInput" type="number" min="1" max="1000" required value="1" />
+                        <button class="btn-plus-minus detail-btn-plus">+</button>
+                    </div>
                     <button class="product-detail-atc-btn" role="button" data-code="@Model.Product?.ProductCode">ADD TO CART</button>
+                }else{
+                    <div class="out-of-stock">
+                        <p>Out of stock</p>
+                    </div>
                 }
-
             </div>
 
             <div class="d-flex flex-column gap-3">
