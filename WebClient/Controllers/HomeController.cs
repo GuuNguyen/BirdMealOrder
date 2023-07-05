@@ -17,6 +17,7 @@ namespace WebClient.Controllers
         private string ProductUrl = "";
         private string OrderAPIUrl = "";
         private string FeedbackUrl = "";
+        private string SearchUrl = "";
 
         public HomeController()
         {
@@ -28,6 +29,7 @@ namespace WebClient.Controllers
             ProductUrl = "https://localhost:7022/api/Product";
             OrderAPIUrl = "https://localhost:7022/api/Order";
             FeedbackUrl = "https://localhost:7022/api/Feedback";
+            SearchUrl = "https://localhost:7022/api/Search";
         }
 
         public async Task<IActionResult> Index()
@@ -280,6 +282,20 @@ namespace WebClient.Controllers
                 Birds = listBird
             };
             return View(finalResult);
+        }
+
+        public async Task<IActionResult> Search(string keyWord)
+        {
+            HttpResponseMessage response = await _client.GetAsync(SearchUrl + "/" + keyWord);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            SearchViewModel result = JsonSerializer.Deserialize<SearchViewModel>(strData, options);
+            return View(result);
         }
 
     }
