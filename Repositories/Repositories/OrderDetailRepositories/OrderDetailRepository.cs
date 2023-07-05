@@ -1,4 +1,5 @@
-﻿using DataAccess.DAOs;
+﻿using BusinessObject.Models;
+using DataAccess.DAOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,11 @@ namespace Repositories.Repositories.OrderDetailRepositories
         public List<object> GetAll()
         {
             return OrderDetailDAO.GetOrderDetails();
+        }
+
+        public List<OrderDetail> ListOderDetailByOderId(int id)
+        {
+            return OrderDetailDAO.ListOderDetailByOderId(id);
         }
     }
 }

@@ -94,5 +94,22 @@ namespace DataAccess.DAOs
                 throw new Exception(ex.Message);
             }
         }
+
+        public static List<OrderDetail> ListOderDetailByOderId(int id)
+        {
+            var context = new BirdMealOrderDBContext();
+            var orderDetail = context.OrderDetails.AsQueryable();
+            try
+            {
+                orderDetail = orderDetail.Where(od => od.OrderId == id).Include(o => o.Order).Include(u => u.Product).Include(m => m.Meal);
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception();
+            }
+            return orderDetail.OrderBy(od => od.OrderId).ToList();
+
+        }
     }
 }
