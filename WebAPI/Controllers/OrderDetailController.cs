@@ -14,5 +14,11 @@ namespace WebAPI.Controllers
         {
             return Ok(_orderDetailRepository.GetAll());
         }
+
+        [HttpGet("ListOderDetailByOderId/{id}")]
+        public IActionResult ListOderDetailByOderId(int id)
+        {
+            return Ok(_orderDetailRepository.ListOderDetailByOderId(id));
+        }
     }
 }

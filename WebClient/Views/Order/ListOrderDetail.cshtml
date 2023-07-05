@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BusinessObject.Models.Bird>
+﻿@model IEnumerable<BusinessObject.Models.OrderDetail>
 
 @{
-    ViewData["Title"] = "Bird_Index";
+    ViewData["Title"] = "ListOrderDetail";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
@@ -21,11 +21,11 @@
                         <div class="container">
                             <div style="display: flex; align-items: center" class="row">
                                 <div class="col-md-6">
-                                    <h3 style="font-size: 30px" class="box-title">Bird</h3>
+                                    <h3 style="font-size: 30px" class="box-title">Order Details</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a asp-action="Create" asp-controller="Bird" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
-                                        Create new bird
+                                    <a asp-action="Order_Index" asp-controller="Staff" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
+                                        Back to order
                                     </a>
                                 </div>
                             </div>
@@ -38,45 +38,66 @@
                         <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
                             <table class="table text-nowrap">
                                 <thead>
-                                    <tr>
+                                    <tr style = "text-align: center">
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.BirdImage)
+                                            @Html.DisplayNameFor(model => model.Quantity)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.BirdName)
+                                            @Html.DisplayNameFor(model => model.UnitPrice)
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
-                                            Action
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            <div>Image</div>
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            <iv>Name</iv>
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
+                                            <iv>Category</iv>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr data-id="@item.BirdId" class="product_list ">
+                                        <tr style = "text-align:center" data-id="@item.OrderDetailId" class="product_list ">
                                             <td>
-                                                @if (string.IsNullOrEmpty(item.BirdImage))
+                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                            </td>
+                                            <td style="font-weight:bold; color: red">
+                                                $@Html.DisplayFor(modelItem => item.UnitPrice)
+                                            </td>
+                                            <td>
+                                                @if (item.Product == null)
                                                 {
-                                                    <img class="product-img" src="~/Admin/plugins/images/no-image.png" width="100" height="100" />
+                                                    <img class="product-img" src="@Html.DisplayFor(modelItem => item.Meal.MealImage)" width="100" height="100" />
+
                                                 }
-                                                else
+                                                @if (item.Meal == null)
                                                 {
-                                                    <img class="product-img" src="@item.BirdImage" width="100" height="100" />
+                                                    <img class="product-img" src="@Html.DisplayFor(modelItem => item.Product.ProductImage)" width="100" height="100" />
                                                 }
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.BirdName)
+                                                @if (item.Product == null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Meal.MealName)
+
+                                                }
+                                                @if (item.Meal == null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Product.ProductName)
+                                                }
                                             </td>
-                                            <td class="option">
-                                                <div class="dropdown">
-                                                    <div onclick="toggleDropdown(this)">
-                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                                    </div>
-                                                    <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-controller="Bird" asp-route-id="@item.BirdId">Edit</a>
-                                                        <a data-product-id="@item.BirdId" onclick="showDeleteConfirmation(this)">Delete</a>
-                                                    </div>
-                                                </div>
+                                            <td style = "font-weight: bold">
+                                                @if (item.Product == null)
+                                                {
+                                                    <div>Meal</div>
+
+                                                }
+                                                @if (item.Meal == null)
+                                                {
+                                                    <div>Product</div>
+                                                }
                                             </td>
                                         </tr>
                                     }

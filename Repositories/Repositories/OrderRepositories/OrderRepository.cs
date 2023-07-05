@@ -108,7 +108,7 @@ namespace Repositories.Repositories.OrderRepositories
             {
                 order.ShipDate = DateTime.Now.AddDays(1);
             }
-            else if(order.Status == OrderStatus.Completed)
+            else if(order.Status == OrderStatus.Completed || order.Status == OrderStatus.Canceled)
             {
                 order.ShipDate = check.ShipDate;
             }
