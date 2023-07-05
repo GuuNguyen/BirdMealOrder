@@ -1,5 +1,6 @@
 ﻿@{
     var name = Context.Session.GetString("userName");
+    var profileUser = Context.Session.GetInt32("userID");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -32,18 +33,28 @@
                     <ul class="navbar-nav ms-auto d-none d-lg-inline-flex">
                         <li class="nav-item mx-2 text-nav" style="margin: auto;">
                             <div class="inner-form">
-                                <div class="input-field">
+                                <form asp-action="Search" class="input-field" onsubmit="return validateForm()">
                                     <div class="choices" data-type="text" aria-haspopup="true" aria-expanded="false" dir="ltr">
                                         <div class="choices__inner">
-                                            <input type="text" class="choices__input choices__input--cloned" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Type to search...">
+                                            <input name="keyWord" id="searchInput" type="text" class="choices__input choices__input--cloned" autocomplete="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Type to search...">
                                         </div>
                                     </div>
-                                    <button class="btn-search" type="button">
+                                    <button class="btn-search" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                             <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
                                         </svg>
                                     </button>
-                                </div>
+                                </form>
+
+                                <script>
+                                    function validateForm() {
+                                        var searchInput = document.getElementById("searchInput");
+                                        if (searchInput.value.trim() === "") {
+                                            return false; // Prevent form submission
+                                        }
+                                    }
+                                </script>
+
                             </div>
                         </li>
                         <li class=" mx-2 text-nav">
@@ -67,7 +78,7 @@
                                         <ul>
                                             <li class="dropdown-list-item">
                                                 <i class="fa-regular fa-address-card"></i>
-                                                <a href="#">My profile</a>
+                                                <a href="/User/DetailUser/@profileUser">My profile</a>
                                             </li>
                                             <li class="dropdown-list-item">
                                                 <i class="fa-regular fa-pen-to-square"></i>
