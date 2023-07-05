@@ -11,5 +11,7 @@ namespace Repositories.Repositories.FeedbackRepositories
     public interface IFeedbackRepository
     {
         void Create(CreateFeedbackDTO feedbackDTO);
+        object GetListFeedbackByMeald(int mealId);
+        object GetListFeedbackByProductId(int productId);
     }
 }

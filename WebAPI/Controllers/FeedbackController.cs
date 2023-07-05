@@ -22,5 +22,17 @@ namespace WebAPI.Controllers
             _feedbackRepository.Create(feedback);
             return Ok("Create Sucessfull!");
         }
+
+        [HttpGet("GetListFeedbackByMeald/{mealId}")]
+        public IActionResult GetListFeedbackByMeald(int mealId)
+        {
+            return Ok(_feedbackRepository.GetListFeedbackByMeald(mealId));
+        }
+
+        [HttpGet("GetListFeedbackByProductId/{productId}")]
+        public IActionResult GetListFeedbackByProductId(int productId)
+        {
+            return Ok(_feedbackRepository.GetListFeedbackByProductId(productId));
+        }
     }
 }
