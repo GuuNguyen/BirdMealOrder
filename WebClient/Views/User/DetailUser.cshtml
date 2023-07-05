@@ -1,54 +1,351 @@
 ﻿@model BusinessObject.Models.User
 
 @{
+    Layout = "~/Views/Shared/_StoreLayout.cshtml";
     ViewData["Title"] = "DetailUser";
+    var profileUser = Context.Session.GetInt32("userID");
+
 }
 
-<h1>DetailUser</h1>
 
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FullName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Role)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Role.RoleName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<style>
+    body {
+        /*background-color: #EEE9E9;*/
+        background-image: linear-gradient(to right,#00b09b, #538a50, #96c93d);
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-top: 78px;
+        margin-bottom: 70px;
+    }
+
+    .left-column {
+        width: 66vw;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 25px;
+        margin-left: 16px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .right-column {
+        width: 30vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 25px;
+        margin-left: 17px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .avatar-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .user-info {
+        text-align: center;
+        margin-top: 20px;
+        font-family: system-ui;
+    }
+
+        .user-info div {
+            display: flex;
+            justify-content: center;
+        }
+
+        .user-info #userName {
+            margin-bottom: 10px;
+            font-size: 33px;
+            font-weight: bold;
+            color: green;
+            text-align: center;
+        }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 50px;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    .info-column {
+        width: 50%;
+        font-size: 20px;
+        font-weight: bold;
+        font-family: system-ui;
+    }
+
+        .info-column p:first-child {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+
+        .info-column div {
+            display: flex;
+            justify-content: center;
+        }
+
+    .bd1 {
+        border-right: solid #828282;
+        border-left: solid #828282;
+    }
+
+    .right-column p {
+        text-align: center;
+    }
+
+    .titleProfile {
+        background-color: rgba(255, 255, 255, 0.8);
+        text-align: center;
+        border-radius: 25px;
+        margin-left: 23px;
+    }
+
+    .text {
+        font-size: 65px;
+        font-weight: bolder;
+        background: -webkit-linear-gradient(#96c93d, #00b09b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 7px;
+    }
+
+    .btn-saveChange {
+        display: flex;
+        margin-right: 5px;
+        align-items: center;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 0.7em 1.4em 0.7em 1.1em;
+        color: white;
+        background: #ad5389;
+        background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+        border: none;
+        box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+        letter-spacing: 0.05em;
+        border-radius: 20em;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .btn-saveChange:hover {
+            box-shadow: 0 0.5em 1.5em -0.7em #14a73e98;
+        }
+
+        .btn-saveChange:active {
+            box-shadow: 0 0.3em 1em -0.7em #14a73e98;
+        }
+
+    .btn-editProfile {
+        display: flex;
+        margin-right: 5px;
+        align-items: center;
+        font-family: inherit;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 0.7em 1.4em 0.7em 1.1em;
+        color: white;
+        background: #ad5389;
+        background: linear-gradient(0deg, rgba(20,167,62,1) 0%, rgba(102,247,113,1) 100%);
+        border: none;
+        box-shadow: 0 0.7em 1.5em -0.5em #14a73e98;
+        letter-spacing: 0.05em;
+        border-radius: 20em;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+    }
+
+        .btn-editProfile:hover {
+            box-shadow: 0 0.5em 1.5em -0.7em #14a73e98;
+        }
+
+    .btn-saveChange:active {
+        box-shadow: 0 0.3em 1em -0.7em #14a73e98;
+    }
+
+
+    .input-container {
+        display: none;
+        border: 3px solid #14a73e98;
+        border-radius: 5px;
+        height: 50px;
+        line-height: normal;
+        color: #282828;
+        display: block;
+        
+        box-sizing: border-box;
+        user-select: auto;
+        font-size: 16px;
+        padding: 0 6px;
+        padding-left: 12px;
+        
+
+    
+
+    }
+
+    .display-value {
+        display: inline-block;
+    }
+</style>
+
+<body>
+    <div class="titleProfile">
+        <h1 class="text">USER PROFILE</h1>
+    </div>
+    <div class="container">
+        <div class="left-column">
+            <form asp-action="EditUserProfile" asp-controller="User" method="post">
+                <input type="hidden" asp-for="UserId" readonly />
+                @* <input asp-for="Password" type="hidden" />*@
+                <input asp-for="RoleId" type="hidden" readonly />
+                <input asp-for="Status" type="hidden" readonly />
+                <div class="button-container">
+
+                    <button type="button" id="editProfileBtn" class="btn-editProfile" onclick="toggleEditMode()">
+                        Edit Profile
+                    </button>
+
+                    <button type="submit" id="saveChangeBtn" class="btn-saveChange" style="display: none;">
+                        Save Change
+                    </button>
+                </div>
+                <div class="avatar-container">
+                    <div class="avatar">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/groupprojectprn.appspot.com/o/bird-images%2Fchim-oanh-co-do.jpg?alt=media&token=0a9bc387-70aa-4693-94ca-f989ac5d09d0" alt="Avatar">
+                    </div>
+                </div>
+                <div class="user-info">
+                    <div>
+                        <span id="userName" class="display-value">@Html.DisplayFor(model => model.UserName)</span><br />
+                        @* <label asp-for="UserName" class="control-label"></label>*@
+                        <input asp-for="UserName" id="userNameInput" type="text" class="input-container" style="display: none;" readonly />
+                    </div>
+                    <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
+                </div>
+                <div class="info-row">
+                    <div class="info-column ">
+                        <p>Full Name</p>
+                        <div>
+                            <span id="fullName" class="display-value">@Html.DisplayFor(model => model.FullName)</span><br />
+                            @*<label asp-for="FullName" class="control-label"></label>*@
+                            <input asp-for="FullName" id="fullNameInput" type="text" class="input-container" style="display: none;" />
+                        </div>
+                    </div>
+                    <div class="info-column bd1">
+                        <p>Phone Number</p>
+                        <div>
+                            <span id="phoneNumber" class="display-value">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
+                            @* <label asp-for="PhoneNumber" class="control-label"></label>*@
+                            <input asp-for="PhoneNumber" id="phoneNumberInput" type="text" class="input-container" style="display: none;" />
+                        </div>
+                    </div>
+                    <div class="info-column">
+                        <p>Password</p>
+                        <div>
+                            <span id="password" class="display-value">@Html.DisplayFor(model => model.Password)</span><br />
+                            @* <label asp-for="PhoneNumber" class="control-label"></label>*@
+                            <input asp-for="Password" id="passwordInput" type="text" class="input-container" style="display: none;" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="right-column">
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+            <p>Hello World</p>
+        </div>
+    </div>
+
+
+
+    <script>
+       
+
+        function toggleEditMode() {
+            var editProfileBtn = document.getElementById("editProfileBtn");
+            var saveChangeBtn = document.getElementById("saveChangeBtn");
+            var userNameValue = document.getElementById("userName");
+            var fullNameValue = document.getElementById("fullName");
+            var phoneNumberValue = document.getElementById("phoneNumber");
+            var passwordValue = document.getElementById("password");
+            var userNameInput = document.getElementById("userNameInput");
+            var fullNameInput = document.getElementById("fullNameInput");
+            var phoneNumberInput = document.getElementById("phoneNumberInput");
+            var passwordInput = document.getElementById("passwordInput");
+
+            if (editProfileBtn.style.display === "none") {
+                editProfileBtn.style.display = "block";
+                saveChangeBtn.style.display = "none";
+
+                userNameValue.style.display = "block";
+                fullNameValue.style.display = "block";
+                phoneNumberValue.style.display = "block";
+                passwordValue.style.display = "block";
+
+                userNameInput.style.display = "none";
+                fullNameInput.style.display = "none";
+                phoneNumberInput.style.display = "none";
+                passwordInput.style.display = "none";
+            } else {
+                editProfileBtn.style.display = "none";
+                saveChangeBtn.style.display = "block";
+
+                userNameValue.style.display = "block"; //---------------
+                fullNameValue.style.display = "none";
+                phoneNumberValue.style.display = "none";
+                passwordValue.style.display = "none";
+
+                userNameInput.style.display = "none"; //-------------
+                fullNameInput.style.display = "block";
+                phoneNumberInput.style.display = "block";
+                passwordInput.style.display = "block";
+            }
+        }
+
+
+
+
+    </script>
+</body>
+
+
+
+
+
+

@@ -96,9 +96,18 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    var m = context.Meals.Find(id);
-                    context.Meals.Remove(m);
-                    context.SaveChanges();
+                    var checkMealInDetails = context.OrderDetails.Where(o => o.MealId == id).FirstOrDefault();
+                    if (checkMealInDetails != null)
+                    {
+                        ChangeStatus(id);
+                    }
+                    else
+                    {
+                        var m = context.Meals.Find(id);
+                        context.Meals.Remove(m);
+                        context.SaveChanges();
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -158,10 +167,31 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var context = new BirdMealOrderDBContext())
+                using (var context = new BirdMealOrderDBContext())
                 {
                     return context.BirdMeals.Where(bm => bm.BirdId == id).Select(m => m.Meal).ToList();
                 }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static bool RefundQuantityMeal(Dictionary<int, int> mealQuantityRefund)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    foreach (var item in mealQuantityRefund)
+                    {
+                        var meal = context.Meals.Find(item.Key);
+                        meal.QuantityAvailable = meal.QuantityAvailable + item.Value;
+                    }
+                    context.SaveChanges();
+                }
+                return true;
             }
             catch (Exception e)
             {

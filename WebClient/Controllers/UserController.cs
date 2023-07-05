@@ -104,17 +104,9 @@ namespace WebClient.Controllers
         }
 
 
-
-
-
-
-
         public async Task<IActionResult> DeleteUser(int id)
         {
-            //if (HttpContext.Session.GetString("role") != "admin")
-            //{
-            //    return RedirectToAction("Login", "Login");
-            //}
+            
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -129,10 +121,7 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string tmp, int id)
         {
-            //if (HttpContext.Session.GetString("role") != "admin")
-            //{
-            //    return RedirectToAction("Login", "Login");
-            //}
+            
             HttpResponseMessage response = await _client.DeleteAsync(UserAPIUrl + "/" + id);
             if (response.IsSuccessStatusCode)
             {
@@ -148,10 +137,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> EditUser(int id)
         {
-            //if (HttpContext.Session.GetString("role") == null)
-            //{
-            //    return RedirectToAction("Login", "Login");
-            //}
+           
 
             HttpResponseMessage reponseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await reponseRole.Content.ReadAsStringAsync();
@@ -199,10 +185,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> DetailUser(int id)
         {
-            //if (HttpContext.Session.GetString("role") == null)
-            //{
-            //    return RedirectToAction("Login", "Login");
-            //}
+            
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -213,5 +196,37 @@ namespace WebClient.Controllers
             return View(lUser);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditUserProfile(User user)
+        {
+            
+            HttpResponseMessage responseRole = await _client.GetAsync(RoleAPIUrl);
+            string strDataRole = await responseRole.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            };
+            List<Role>? listRole = JsonSerializer.Deserialize<List<Role>>(strDataRole, options);
+            ViewBag.RoleId = new SelectList(listRole, "RoleId", "RoleName");
+
+
+            string jsonStr = JsonSerializer.Serialize(user);
+            var contentData = new StringContent(jsonStr, System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _client.PutAsync(UserAPIUrl, contentData);
+
+            int userProfileId = user.UserId;
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccMessage"] = "Edit Successfull!";
+                
+                return RedirectToAction("DetailUser", "User", new { id = userProfileId });
+
+            }
+            ModelState.AddModelError(String.Empty, "Failed to call API!");
+         
+            return RedirectToAction("DetailUser", "User", new { id = userProfileId });
+        }
+
+        
     }
 }

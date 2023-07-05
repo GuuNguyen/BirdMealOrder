@@ -17,6 +17,8 @@ namespace WebClient.Controllers
         private string BirdAPIUrl = "";
         private string ProductUrl = "";
         private string OrderAPIUrl = "";
+        private string FeedbackUrl = "";
+        private string SearchUrl = "";
         private string SortAPIUrl = "";
 
         public HomeController()
@@ -28,6 +30,8 @@ namespace WebClient.Controllers
             BirdAPIUrl = "https://localhost:7022/api/Bird";
             ProductUrl = "https://localhost:7022/api/Product";
             OrderAPIUrl = "https://localhost:7022/api/Order";
+            FeedbackUrl = "https://localhost:7022/api/Feedback";
+            SearchUrl = "https://localhost:7022/api/Search";
             SortAPIUrl = "https://localhost:7022/api/Sort";
         }
 
@@ -177,13 +181,14 @@ namespace WebClient.Controllers
                 {
                     PropertyNameCaseInsensitive = true
                 };
-                Meal meal = null;
+                Meal? meal = null;
                 Product? product = null;
                 List<Meal>? listMeal = null;
                 List<Product>? listProduct = null;
                 List<Bird>? listBird = new List<Bird>();
                 List<Product>? productIngredients = null;
                 List<MealProduct>? listMealProduct = null;
+                ListFeedbackViewModel? listFeedbackViewModel = null;
                 var breadcrumbs = new List<BreadCrumb>
                 {
                     new BreadCrumb { Text = "Home", Url = "/" },
@@ -217,6 +222,10 @@ namespace WebClient.Controllers
                         HttpResponseMessage mealProductResponse = await _client.GetAsync(MealAPIUrl + $"/GetMealProductByMealId/{meal.MealId}");
                         string mealProductStrData = await mealProductResponse.Content.ReadAsStringAsync();
                         listMealProduct = JsonSerializer.Deserialize<List<MealProduct>>(mealProductStrData, options);
+
+                        HttpResponseMessage feedbackMealResponse = await _client.GetAsync(FeedbackUrl + $"/GetListFeedbackByMeald/{meal.MealId}");
+                        string feedbackMealStrData = await feedbackMealResponse.Content.ReadAsStringAsync();
+                        listFeedbackViewModel = JsonSerializer.Deserialize<ListFeedbackViewModel>(feedbackMealStrData, options);
                         break;
                     case "FO":
                         HttpResponseMessage listProductResponse = await _client.GetAsync(ProductUrl);
@@ -234,6 +243,10 @@ namespace WebClient.Controllers
                         var foodBreadCrumbDetail = new BreadCrumb { Text = product.ProductName, Url = $"/Home/Detail?code={product.ProductCode}" };
                         breadcrumbs.Add(foodBreadCrumb);
                         breadcrumbs.Add(foodBreadCrumbDetail);
+
+                        HttpResponseMessage feedbackProductResponse = await _client.GetAsync(FeedbackUrl + $"/GetListFeedbackByMeald/{product.ProductId}");
+                        string feedbackProductStrData = await feedbackProductResponse.Content.ReadAsStringAsync();
+                        listFeedbackViewModel = JsonSerializer.Deserialize<ListFeedbackViewModel>(feedbackProductStrData, options);
                         break;
                 }
                 var finalResult = new DetailPMViewModel
@@ -241,11 +254,12 @@ namespace WebClient.Controllers
                     Breadcrumbs = breadcrumbs,
                     Meal = meal,
                     Product = product,
-                    Meals = listMeal ?? new List<Meal>(),
-                    ProductIngredients = productIngredients ?? new List<Product>(),
-                    Birds = listBird ?? new List<Bird>(),
-                    Products = listProduct ?? new List<Product>(),
-                    MealProducts = listMealProduct ?? new List<MealProduct>()
+                    Meals = listMeal,
+                    ProductIngredients = productIngredients,
+                    Birds = listBird,
+                    Products = listProduct,
+                    MealProducts = listMealProduct ?? new List<MealProduct>(),
+                    ListFeedbackViewModel = listFeedbackViewModel,
                 };
                 return View(finalResult);
             }
@@ -275,6 +289,20 @@ namespace WebClient.Controllers
                 Birds = listBird ?? new List<Bird>(),
             };
             return View(finalResult);
+        }
+
+        public async Task<IActionResult> Search(string keyWord)
+        {
+            HttpResponseMessage response = await _client.GetAsync(SearchUrl + "/" + keyWord);
+
+            string strData = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            SearchViewModel result = JsonSerializer.Deserialize<SearchViewModel>(strData, options);
+            return View(result);
         }
 
         public async Task<IActionResult> ApplyFilter(SortInputDTO value)

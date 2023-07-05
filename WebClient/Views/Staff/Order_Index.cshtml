@@ -33,14 +33,17 @@
                         <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
                             <table class="table text-nowrap">
                                 <thead>
-                                    <tr>
+                                    <tr style="text-align: center">
+                                        <th style="font-size: 17px; font-weight:bold;">
+                                            @Html.DisplayNameFor(model => model.OrderId)
+                                        </th>
                                         <th style="font-size: 17px; font-weight:bold;">
                                             @Html.DisplayNameFor(model => model.User)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.OrderDate)
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold; text-align: center;">
+                                        <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.ShipDate)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
@@ -49,13 +52,13 @@
                                         <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.ShippingAddress)
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
+                                        <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.Status)
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
+                                        <th style="font-size: 17px; font-weight:bold">
                                             Save Status
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
+                                        <th style="font-size: 17px; font-weight:bold">
                                             Action
                                         </th>
                                     </tr>
@@ -65,21 +68,27 @@
                                     @foreach (var item in Model)
                                     {
                                         <form id="order-form-@item.OrderId" method="post" action="/Staff/ChangeOrderStatus">
-                                        <tr data-id="@item.OrderId" class="product_list">
+                                        <tr style="text-align: center" data-id="@item.OrderId" class="product_list">
+                                            <td style="text-align: center">
+                                                    @Html.DisplayFor(modelItem => item.OrderId)
+                                            </td>
                                             <td>
                                                     @Html.DisplayFor(modelItem => item.User.FullName)
                                             </td>
                                             <td>
                                                     @item.OrderDate.ToString("dd/MM/yyyy")
                                             </td>
-                                            <td style="text-align: center;">
+                                            <td style="text-align: center">
                                                     @if (item.ShipDate != new DateTime(1753, 1, 1))
                                                     {
-                                                        @Html.DisplayFor(modelItem => item.ShipDate)
+                                                        @if (item.ShipDate.HasValue)
+                                                        {
+                                                            @item.ShipDate.Value.ToString("dd/MM/yyyy")
+                                                        }
                                                     }
                                             </td>
                                             <td>
-                                                $@Html.DisplayFor(modelItem => item.TotalPrice)
+                                                    $@Html.DisplayFor(modelItem => item.TotalPrice)
                                             </td>
                                             <td>
                                                     @Html.DisplayFor(modelItem => item.ShippingAddress.City)
@@ -87,25 +96,25 @@
                                             <td>
                                                     @if (item.Status == BusinessObject.Enums.OrderStatus.Canceled)
                                                     {
-                                                    <select style="text-align: center; color: red; font-weight: bold" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
-                                                    </select>
+                                                        @*<select style="text-align: center; color: red; font-weight: bold" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
+                                                            </select>*@
+                                                    <div type="text" style="text-align: center; color: red; font-weight: bold" value="@item.Status" readonly>@item.Status</div>
                                                     <input type="hidden" name="OrderId-@item.OrderId" value="@item.OrderId" />
                                                     }
                                                     @if (item.Status == BusinessObject.Enums.OrderStatus.Pending)
                                                     {
-                                                    <select style="text-align: center; color: #5ecaf0; font-weight: bold" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
+                                                    <select style="text-align: center; color: #5ecaf0; border: 2px solid" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatusNoneCompleted" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
                                                     </select>
                                                     <input type="hidden" name="OrderId-@item.OrderId" value="@item.OrderId" />
                                                     }
                                                     @if (item.Status == BusinessObject.Enums.OrderStatus.Completed)
                                                     {
-                                                    <select style="text-align: center; color: #558b51; font-weight: bold" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
-                                                    </select>
+                                                    <div type="text" style="text-align: center; color: #558b51; font-weight: bold" value="@item.Status" readonly>@item.Status</div>
                                                     <input type="hidden" name="OrderId-@item.OrderId" value="@item.OrderId" />
                                                     }
                                                     @if (item.Status == BusinessObject.Enums.OrderStatus.Processing)
                                                     {
-                                                    <select style="text-align: center; color: orange; font-weight: bold" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
+                                                    <select style="text-align: center; color: orange; border: 2px solid" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
                                                     </select>
                                                     <input type="hidden" name="OrderId-@item.OrderId" value="@item.OrderId" />
                                                     }
@@ -115,25 +124,10 @@
                                                 <input class="form-control" type="hidden" name="Status" id="status-input-@item.OrderId" value="@item.Status" />
                                                 <button type="submit" id="save-button-@item.OrderId" style="display: none;" class="btn btn-primary save-button" data-orderid="@item.OrderId">Save</button>
                                             </td>
-                                            <td class="option">
-                                                <div class="dropdown">
-                                                    <div onclick="toggleDropdown(this)">
-                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                                    </div>
-                                                    <div class="dropdown-content">
-                                                            @if (item.Status == BusinessObject.Enums.OrderStatus.Canceled)
-                                                            {
-                                                            <a asp-action="Edit" asp-controller="Order" asp-route-id="@item.OrderId">Edit</a>
-                                                            <a asp-action="Details" asp-controller="Order" asp-route-id="@item.OrderId">Details</a>
-                                                            }
-                                                            else
-                                                            {
-                                                            <a asp-action="Edit" asp-controller="Order" asp-route-id="@item.OrderId">Edit</a>
-                                                            <a asp-action="Details" asp-controller="Order" asp-route-id="@item.OrderId">Details</a>
-                                                            <a data-product-id="@item.OrderId" onclick="showDeleteConfirmation(this)">Delete</a>
-                                                            }
-                                                    </div>
-                                                </div>
+                                            <td>
+                                                <a class="btn btn-primary" asp-action="ListOrderDetail" asp-controller="Order" asp-route-id="@item.OrderId">Details</a>
+                                                    @*                                                <a data-product-id="@item.OrderId" onclick="showDeleteConfirmation(this)">Delete</a>
+                                                    *@
                                             </td>
                                         </tr>
                                         </form>

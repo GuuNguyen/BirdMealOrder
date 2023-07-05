@@ -1,7 +1,7 @@
-﻿@model IEnumerable<BusinessObject.Models.Product>
+﻿@model IEnumerable<BusinessObject.Models.OrderDetail>
 
 @{
-    ViewData["Title"] = "Product_Index";
+    ViewData["Title"] = "ListOrderDetail";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
 }
 
@@ -21,11 +21,11 @@
                         <div class="container">
                             <div style="display: flex; align-items: center" class="row">
                                 <div class="col-md-6">
-                                    <h3 style="font-size: 30px" class="box-title">Product</h3>
+                                    <h3 style="font-size: 30px" class="box-title">Order Details</h3>
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <a asp-action="Create" asp-controller="Product" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
-                                        Create new product
+                                    <a asp-action="Order_Index" asp-controller="Staff" style="margin-left: 318px; background-color: #538a50" class="btn waves-effect text-white">
+                                        Back to order
                                     </a>
                                 </div>
                             </div>
@@ -38,77 +38,66 @@
                         <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
                             <table class="table text-nowrap">
                                 <thead>
-                                    <tr>
+                                    <tr style = "text-align: center">
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.ProductCode)
+                                            @Html.DisplayNameFor(model => model.Quantity)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.ProductImage)
+                                            @Html.DisplayNameFor(model => model.UnitPrice)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.ProductName)
+                                            <div>Image</div>
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.Price)
+                                            <iv>Name</iv>
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.QuantityAvailable)
-                                        </th>
-                                        <th style="font-size: 17px; font-weight:bold">
-                                            @Html.DisplayNameFor(model => model.ProductStatus)
-                                        </th>
-                                        <th style="font-size: 17px; font-weight:bold; text-align: center">
-                                            Action
+                                            <iv>Category</iv>
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model)
                                     {
-                                        <tr data-id="@item.ProductId" class="product_list ">
+                                        <tr style = "text-align:center" data-id="@item.OrderDetailId" class="product_list ">
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ProductCode)
+                                                @Html.DisplayFor(modelItem => item.Quantity)
+                                            </td>
+                                            <td style="font-weight:bold; color: red">
+                                                $@Html.DisplayFor(modelItem => item.UnitPrice)
                                             </td>
                                             <td>
-                                                @if (string.IsNullOrEmpty(item.ProductImage))
+                                                @if (item.Product == null)
                                                 {
-                                                    <img class="product-img" src="~/Admin/plugins/images/no-image.png" width="100" height="100" />
+                                                    <img class="product-img" src="@Html.DisplayFor(modelItem => item.Meal.MealImage)" width="100" height="100" />
+
                                                 }
-                                                else
+                                                @if (item.Meal == null)
                                                 {
-                                                    <img class="product-img" src="@item.ProductImage" width="100" height="100" />
+                                                    <img class="product-img" src="@Html.DisplayFor(modelItem => item.Product.ProductImage)" width="100" height="100" />
                                                 }
                                             </td>
                                             <td>
-                                                <a class="text-dark" href="@Url.Action("Details", "Product", new { id = item.ProductId })">
-                                                    @Html.DisplayFor(modelItem => item.ProductName)
-                                                </a>
+                                                @if (item.Product == null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Meal.MealName)
+
+                                                }
+                                                @if (item.Meal == null)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.Product.ProductName)
+                                                }
                                             </td>
-                                            <td>
-                                                $@Html.DisplayFor(modelItem => item.Price)
-                                            </td>
-                                            <td style="text-align: center">
-                                                @Html.DisplayFor(modelItem => item.QuantityAvailable)
-                                            </td>
-                                            <td>
-                                                <div class="checkbox-wrapper-5">
-                                                    <div class="check">
-                                                        <input id="check-@item.ProductId" type="checkbox" @(item.ProductStatus == BusinessObject.Enums.ProductStatus.Available ? "checked" : "") onchange="toggleProductStatus(this, @item.ProductId)">
-                                                        <label class="labelCheck" for="check-@item.ProductId"></label>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="option">
-                                                <div class="dropdown">
-                                                    <div onclick="toggleDropdown(this)">
-                                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                                    </div>
-                                                    <div class="dropdown-content">
-                                                        <a asp-action="Edit" asp-controller="Product" asp-route-id="@item.ProductId"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
-                                                        <a asp-action="Details" asp-controller="Product" asp-route-id="@item.ProductId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>
-                                                        <a data-product-id="@item.ProductId" onclick="showDeleteConfirmation(this)" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
-                                                    </div>
-                                                </div>
+                                            <td style = "font-weight: bold">
+                                                @if (item.Product == null)
+                                                {
+                                                    <div>Meal</div>
+
+                                                }
+                                                @if (item.Meal == null)
+                                                {
+                                                    <div>Product</div>
+                                                }
                                             </td>
                                         </tr>
                                     }
@@ -134,7 +123,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Do you really want to delete this product? This process cannot be undone.</p>
+                <p>Do you really want to delete this bird? This process cannot be undone.</p>
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelBtn">Cancel</button>
@@ -173,21 +162,6 @@
         }
     });
 
-    function toggleProductStatus(checkbox, productId) {
-            $.ajax({
-                url: "https://localhost:7022/api/Product/changeStatus/" + productId,
-                type: "put",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-
-                },
-                error: function (xhr) {
-                    console.log(xhr)
-                }
-            });
-        }
-
     var deleteProductId;
     function showDeleteConfirmation(element) {
         deleteProductId = element.dataset.productId;
@@ -197,7 +171,7 @@
     $('#confirmDeleteBtn').click(function () {
         $('#myModal').modal('hide');
         $.ajax({
-            url: 'https://localhost:7022/api/Product/' + deleteProductId,
+            url: 'https://localhost:7022/api/Bird?id=' + deleteProductId,
             type: 'DELETE',
             success: function () {
                 // Xóa sản phẩm thành công, reload lại trang
