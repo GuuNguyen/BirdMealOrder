@@ -158,10 +158,31 @@ namespace DataAccess.DAOs
         {
             try
             {
-                using(var context = new BirdMealOrderDBContext())
+                using (var context = new BirdMealOrderDBContext())
                 {
                     return context.BirdMeals.Where(bm => bm.BirdId == id).Select(m => m.Meal).ToList();
                 }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public static bool RefundQuantityMeal(Dictionary<int, int> mealQuantityRefund)
+        {
+            try
+            {
+                using (var context = new BirdMealOrderDBContext())
+                {
+                    foreach (var item in mealQuantityRefund)
+                    {
+                        var meal = context.Meals.Find(item.Key);
+                        meal.QuantityAvailable = meal.QuantityAvailable + item.Value;
+                    }
+                    context.SaveChanges();
+                }
+                return true;
             }
             catch (Exception e)
             {
