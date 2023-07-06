@@ -142,6 +142,7 @@ namespace WebClient.Controllers
                 Breadcrumbs = breadcrumbs,
                 Meals = listMeal ?? new List<Meal>(),
                 Birds = listBird ?? new List<Bird>(),
+                PageType = "Meal"
             };
             return View("Meal", finalResult);
         }
