@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        
         public IActionResult Get()
         {
             return Ok(_userRepository.GetUsers());
@@ -31,7 +31,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        
         public IActionResult Create(CreateUserDTO userDTO)
         {
             var newUser = _userRepository.CreateUser(userDTO);
@@ -56,8 +55,9 @@ namespace WebAPI.Controllers
             return updateUser ? Ok(updateUser) : BadRequest();
         }
 
-        [HttpDelete]
+
         [Authorize]
+        [HttpDelete]
         public IActionResult Delete(int userId)
         {
             var deleteUser = _userRepository.DeleteUser(userId);

@@ -91,6 +91,8 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUserFull(User user)
         {
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage responseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await responseRole.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -111,19 +113,14 @@ namespace WebClient.Controllers
                 TempData["SuccMessage"] = "Create Successfull!";
                 return RedirectToAction("CreateUser", "User");
             }
-            ModelState.AddModelError(String.Empty, "Failed to call API");
+            TempData["ErrMessage"] = "UserName Or PhoneNumber already exists!";
             return RedirectToAction("CreateUser", "User");
         }
 
 
         public async Task<IActionResult> DeleteUser(int id)
         {
-            if (HttpContext.Session.GetString("role") != "Admin")
-            {
-                return Redirect("/Login/Login");
-            }
-            string token = HttpContext.Session.GetString("token");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -138,16 +135,17 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string tmp, int id)
         {
-            
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await _client.DeleteAsync(UserAPIUrl + "/" + id);
             if (response.IsSuccessStatusCode)
             {
                 ViewBag.Message = "Delete successfully!";
-                return RedirectToAction("Index", "User");
+                return RedirectToAction("User_Index", "Staff");
 
             }
             ModelState.AddModelError(String.Empty, "Failed to call API!");
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("User_Index", "User");
         }
 
 
@@ -181,7 +179,8 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(User user)
         {
-
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage responseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await responseRole.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
