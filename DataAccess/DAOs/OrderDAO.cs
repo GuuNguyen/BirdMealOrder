@@ -17,7 +17,11 @@ namespace DataAccess.DAOs
             {
                 using (var _context = new BirdMealOrderDBContext())
                 {
-                    return _context.Orders.Include(c => c.User).Include(s => s.ShippingAddress).ToList();
+                    return _context.Orders
+                        .Include(c => c.User)
+                        .Include(s => s.ShippingAddress)
+                        .OrderByDescending(o => o.OrderDate) // Sắp xếp theo OrderDate giảm dần
+                        .ToList();
                 }
             }
             catch (Exception ex)

@@ -15,7 +15,14 @@
     <meta name="description"
           content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
-    <title>Admin Page</title>
+    @if (role == "Admin")
+    {
+        <title>Admin Page</title>
+    }
+    @if(role == "Staff")
+    {
+        <title>Staff Page</title>
+    }
     <link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" asp-append-version="true" />
     <link rel="icon" type="image/png" sizes="16x16" href="~/Admin/plugins/images/favicon.png" asp-append-version="true" />
     <link href="~/Admin/css/style.min.css" rel="stylesheet" asp-append-version="true" />
