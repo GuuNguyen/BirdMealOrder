@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         public IActionResult GetAllProduct()
         {
-            var listProduct = _repo.GetAllProducts();
+           var listProduct = _repo.GetAllProducts();
             return Ok(listProduct);
         }
 
@@ -51,7 +51,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult CreateProduct(CreateProductDTO product)
         {
             var isSuccess = _repo.AddProduct(product);
@@ -59,14 +58,12 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         public IActionResult UpdateProduct(ProductDTO product)
         {
             var isSuccess = _repo.UpdateProduct(product);
             return isSuccess ? Ok("Successfull update!") : BadRequest("Fail update!");
         }
         [HttpDelete("{id}")]
-        [Authorize]
         public IActionResult DeleteProduct(int id)
         {
             var isSuccess = _repo.DeleteProduct(id);
@@ -74,7 +71,6 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("changeStatus/{id}")]
-        [Authorize]
         public IActionResult ChangeStatus(int id)
         {
             var isSuccess = _repo.ChangeProductStatus(id);

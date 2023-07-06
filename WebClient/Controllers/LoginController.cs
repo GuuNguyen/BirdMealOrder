@@ -29,11 +29,11 @@ namespace WebClient.Controllers
 
         public IActionResult Login()
         {
-            if (HttpContext.Session.GetString("role") == "Admin")
+            if(HttpContext.Session.GetString("role") == "Admin")
             {
                 return RedirectToAction("User_Index", "Staff");
             }
-            if (HttpContext.Session.GetString("role") == "Staff")
+            if(HttpContext.Session.GetString("role") == "Staff")
             {
                 return RedirectToAction("Product_Index", "Staff");
 
@@ -66,24 +66,23 @@ namespace WebClient.Controllers
                 var userId = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
                 var userFullName = jwtSecurityToken.Claims.First(claim => claim.Type == "FullName").Value;
                 string splipedName = "Name";
-                int lastSpaceIndex = userFullName.LastIndexOf(' ');
+                int lastSpaceIndex = userFullName.LastIndexOf(' ');                
                 if (lastSpaceIndex != -1 && lastSpaceIndex < userFullName.Length - 1)
                 {
                     splipedName = userFullName.Substring(lastSpaceIndex + 1);
                 }
-                var parseUserId = Int32.Parse(userId);
-
+                var parseUserId = Int32.Parse(userId); 
+                
                 HttpContext.Session.SetString("userName", splipedName);
                 HttpContext.Session.SetString("role", roleString);
                 HttpContext.Session.SetInt32("userID", parseUserId);
                 HttpContext.Session.SetString("token", token);
-
+                
                 if (roleString == "Admin")
                 {
-
                     return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
-                else if (roleString == "Staff")
+                else if(roleString == "Staff")
                 {
                     return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
