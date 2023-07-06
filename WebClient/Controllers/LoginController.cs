@@ -71,23 +71,24 @@ namespace WebClient.Controllers
                 {
                     splipedName = userFullName.Substring(lastSpaceIndex + 1);
                 }
+
+                var parseUserId = Int32.Parse(userId);  
                 HttpContext.Session.SetString("userName", splipedName);
                 HttpContext.Session.SetString("role", roleString);
-                var parseUserId = Int32.Parse(userId);
+                HttpContext.Session.SetInt32("userID", parseUserId);
+                HttpContext.Session.SetString("token", token);
+                
 
                 if (roleString == "Admin")
                 {
-                    HttpContext.Session.SetInt32("userID", parseUserId);
                     return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
                 else if(roleString == "Staff")
                 {
-                    HttpContext.Session.SetInt32("userID", parseUserId);
                     return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
                 else
                 {
-                    HttpContext.Session.SetInt32("userID", parseUserId);
                     var cart = new List<CartItem>();
                     HttpContext.Session.SetString("cart", JsonSerializer.Serialize(cart));
                     return Json(new { redirectUrl = Url.Action("Index", "Home") });
