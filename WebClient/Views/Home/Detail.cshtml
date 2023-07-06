@@ -139,40 +139,36 @@
         <div class="list-feedback">
             @foreach(var item in Model.ListFeedbackViewModel.FeedbackList)
             {
-                <div class="item-feedback" data-status=@item.Rating>
-                    @{
-                        var index = Model.ListFeedbackViewModel.FeedbackList.IndexOf(item);
-                        var user = Model.ListFeedbackViewModel.User[index];
-                    }
+                <div class="item-feedback" data-status=@item.Feedback.Rating>
                     <div class="container-user-feedback d-flex mt-3">
-                        <div class="FullName fw-bold h5">@user.FullName</div>
+                        <div class="FullName fw-bold h5">@item.user.FullName</div>
                         <div class="ms-4 text-success h8">
                             <i class="fa-solid fa-circle-check"></i> Purchased at BirdMealStore
                         </div>
                     </div>
                     <div class="rating">
-                        <input type="radio" value="5" @if (item.Rating == 5)
+                        <input type="radio" value="5" @if (item.Feedback.Rating == 5)
                         {
                             <text>checked</text>
                         }><label for="5">☆</label>
-                        <input type="radio" value="4" @if (item.Rating == 4)
+                        <input type="radio" value="4" @if (item.Feedback.Rating == 4)
                         {
                             <text>checked</text>
                         }><label for="4">☆</label>
-                        <input type="radio" value="3" @if (item.Rating == 3)
+                        <input type="radio" value="3" @if (item.Feedback.Rating == 3)
                         {
                             <text>checked</text>
                         }><label for="3">☆</label>
-                        <input type="radio" value="2" @if (item.Rating == 2)
+                        <input type="radio" value="2" @if (item.Feedback.Rating == 2)
                         {
                             <text>checked</text>
                         }><label for="2">☆</label>
-                        <input type="radio" value="1" @if (item.Rating == 1)
+                        <input type="radio" value="1" @if (item.Feedback.Rating == 1)
                         {
                             <text>checked</text>
                         }><label for="1">☆</label>
                     </div>
-                    <div class="commet">@item.Feedback1</div>
+                    <div class="commet">@item.Feedback.Feedback1</div>
                     <div class="line" style="margin-top:20px"></div>
                 </div>
             }

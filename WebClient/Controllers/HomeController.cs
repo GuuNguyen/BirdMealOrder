@@ -282,7 +282,7 @@ namespace WebClient.Controllers
                         breadcrumbs.Add(foodBreadCrumb);
                         breadcrumbs.Add(foodBreadCrumbDetail);
 
-                        HttpResponseMessage feedbackProductResponse = await _client.GetAsync(FeedbackUrl + $"/GetListFeedbackByMeald/{product.ProductId}");
+                        HttpResponseMessage feedbackProductResponse = await _client.GetAsync(FeedbackUrl + $"/GetListFeedbackByProductId/{product.ProductId}");
                         string feedbackProductStrData = await feedbackProductResponse.Content.ReadAsStringAsync();
                         listFeedbackViewModel = JsonSerializer.Deserialize<ListFeedbackViewModel>(feedbackProductStrData, options);
                         break;

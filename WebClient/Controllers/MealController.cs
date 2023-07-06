@@ -301,7 +301,7 @@ namespace WebClient.Controllers
                         var mealBreadCrumbDetail = new BreadCrumb { Text = meal.MealName, Url = $"/Home/Detail?code={meal.MealCode}" };
                         break;
                 }
-                HttpResponseMessage birdResponse = await client.GetAsync(BirdApiUrl);
+                HttpResponseMessage birdResponse = await client.GetAsync(BirdApiUrl + $"/ByMeal/{meal.MealId}");
                 string birdStrData = await birdResponse.Content.ReadAsStringAsync();
                 listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
 
