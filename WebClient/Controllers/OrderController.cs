@@ -86,6 +86,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> ListOrderDetail(int id)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(OrderApiUrl + "/" + id);
 
             string strData = await response.Content.ReadAsStringAsync();

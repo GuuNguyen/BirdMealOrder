@@ -20,6 +20,12 @@ namespace WebClient.Controllers
         }
         public ActionResult Create()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             return View();
         }
@@ -57,6 +63,12 @@ namespace WebClient.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(BirdApiUrl + "/" + id.ToString());
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -89,7 +101,7 @@ namespace WebClient.Controllers
             HttpResponseMessage response = await client.PutAsync(BirdApiUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
-                TempData["msg"] = "Update successfully!";
+                TempData["msg"] = "Update successfully!!";
             }
             else
             {
