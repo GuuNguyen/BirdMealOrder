@@ -30,12 +30,23 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div style = "border: 1px solid #80808066; padding: 10px;display: inline-block;border-radius: 15px; margin-top: 15px;">
+                            <div style = "font-weight: bold; font-size: 17px">
+                                Shipping Address:
+                            </div>
+                            <div style = "font-size: 16px; display: inline">
+                                @{
+                                    var address = Model.ShippingAddress.StreetAddress + ", " + Model.ShippingAddress.Ward + ", "
+                                    + Model.ShippingAddress.District + ", " + Model.ShippingAddress.City;
+                                }
+                                @address
+                            </div>
+                        </div>
                         <div id="notification" class="alert" style="display: none;"></div>
 
                         <p class="text-muted"></p>
 
-                        <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
+                        <div class="table-responsive" style="height: 413px; overflow-y: scroll;">
                             <table class="table text-nowrap">
                                 <thead>
                                     <tr style="text-align: center">
@@ -53,9 +64,6 @@
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
                                             <div>Category</div>
-                                        </th>
-                                        <th style="font-size: 17px; font-weight:bold">
-                                            <div>ShippingAddress</div>
                                         </th>
                                     </tr>
                                 </thead>
@@ -101,13 +109,6 @@
                                                 {
                                                     <div>Product</div>
                                                 }
-                                            </td>
-                                            <td style="font-weight: bold">
-                                                @{
-                                                    var address = Model.ShippingAddress.StreetAddress + ", " + Model.ShippingAddress.Ward + ", "
-                                                    + Model.ShippingAddress.District + ", " + Model.ShippingAddress.City;
-                                                }
-                                                @address
                                             </td>
                                         </tr>
                                     }
