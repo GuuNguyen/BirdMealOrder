@@ -101,7 +101,7 @@ namespace WebClient.Controllers
             HttpResponseMessage response = await client.PutAsync(BirdApiUrl, contentData);
             if (response.IsSuccessStatusCode)
             {
-                TempData["msg"] = "Update successfully!";
+                TempData["msg"] = "Update successfully!!";
             }
             else
             {
