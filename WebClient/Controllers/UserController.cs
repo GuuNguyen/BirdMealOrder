@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Net;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Repositories.DTOs.ShippingAddressDTO;
+using WebClient.ViewModels;
 
 namespace WebClient.Controllers
 {
@@ -14,6 +16,7 @@ namespace WebClient.Controllers
         private readonly HttpClient _client;
         private string UserAPIUrl = "";
         private string RoleAPIUrl = "";
+        private string SAAPIUrl = "";
 
         public UserController()
         {
@@ -22,6 +25,7 @@ namespace WebClient.Controllers
             _client.DefaultRequestHeaders.Accept.Add(contentType);
             UserAPIUrl = "https://localhost:7022/api/User";
             RoleAPIUrl = "https://localhost:7022/api/Role";
+            SAAPIUrl = "https://localhost:7022/api/ShippingAddress";
         }
 
 
@@ -185,15 +189,33 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> DetailUser(int id)
         {
-            
+            var userId = HttpContext.Session.GetInt32("userID");
+
+            if(userId == null)
+            {
+                return Redirect("/Login/Login");
+            }
+
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
+            HttpResponseMessage SAResponse = await _client.GetAsync(SAAPIUrl + $"/ListBy/{userId}");
+
             string strData = await response.Content.ReadAsStringAsync();
+            string SAStrData = await SAResponse.Content.ReadAsStringAsync();
+
+            
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
             };
-            User lUser = JsonSerializer.Deserialize<User>(strData, options);
-            return View(lUser);
+
+            var listSA = JsonSerializer.Deserialize<List<GetSADTO>>(SAStrData, options);
+            User user = JsonSerializer.Deserialize<User>(strData, options);
+            var finalResult = new UserProfileViewModel
+            {
+                User = user,
+                ShippingAddresses = listSA
+            };
+            return View(finalResult);
         }
 
         [HttpPost]

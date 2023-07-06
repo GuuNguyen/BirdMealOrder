@@ -1,4 +1,4 @@
-﻿@model BusinessObject.Models.User
+﻿@model WebClient.ViewModels.UserProfileViewModel
 
 @{
     Layout = "~/Views/Shared/_StoreLayout.cshtml";
@@ -23,7 +23,7 @@
     }
 
     .left-column {
-        width: 66vw;
+        width: 60vw;
         background-color: rgba(255, 255, 255, 0.8);
         border-radius: 25px;
         margin-left: 16px;
@@ -31,11 +31,11 @@
     }
 
     .right-column {
-        width: 30vw;
+        padding: 2%;
+        width: 35vw;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: white;
         border-radius: 25px;
         margin-left: 17px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -110,9 +110,6 @@
         border-left: solid #828282;
     }
 
-    .right-column p {
-        text-align: center;
-    }
 
     .titleProfile {
         background-color: rgba(255, 255, 255, 0.8);
@@ -208,10 +205,17 @@
         font-size: 16px;
         padding: 0 6px;
         padding-left: 12px;
-        
+    }
 
-    
-
+    .delivery-times{
+        position: absolute;
+        top: 5%;
+        right: 2%;
+    }
+    .delivery-times i{
+        color: black;
+        font-size: 20px;
+        cursor: pointer;
     }
 
     .display-value {
@@ -220,16 +224,16 @@
 </style>
 
 <body>
+    <div id="deliveryModalContainer"></div>
     <div class="titleProfile">
         <h1 class="text">USER PROFILE</h1>
     </div>
     <div class="container">
         <div class="left-column">
             <form asp-action="EditUserProfile" asp-controller="User" method="post">
-                <input type="hidden" asp-for="UserId" readonly />
-                @* <input asp-for="Password" type="hidden" />*@
-                <input asp-for="RoleId" type="hidden" readonly />
-                <input asp-for="Status" type="hidden" readonly />
+                <input type="hidden" asp-for="User.UserId" readonly />
+                <input asp-for="User.RoleId" type="hidden" readonly />
+                <input asp-for="User.Status" type="hidden" readonly />
                 <div class="button-container">
 
                     <button type="button" id="editProfileBtn" class="btn-editProfile" onclick="toggleEditMode()">
@@ -247,48 +251,58 @@
                 </div>
                 <div class="user-info">
                     <div>
-                        <span id="userName" class="display-value">@Html.DisplayFor(model => model.UserName)</span><br />
+                        <span id="userName" class="display-value">@Html.DisplayFor(model => model.User.UserName)</span><br />
                         @* <label asp-for="UserName" class="control-label"></label>*@
-                        <input asp-for="UserName" id="userNameInput" type="text" class="input-container" style="display: none;" readonly />
+                        <input asp-for="User.UserName" id="userNameInput" type="text" class="input-container" style="display: none;" readonly />
                     </div>
-                    <p>@Html.DisplayFor(model => model.Role.RoleName)</p>
+                    <p>@Html.DisplayFor(model => model.User.Role.RoleName)</p>
                 </div>
                 <div class="info-row">
                     <div class="info-column ">
                         <p>Full Name</p>
                         <div>
-                            <span id="fullName" class="display-value">@Html.DisplayFor(model => model.FullName)</span><br />
-                            @*<label asp-for="FullName" class="control-label"></label>*@
-                            <input asp-for="FullName" id="fullNameInput" type="text" class="input-container" style="display: none;" />
+                            <span id="fullName" class="display-value">@Html.DisplayFor(model => model.User.FullName)</span><br />
+                            <input asp-for="User.FullName" id="fullNameInput" type="text" class="input-container" style="display: none;" />
                         </div>
                     </div>
                     <div class="info-column bd1">
                         <p>Phone Number</p>
                         <div>
-                            <span id="phoneNumber" class="display-value">@Html.DisplayFor(model => model.PhoneNumber)</span><br />
-                            @* <label asp-for="PhoneNumber" class="control-label"></label>*@
-                            <input asp-for="PhoneNumber" id="phoneNumberInput" type="text" class="input-container" style="display: none;" />
+                            <span id="phoneNumber" class="display-value">@Html.DisplayFor(model => model.User.PhoneNumber)</span><br />
+                            <input asp-for="User.PhoneNumber" id="phoneNumberInput" type="text" class="input-container" style="display: none;" />
                         </div>
                     </div>
                     <div class="info-column">
                         <p>Password</p>
                         <div>
-                            <span id="password" class="display-value">@Html.DisplayFor(model => model.Password)</span><br />
-                            @* <label asp-for="PhoneNumber" class="control-label"></label>*@
-                            <input asp-for="Password" id="passwordInput" type="text" class="input-container" style="display: none;" />
+                            <span id="password" class="display-value">@Html.DisplayFor(model => model.User.Password)</span><br />
+                            <input asp-for="User.Password" id="passwordInput" type="text" class="input-container" style="display: none;" />
                         </div>
                     </div>
                 </div>
             </form>
         </div>
         <div class="right-column">
-            <p>Hello World</p>
-            <p>Hello World</p>
-            <p>Hello World</p>
-            <p>Hello World</p>
-            <p>Hello World</p>
-            <p>Hello World</p>
-            <p>Hello World</p>
+            <h4>DELIVERY INFORMATION</h4>
+            <a href="#" id="addNewDelivery" class="add-new-delivery">+ ADD NEW</a>
+            <div class="hero-delivery-table">
+                @if (Model.ShippingAddresses != null)
+                {
+                    @foreach (var item in Model.ShippingAddresses)
+                    {
+                        <div class="hero-shipping-address-item">
+                            <a class="delivery-times" name="selectedAddress" value="@item.ShippingAddressId">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </a>
+                            <div class="shipping-address-item">
+                                <p>@item.FullName</p>
+                                <p>@item.StreetAddress, @item.Ward, @item.District, @item.City</p>
+                                <p>+84 @item.PhoneNumber</p>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
         </div>
     </div>
 
@@ -337,9 +351,6 @@
                 passwordInput.style.display = "block";
             }
         }
-
-
-
 
     </script>
 </body>
