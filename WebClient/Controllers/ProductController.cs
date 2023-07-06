@@ -30,6 +30,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -48,7 +50,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
-
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             return View();
         }
 
@@ -89,6 +92,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl + "/" + id.ToString());
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -156,6 +161,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl + "/" + id);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -190,6 +197,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl + "/" + id);
 
             string strData = await response.Content.ReadAsStringAsync();

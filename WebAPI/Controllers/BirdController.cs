@@ -1,4 +1,5 @@
 ﻿using BusinessObject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Repositories.BirdRepositories;
@@ -45,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateBird(Bird bird)
         {
             var b = _birdRepo.CreateBird(bird);
@@ -52,6 +54,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult UpdateBird(Bird bird)
         {
             var b = _birdRepo.GetBirdById(bird.BirdId);
@@ -64,6 +67,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var b = _birdRepo.GetBirdById(id);

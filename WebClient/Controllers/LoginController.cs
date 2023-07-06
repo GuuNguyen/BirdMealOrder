@@ -85,7 +85,7 @@ namespace WebClient.Controllers
                 }
                 else if (roleString == "Staff")
                 {
-                    return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
+                    return Json(new { redirectUrl = Url.Action("Product_Index", "Staff") });
                 }
                 else
                 {
