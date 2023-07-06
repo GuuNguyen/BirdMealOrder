@@ -37,6 +37,9 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Index()
         {
+
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl);
             HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
             HttpResponseMessage bestSellerResponse = await _client.GetAsync(OrderAPIUrl + "/GetBestSeller");
@@ -318,7 +321,7 @@ namespace WebClient.Controllers
             if (response.IsSuccessStatusCode)
             {
                 strData = await response.Content.ReadAsStringAsync();
-                if(strData == "[]") return NotFound();
+                if (strData == "[]") return NotFound();
                 if (value.PageType == "Meal")
                 {
                     List<Meal> listMeal = JsonSerializer.Deserialize<List<Meal>>(strData, options);
@@ -326,9 +329,9 @@ namespace WebClient.Controllers
                 }
                 else
                 {
-                    List<Product> listProduct = JsonSerializer.Deserialize<List<Product>>(strData, options);;
+                    List<Product> listProduct = JsonSerializer.Deserialize<List<Product>>(strData, options); ;
                     return Json(listProduct);
-                }                
+                }
             }
             return BadRequest();
         }

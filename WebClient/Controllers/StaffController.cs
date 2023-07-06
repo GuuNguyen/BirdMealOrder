@@ -37,6 +37,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -52,10 +54,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> User_Index()
         {
-            if (HttpContext.Session.GetString("role") != "Admin")
+            if (HttpContext.Session.GetString("role") != "Staff")
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(UserApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -73,6 +77,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(MealApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -90,6 +96,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(BirdApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -104,10 +112,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Report_Index()
         {
-            if (HttpContext.Session.GetString("role") != "Admin")
+            if (HttpContext.Session.GetString("role") != "Staff")
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(OrderDetailApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -126,6 +136,8 @@ namespace WebClient.Controllers
             {
                 return Redirect("/Login/Login");
             }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(OrderApiUrl);
             string strData = await response.Content.ReadAsStringAsync();
 
@@ -156,6 +168,12 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeOrderStatus(ChangeOrderStatusDTO order)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string strData = JsonSerializer.Serialize(order);
             var contentData = new StringContent(strData, System.Text.Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PutAsync(OrderApiUrl + "/ChangeOrderStatus", contentData);

@@ -25,6 +25,12 @@ namespace WebClient.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderHistory()
         {
+            if (HttpContext.Session.GetString("role") != "Customer")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var userId = HttpContext.Session.GetInt32("userID");
             if (userId == null)
             {
@@ -50,6 +56,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> OrderDetail(int OrderId)
         {
+            if (HttpContext.Session.GetString("role") != "Customer")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var userId = HttpContext.Session.GetInt32("userID");
             if (userId == null)
             {
