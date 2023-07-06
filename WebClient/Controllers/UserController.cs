@@ -27,7 +27,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Index(string SearchKey)
         {
-            //if (HttpContext.Session.GetString("role") != "admin") return RedirectToAction("Login", "Login");
+            if (HttpContext.Session.GetString("role") != "Admin")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl);
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -45,6 +51,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> CreateUser()
         {
+            if (HttpContext.Session.GetString("role") != "Admin")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage responseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await responseRole.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -106,7 +118,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> DeleteUser(int id)
         {
-            
+            if (HttpContext.Session.GetString("role") != "Admin")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await _client.GetAsync(UserAPIUrl + "/" + id);
             string strData = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -137,7 +154,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> EditUser(int id)
         {
-           
+            if (HttpContext.Session.GetString("role") != "Admin")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             HttpResponseMessage reponseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await reponseRole.Content.ReadAsStringAsync();
