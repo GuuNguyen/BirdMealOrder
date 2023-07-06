@@ -66,7 +66,7 @@ namespace Repositories.Repositories.UserRepositories
         {
             if (userDTOFull.FullName != null && userDTOFull.UserName != null && userDTOFull.PhoneNumber != null && userDTOFull.Password != null)
             {
-                if (!UserDAO.isExitedUserName(userDTOFull.FullName) && !UserDAO.isExitedPhoneNumber(userDTOFull.PhoneNumber))
+                if (!UserDAO.isExitedUserName(userDTOFull.UserName) && !UserDAO.isExitedPhoneNumber(userDTOFull.PhoneNumber))
                 {
                     var newUser = _mapper.Map<User>(userDTOFull);
                     newUser.Status = UserStatus.Active;

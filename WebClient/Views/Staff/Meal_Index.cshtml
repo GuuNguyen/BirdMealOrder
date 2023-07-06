@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
     var message = TempData["SuccMessage"] as string;
     var Emessage = TempData["ErrMessage"] as string;
+    var token = Context.Session.GetString("token");
 }
 
 <div class="preloader">
@@ -190,6 +191,9 @@
             $.ajax({
                 url: "https://localhost:7022/api/Meal/ChangeStatus/" + mealId,
                 type: "put",
+                headers: {
+                    "Authorization": "Bearer " + "@token"
+                },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -211,6 +215,9 @@
                     type: "delete",
                     contentType: "application/json; charset=utf-8",
                     dataType: "text",
+                    headers: {
+                        "Authorization": "Bearer " + "@token"
+                    },
                     success: function (result) {
                         $("#notification").removeClass("alert-danger").addClass("alert-success");
                         $("#notification").text("Delete successfully.").show().delay(3000).fadeOut();

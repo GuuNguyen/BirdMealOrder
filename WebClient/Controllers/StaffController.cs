@@ -54,7 +54,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> User_Index()
         {
-            if (HttpContext.Session.GetString("role") != "Staff")
+            if (HttpContext.Session.GetString("role") != "Admin")
             {
                 return Redirect("/Login/Login");
             }
@@ -112,7 +112,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Report_Index()
         {
-            if (HttpContext.Session.GetString("role") != "Staff")
+            if (HttpContext.Session.GetString("role") != "Admin")
             {
                 return Redirect("/Login/Login");
             }

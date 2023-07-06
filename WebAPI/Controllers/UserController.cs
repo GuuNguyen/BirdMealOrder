@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.UserDTO;
 using Repositories.Repositories.UserRepositories;
@@ -16,12 +17,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        
         public IActionResult Get()
         {
             return Ok(_userRepository.GetUsers());
         }
 
         [HttpGet("{userId}")]
+        
         public IActionResult Get(int userId)
         {
             return Ok(_userRepository.GetUser(userId));
@@ -36,6 +39,7 @@ namespace WebAPI.Controllers
 
 
         [HttpPost("StaffCreateUser")]
+        [Authorize]
         public IActionResult CreateFull(CreateUserDTOFull userDTOFull)
         {
             var newUser = _userRepository.CreateUserFull(userDTOFull);
@@ -44,12 +48,15 @@ namespace WebAPI.Controllers
 
 
         [HttpPut]
+        [Authorize]
         public IActionResult Update(UpdateUserDTO userDTO)
         {
             var updateUser = _userRepository.UpdateUser(userDTO);
             return updateUser ? Ok(updateUser) : BadRequest();
         }
 
+
+        [Authorize]
         [HttpDelete]
         public IActionResult Delete(int userId)
         {
@@ -59,6 +66,7 @@ namespace WebAPI.Controllers
 
 
         [HttpPut("ChangeStatus/{userId}")]
+        [Authorize]
         public IActionResult ChangeStatus(int userId)
         {
             var user = _userRepository.GetUser(userId);

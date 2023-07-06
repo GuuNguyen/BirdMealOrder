@@ -18,7 +18,7 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> ReportFilter(DateTime startDate, DateTime endDate)
         {
-            if (HttpContext.Session.GetString("role") != "Staff")
+            if (HttpContext.Session.GetString("role") != "Admin")
             {
                 return Redirect("/Login/Login");
             }
