@@ -153,6 +153,8 @@ namespace Repositories.Repositories.OrderRepositories
         public List<object> GetListBestSeller()
         {
             var listOrder = OrderDetailDAO.GetListAllOrderDetail();
+            var productDictionary = GetProductDictionary();
+            var mealDictionary = GetMealDictionary();
             Dictionary<string, int> productQuantities = new Dictionary<string, int>();
 
             foreach (var orderDetail in listOrder)
@@ -160,13 +162,13 @@ namespace Repositories.Repositories.OrderRepositories
                 int quantity = orderDetail.Quantity;
                 string product = "";
 
-                if (orderDetail.ProductId.HasValue)
+                if (orderDetail.ProductId.HasValue && productDictionary.ContainsKey(orderDetail.ProductId.Value))
                 {
-                    product = ProductDAO.GetProductById(orderDetail.ProductId.Value).ProductCode;
+                    product = productDictionary[orderDetail.ProductId.Value].ProductCode;
                 }
-                else
+                else if (orderDetail.MealId.HasValue && mealDictionary.ContainsKey(orderDetail.MealId.Value))
                 {
-                    product = MealDAO.GetMeal(orderDetail.MealId.Value).MealCode;
+                    product = mealDictionary[orderDetail.MealId.Value].MealCode;
                 }
 
                 if (!string.IsNullOrEmpty(product))
@@ -191,11 +193,11 @@ namespace Repositories.Repositories.OrderRepositories
                 switch (prefix)
                 {
                     case "ME":
-                        var meal = MealDAO.GetMealByCode(pair.Key);
+                        var meal = mealDictionary.Values.FirstOrDefault(m => m.MealCode == pair.Key);
                         bestSellers.Add(meal);
                         break;
                     case "FO":
-                        var product = ProductDAO.GetProductByCode(pair.Key);
+                        var product = productDictionary.Values.FirstOrDefault(p => p.ProductCode == pair.Key);
                         bestSellers.Add(product);
                         break;
                 }
@@ -203,50 +205,74 @@ namespace Repositories.Repositories.OrderRepositories
             return bestSellers;
         }
 
+
+        public Dictionary<int, Meal> GetMealDictionary()
+        {
+            var mealList = MealDAO.GetAllMeals();
+            var mealDictionary = new Dictionary<int, Meal>();
+
+            foreach (var meal in mealList)
+            {
+                mealDictionary.Add(meal.MealId, meal);
+            }
+
+            return mealDictionary;
+        }
+
+        public Dictionary<int, Product> GetProductDictionary()
+        {
+            var productList = ProductDAO.GetAllProducts();
+            var productDictionary = new Dictionary<int, Product>();
+
+            foreach (var product in productList)
+            {
+                productDictionary.Add(product.ProductId, product);
+            }
+
+            return productDictionary;
+        }
+
+
         public List<object> GetListRecommend()
         {
-            var productList = (from od in _context.OrderDetails
-                               join f in _context.Feedbacks on od.OrderDetailId equals f.OrderDetailId
-                               where f.Rating == 5 && od.ProductId != null
-                               group od by od.ProductId into g
-                               orderby g.Count() descending
-                               select new
-                               {
-                                   ProductId = g.Key,
-                                   Count = g.Count()
-                               }).ToList();
+            var productDictionary = GetProductDictionary();
+            var mealDictionary = GetMealDictionary();
+            var productCounts = (from f in _context.Feedbacks
+                                 join od in _context.OrderDetails on f.OrderDetailId equals od.OrderDetailId
+                                 where f.Rating == 5 && od.ProductId != null
+                                 group f by od.ProductId into g
+                                 select new
+                                 {
+                                     Id = g.Key,
+                                     Count = g.Count()
+                                 }).ToList();
 
-            var mealList = (from od in _context.OrderDetails
-                            join f in _context.Feedbacks on od.OrderDetailId equals f.OrderDetailId
-                            where f.Rating == 5 && od.MealId != null
-                            group od by od.MealId into g
-                            orderby g.Count() descending
-                            select new
-                            {
-                                MealId = g.Key,
-                                Count = g.Count()
-                            }).ToList();
+            var mealCounts = (from f in _context.Feedbacks
+                              join od in _context.OrderDetails on f.OrderDetailId equals od.OrderDetailId
+                              where f.Rating == 5 && od.MealId != null
+                              group f by od.MealId into g
+                              select new
+                              {
+                                  Id = g.Key,
+                                  Count = g.Count()
+                              }).ToList();
+
+            var topProducts = productCounts
+                .OrderByDescending(pc => pc.Count)
+                .Select(pc => productDictionary[pc.Id.Value])
+                .ToList();
+
+            var topMeals = mealCounts
+                .OrderByDescending(mc => mc.Count)
+                .Select(mc => mealDictionary[mc.Id.Value])
+                .ToList();
 
             var listRecommend = new List<object>();
-            foreach (var item in productList)
-            {
-                var product = ProductDAO.GetProductById(item.ProductId.Value);
-                if (product != null)
-                {
-                    listRecommend.Add(product);
-                }
-            }
 
-            foreach (var item in mealList)
-            {
-                var meal = MealDAO.GetMeal(item.MealId.Value);
-                if (meal != null)
-                {
-                    listRecommend.Add(meal);
-                }
-            }
+            listRecommend.AddRange(topProducts);
+            listRecommend.AddRange(topMeals);
 
-            return listRecommend;
+            return listRecommend.Take(8).ToList();
         }
 
     }

@@ -22,7 +22,7 @@ namespace WebClient.Controllers
         private string SortAPIUrl = "";
 
         public HomeController()
-        {
+        {     
             _client = new HttpClient();
             var contentType = new MediaTypeWithQualityHeaderValue("application/json");
             _client.DefaultRequestHeaders.Accept.Add(contentType);
@@ -37,13 +37,17 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var mealTask = _client.GetAsync(MealAPIUrl);
+            var birdTask = _client.GetAsync(BirdAPIUrl);
+            var bestSellerTask = _client.GetAsync(OrderAPIUrl + "/GetBestSeller");
+            var recommendTask = _client.GetAsync(OrderAPIUrl + "/RecommendList");
 
-            string token = HttpContext.Session.GetString("token");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl);
-            HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
-            HttpResponseMessage bestSellerResponse = await _client.GetAsync(OrderAPIUrl + "/GetBestSeller");
-            HttpResponseMessage recommendResponse = await _client.GetAsync(OrderAPIUrl + "/RecommendList");
+            await Task.WhenAll(mealTask, birdTask, bestSellerTask, recommendTask);
+
+            var mealResponse = await mealTask;
+            var birdResponse = await birdTask;
+            var bestSellerResponse = await bestSellerTask;
+            var recommendResponse = await recommendTask;
 
             string mealStrData = await mealResponse.Content.ReadAsStringAsync();
             string birdStrData = await birdResponse.Content.ReadAsStringAsync();
@@ -55,14 +59,10 @@ namespace WebClient.Controllers
                 PropertyNameCaseInsensitive = true
             };
 
-            List<Meal> listMeal = new List<Meal>();
-            List<Bird> listBird = new List<Bird>();
-            List<object> listBestSellers = new List<object>();
-            List<object> listRecommends = new List<object>();
-            listMeal = JsonSerializer.Deserialize<List<Meal>>(mealStrData, options);
-            listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
-            listBestSellers = JsonSerializer.Deserialize<List<object>>(bestSellerData, options);
-            listRecommends = JsonSerializer.Deserialize<List<object>>(recommendData, options);
+            var listMeal = JsonSerializer.Deserialize<List<Meal>>(mealStrData, options);
+            var listBird = JsonSerializer.Deserialize<List<Bird>>(birdStrData, options);
+            var listBestSellers = JsonSerializer.Deserialize<List<object>>(bestSellerData, options);
+            var listRecommends = JsonSerializer.Deserialize<List<object>>(recommendData, options);
 
             var finalList = new HomeViewModel
             {
@@ -71,7 +71,6 @@ namespace WebClient.Controllers
                 BestSellers = listBestSellers ?? new List<object>(),
                 HighlyRecommends = listRecommends ?? new List<object>(),
             };
-
             return View(finalList);
         }
 
@@ -321,7 +320,7 @@ namespace WebClient.Controllers
             if (response.IsSuccessStatusCode)
             {
                 strData = await response.Content.ReadAsStringAsync();
-                if (strData == "[]") return NotFound();
+                if(strData == "[]") return NotFound();
                 if (value.PageType == "Meal")
                 {
                     List<Meal> listMeal = JsonSerializer.Deserialize<List<Meal>>(strData, options);
@@ -329,9 +328,9 @@ namespace WebClient.Controllers
                 }
                 else
                 {
-                    List<Product> listProduct = JsonSerializer.Deserialize<List<Product>>(strData, options); ;
+                    List<Product> listProduct = JsonSerializer.Deserialize<List<Product>>(strData, options);;
                     return Json(listProduct);
-                }
+                }                
             }
             return BadRequest();
         }
