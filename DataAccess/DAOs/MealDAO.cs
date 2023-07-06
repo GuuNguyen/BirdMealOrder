@@ -17,7 +17,18 @@ namespace DataAccess.DAOs
             {
                 using (var context = new BirdMealOrderDBContext())
                 {
-                    return context.Meals.ToList();
+                    return context.Meals
+                                        .Select(m => new Meal
+                                        {
+                                            MealId = m.MealId,
+                                            MealName = m.MealName,
+                                            MealCode = m.MealCode,
+                                            MealDescription = m.MealDescription,
+                                            MealImage = m.MealImage,
+                                            MealStatus = m.MealStatus,
+                                            Price = m.Price,
+                                            QuantityAvailable = m.QuantityAvailable
+                                        }).ToList();
                 }
             }
             catch (Exception ex)

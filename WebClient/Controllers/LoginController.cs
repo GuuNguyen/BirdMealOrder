@@ -71,14 +71,13 @@ namespace WebClient.Controllers
                 {
                     splipedName = userFullName.Substring(lastSpaceIndex + 1);
                 }
-
-                var parseUserId = Int32.Parse(userId);  
+                var parseUserId = Int32.Parse(userId); 
+                
                 HttpContext.Session.SetString("userName", splipedName);
                 HttpContext.Session.SetString("role", roleString);
                 HttpContext.Session.SetInt32("userID", parseUserId);
                 HttpContext.Session.SetString("token", token);
                 
-
                 if (roleString == "Admin")
                 {
                     return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });

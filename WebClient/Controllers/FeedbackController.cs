@@ -23,6 +23,12 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Feedback(FeebackSuccessViewModel feebackSuccessViewModel)
         {
+            if (HttpContext.Session.GetString("role") != "Customer")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var feedback = new CreateFeedbackDTO
             {
                 OrderDetailId = feebackSuccessViewModel.OrderDetailId,
@@ -45,6 +51,10 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> FeedbackSuccess(FeebackSuccessViewModel feebackSuccessViewModel)
         {
+            if (HttpContext.Session.GetString("role") != "Customer")
+            {
+                return Redirect("/Login/Login");
+            }
             return View(feebackSuccessViewModel);
         }
     }

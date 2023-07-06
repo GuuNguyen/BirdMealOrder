@@ -38,6 +38,12 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> Create()
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(ProductApiUrl);
             string strData = await response.Content.ReadAsStringAsync();
             HttpResponseMessage responseB = await client.GetAsync(BirdApiUrl);
@@ -57,6 +63,12 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateMealDTO createMealDTO, IFormFile mealImage)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var productIds = new List<int>();
             foreach (var product in createMealDTO.ProductOptions)
             {
@@ -106,7 +118,12 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int mealId)
         {
-
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage respone = await client.DeleteAsync(MealApiUrl + "/" + mealId);
             if (respone.IsSuccessStatusCode)
             {
@@ -117,6 +134,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Details(int mealId)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage respone = await client.GetAsync(MealApiUrl + "/" + mealId);
             string strData = await respone.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -129,6 +152,12 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Edit(int mealId)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage respone = await client.GetAsync(MealApiUrl + "/GetMealIncludeBird&Product/" + mealId);
             string strData = await respone.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -157,6 +186,12 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(UpdateMealDTO updateMealDTO, IFormFile mImage)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var productIds = new List<int>();
             foreach (var product in updateMealDTO.ProductRequireds)
             {
@@ -227,6 +262,12 @@ namespace WebClient.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string code)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             if (!string.IsNullOrEmpty(code))
             {
                 var options = new JsonSerializerOptions

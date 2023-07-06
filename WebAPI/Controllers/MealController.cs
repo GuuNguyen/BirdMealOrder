@@ -1,5 +1,6 @@
 ﻿
 using DataAccess.DAOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -49,7 +50,7 @@ namespace WebAPI.Controllers
             if (check.IsNullOrEmpty()) return BadRequest("Fail");
             return Ok(check);
         }
-
+        [Authorize]
         [HttpDelete("{id}")]
         public IActionResult DeleteMeal(int id)
         {
@@ -58,7 +59,7 @@ namespace WebAPI.Controllers
             _mealRepo.DeleteMeal(id);
             return Ok("Delete Successfull!");
         }
-
+        [Authorize]
         [HttpPost]
         public IActionResult CreateMeal(CreateMealDTO mealDTO)
         {
@@ -66,7 +67,7 @@ namespace WebAPI.Controllers
             if (!check.IsNullOrEmpty()) return Conflict(check);
             return Ok("Create Successfull!");
         }
-
+        [Authorize]
         [HttpPut]
         public IActionResult UpdateMeal(UpdateMealDTO mealDTO)
         {
@@ -76,7 +77,7 @@ namespace WebAPI.Controllers
             if (!check.IsNullOrEmpty()) return Conflict(check);
             return Ok("Update Successfull!");
         }
-
+        [Authorize]
         [HttpPut("ChangeStatus/{mealId}")]
         public IActionResult ChangeStatus(int mealId)
         {
