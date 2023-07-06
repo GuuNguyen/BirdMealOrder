@@ -66,11 +66,17 @@ namespace WebClient.Controllers
                 var userId = jwtSecurityToken.Claims.First(claim => claim.Type == ClaimTypes.Sid).Value;
                 var userFullName = jwtSecurityToken.Claims.First(claim => claim.Type == "FullName").Value;
                 string splipedName = "Name";
-                int lastSpaceIndex = userFullName.LastIndexOf(' ');                
+                int lastSpaceIndex = userFullName.LastIndexOf(' ');
+
                 if (lastSpaceIndex != -1 && lastSpaceIndex < userFullName.Length - 1)
                 {
                     splipedName = userFullName.Substring(lastSpaceIndex + 1);
                 }
+                else if (!string.IsNullOrEmpty(userFullName))
+                {
+                    splipedName = userFullName;
+                }
+
                 var parseUserId = Int32.Parse(userId); 
                 
                 HttpContext.Session.SetString("userName", splipedName);

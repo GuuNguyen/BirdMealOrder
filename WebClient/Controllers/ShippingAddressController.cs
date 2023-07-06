@@ -23,6 +23,8 @@ public class ShippingAddressController : Controller
     public async Task<IActionResult> GetDeliveryAddresses()
     {
         var userId = HttpContext.Session.GetInt32("userID");
+        string token = HttpContext.Session.GetString("token");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         HttpResponseMessage SAResponse = await _client.GetAsync(SAAPIUrl + $"/ListBy/{userId}");       
         if(SAResponse.IsSuccessStatusCode)
         {
@@ -131,6 +133,8 @@ public class ShippingAddressController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateSADTO sADTO)
     {
+        string token = HttpContext.Session.GetString("token");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var userId = HttpContext.Session.GetInt32("userID");
         sADTO.UserId = (int)userId;
         string strData = JsonSerializer.Serialize(sADTO);

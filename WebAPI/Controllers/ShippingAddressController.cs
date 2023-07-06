@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.ShippingAddressDTO;
 using Repositories.Repositories.ShippingAddressRepositories;
 
 namespace WebAPI.Controllers
 {
+
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ShippingAddressController : ControllerBase
@@ -16,6 +19,7 @@ namespace WebAPI.Controllers
             _repo = repo;
         }
 
+        
         [HttpGet("ListBy/{userId}")]
         public IActionResult GetListByUserId(int userId)
         {
@@ -27,6 +31,8 @@ namespace WebAPI.Controllers
         {
             return Ok(_repo.GetById(id));   
         }
+
+
         [HttpPost]
         public IActionResult Create(CreateSADTO createSADTO)
         {

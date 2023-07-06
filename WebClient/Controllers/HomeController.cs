@@ -37,6 +37,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrEmpty(role))
+            {
+                if(role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if(role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+
             var mealTask = _client.GetAsync(MealAPIUrl);
             var birdTask = _client.GetAsync(BirdAPIUrl);
             var bestSellerTask = _client.GetAsync(OrderAPIUrl + "/GetBestSeller");
@@ -76,6 +83,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Meal()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+
             HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl);
             HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
             string mealStrData = await mealResponse.Content.ReadAsStringAsync();
@@ -109,6 +123,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> MealsByBirdId(int id)
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+
             HttpResponseMessage mealResponse = await _client.GetAsync(MealAPIUrl + $"/ByBirdId/{id}");
             HttpResponseMessage birdResponse = await _client.GetAsync(BirdAPIUrl);
             HttpResponseMessage birdSpecificResponse = await _client.GetAsync(BirdAPIUrl + $"/{id}");
@@ -149,6 +170,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Food()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+
             HttpResponseMessage productResponse = await _client.GetAsync(ProductUrl);
 
             string productStrData = await productResponse.Content.ReadAsStringAsync();
@@ -178,6 +206,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Detail(string code)
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+
             if (!string.IsNullOrEmpty(code))
             {
                 var options = new JsonSerializerOptions
@@ -271,6 +306,13 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> Bird()
         {
+            var role = HttpContext.Session.GetString("role");
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+
             HttpResponseMessage response = await _client.GetAsync(BirdAPIUrl);
 
             string strData = await response.Content.ReadAsStringAsync();

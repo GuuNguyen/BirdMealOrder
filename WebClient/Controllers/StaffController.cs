@@ -54,7 +54,7 @@ namespace WebClient.Controllers
 
         public async Task<IActionResult> User_Index()
         {
-            if (HttpContext.Session.GetString("role") != "Staff")
+            if (HttpContext.Session.GetString("role") != "Admin")
             {
                 return Redirect("/Login/Login");
             }
@@ -71,6 +71,7 @@ namespace WebClient.Controllers
             List<User> listUser = JsonSerializer.Deserialize<List<User>>(strData, options);
             return View(listUser);
         }
+
         public async Task<IActionResult> Meal_Index()
         {
             if (HttpContext.Session.GetString("role") != "Staff")
