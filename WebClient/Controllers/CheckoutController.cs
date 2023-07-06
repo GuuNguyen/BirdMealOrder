@@ -33,6 +33,19 @@ namespace WebClient.Controllers
         [HttpGet]
         public async Task<IActionResult> Cart()
         {
+            var role = HttpContext.Session.GetString("role");
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+            else
+            {
+                return Redirect("/Login/Login");
+            }
+
             var strCart = HttpContext.Session.GetString("cart");
             var userId = HttpContext.Session.GetInt32("userID");
             bool haveMeal = false;
@@ -41,7 +54,6 @@ namespace WebClient.Controllers
             List<Product>? listProduct = null;
             List<int> listMealId = new List<int>();
             List<int> listProductId = new List<int>();
-            if (userId == null) return Redirect("/Login/Login");
             if (string.IsNullOrEmpty(strCart))
             {
                 GetCartViewModel data = new GetCartViewModel();
@@ -172,6 +184,8 @@ namespace WebClient.Controllers
         {
             var strCart = HttpContext.Session.GetString("cart");
             var userId = HttpContext.Session.GetInt32("userID");
+            string? token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             string apiUrl;
             int id;
             if (strCart == null || string.IsNullOrEmpty(strCart)) return Json(new { cartIsEmpty = true });

@@ -211,8 +211,15 @@ namespace WebClient.Controllers
         public async Task<IActionResult> DetailUser(int id)
         {
             var userId = HttpContext.Session.GetInt32("userID");
-
-            if(userId == null)
+            var role = HttpContext.Session.GetString("role");
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (!string.IsNullOrEmpty(role))
+            {
+                if (role == "Admin") return RedirectToAction("User_Index", "Staff");
+                else if (role == "Staff") return RedirectToAction("Product_Index", "Staff");
+            }
+            else
             {
                 return Redirect("/Login/Login");
             }
@@ -242,7 +249,8 @@ namespace WebClient.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUserProfile(User user)
         {
-            
+            string token = HttpContext.Session.GetString("token");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage responseRole = await _client.GetAsync(RoleAPIUrl);
             string strDataRole = await responseRole.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions

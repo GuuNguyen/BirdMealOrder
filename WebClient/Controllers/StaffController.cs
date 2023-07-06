@@ -71,6 +71,7 @@ namespace WebClient.Controllers
             List<User> listUser = JsonSerializer.Deserialize<List<User>>(strData, options);
             return View(listUser);
         }
+
         public async Task<IActionResult> Meal_Index()
         {
             if (HttpContext.Session.GetString("role") != "Staff")
