@@ -34,7 +34,7 @@ namespace DataAccess.DAOs
                     .Join(dbContext.Orders, x => x.OrderDetail.OrderId, o => o.OrderId, (x, o) => new { Feedback = x.Feedback, OrderDetail = x.OrderDetail, Order = o })
                     .Join(dbContext.Users, x => x.Order.UserId, u => u.UserId, (x, u) => new { Feedback = x.Feedback, OrderDetail = x.OrderDetail, Order = x.Order, User = u })
                     .Where(x => x.OrderDetail.ProductId == productId)
-                    .Select(x => new { Feedback = x.Feedback, Rating = x.Feedback.Rating, User = x.User })
+                    .Select(x => new { Feedback = x.Feedback, Rating = x.Feedback.Rating, User = x.User, Order = x.Order, OrderDetail = x.OrderDetail })
                     .ToList();
                 double avgRating = 0.0;
                 if (feedbackList.Count > 0)
@@ -48,6 +48,18 @@ namespace DataAccess.DAOs
                 int rating4Count = feedbackList.Count(x => x.Rating == 4);
                 int rating5Count = feedbackList.Count(x => x.Rating == 5);
 
+                List<object> listFeedbackOfUser = new List<object>();
+                foreach (var item in feedbackList)
+                {
+                    var order = feedbackList.FirstOrDefault(f => f.OrderDetail.OrderDetailId == item.Feedback.OrderDetailId);
+                    var feedbackOfUser = new
+                    {
+                        User = order.User,
+                        feedback = order.Feedback
+                    };
+                    listFeedbackOfUser.Add(feedbackOfUser);
+                }
+                listFeedbackOfUser.Reverse();
                 var result = new
                 {
                     AvgRating = avgRating,
@@ -56,8 +68,8 @@ namespace DataAccess.DAOs
                     Rating3Count = rating3Count,
                     Rating4Count = rating4Count,
                     Rating5Count = rating5Count,
-                    FeedbackList = feedbackList.Select(x => x.Feedback).OrderByDescending(x => x.FeedbackId).ToList(),
-                    User = feedbackList.Select(x => x.User).OrderByDescending(x => x.UserId).ToList()
+                    FeedbackList = listFeedbackOfUser,
+                    //User = feedbackList.Select(x => x.User).OrderByDescending(x => x.UserId).ToList()
                 };
 
                 return result;
@@ -73,7 +85,7 @@ namespace DataAccess.DAOs
                     .Join(dbContext.Orders, x => x.OrderDetail.OrderId, o => o.OrderId, (x, o) => new { Feedback = x.Feedback, OrderDetail = x.OrderDetail, Order = o })
                     .Join(dbContext.Users, x => x.Order.UserId, u => u.UserId, (x, u) => new { Feedback = x.Feedback, OrderDetail = x.OrderDetail, Order = x.Order, User = u })
                     .Where(x => x.OrderDetail.MealId == mealId)
-                    .Select(x => new { Feedback = x.Feedback, Rating = x.Feedback.Rating, User = x.User })
+                    .Select(x => new { Feedback = x.Feedback, Rating = x.Feedback.Rating, User = x.User, Order = x.Order, OrderDetail = x.OrderDetail })
                     .ToList();
 
                 double avgRating = 0.0;
@@ -88,6 +100,18 @@ namespace DataAccess.DAOs
                 int rating4Count = feedbackList.Count(x => x.Rating == 4);
                 int rating5Count = feedbackList.Count(x => x.Rating == 5);
 
+                List<object> listFeedbackOfUser = new List<object>();
+                foreach (var item in feedbackList)
+                {
+                    var order = feedbackList.FirstOrDefault(f => f.OrderDetail.OrderDetailId == item.Feedback.OrderDetailId);
+                    var feedbackOfUser = new
+                    {
+                        User = order.User,
+                        feedback = order.Feedback
+                    };
+                    listFeedbackOfUser.Add(feedbackOfUser);
+                }
+                listFeedbackOfUser.Reverse();
                 var result = new
                 {
                     AvgRating = avgRating,
@@ -96,8 +120,8 @@ namespace DataAccess.DAOs
                     Rating3Count = rating3Count,
                     Rating4Count = rating4Count,
                     Rating5Count = rating5Count,
-                    FeedbackList = feedbackList.Select(x => x.Feedback).OrderByDescending(x => x.FeedbackId).ToList(),
-                    User = feedbackList.Select(x => x.User).OrderByDescending(x => x.UserId).ToList()
+                    FeedbackList = listFeedbackOfUser,
+                    //User = feedbackList.Select(x => x.User).OrderByDescending(x => x.UserId).ToList()
                 };
 
                 return result;

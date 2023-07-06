@@ -10,7 +10,12 @@ namespace WebClient.ViewModels
         public int Rating3Count { get; set; }
         public int Rating4Count { get; set; }
         public int Rating5Count { get; set; }
-        public List<Feedback> FeedbackList { get; set; }
-        public List<User> User { get; set; }
+        public List<FeedbackOfUser> FeedbackList { get; set; }
+        //public List<User> User { get; set; }
+    }
+    public class FeedbackOfUser
+    {
+        public Feedback Feedback { get; set; }
+        public User user { get; set; }
     }
 }
