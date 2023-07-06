@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "User_Index";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    var token = Context.Session.GetString("token");
 }
 
 <div class="preloader">
@@ -119,7 +120,7 @@
                                                     </div>
                                                     <div class="dropdown-content">
                                                         <a asp-action="EditUser" asp-controller="User" asp-route-id="@item.UserId"><i class="fa-solid fa-pen pe-2"></i>Edit</a>
-                                                       @* <a asp-action="DetailUser" asp-controller="User" asp-route-id="@item.UserId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>*@
+                                                        @* <a asp-action="DetailUser" asp-controller="User" asp-route-id="@item.UserId"><i class="fa-solid fa-circle-info pe-2"></i>Details</a>*@
                                                         @*<a asp-action="DeleteUser" asp-controller="User" asp-route-id="@item.UserId" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>*@
                                                         <a onclick="setUserIdToDelete(@item.UserId)" data-target="#myModal" data-toggle="modal" class="delete-link"><i class="fa-solid fa-trash pe-2"></i>Delete</a>
                                                     </div>
@@ -205,9 +206,13 @@
     });
 
     function toggleUserStatus(checkbox, UserlId) {
+      
         $.ajax({
             url: "https://localhost:7022/api/User/ChangeStatus/" + UserlId,
             type: "put",
+            headers: {
+                "Authorization": "Bearer " + "@token"
+            },
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -228,6 +233,9 @@
             $.ajax({
                 url: "https://localhost:7022/api/User?userId=" + userIdToDelete,
                 type: "delete",
+                headers: {
+                    "Authorization": "Bearer " + "@token"
+                },
                 contentType: "application/json; charset=utf-8",
                 dataType: "text",
                 success: function (result) {

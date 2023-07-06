@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Product_Index";
     Layout = "~/Views/Shared/_StaffLayout.cshtml";
+    var token = Context.Session.GetString("token");
 }
 
 <div class="preloader">
@@ -177,6 +178,9 @@
             $.ajax({
                 url: "https://localhost:7022/api/Product/changeStatus/" + productId,
                 type: "put",
+                headers: {
+                    "Authorization": "Bearer " + "@token"
+                },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -199,6 +203,9 @@
         $.ajax({
             url: 'https://localhost:7022/api/Product/' + deleteProductId,
             type: 'DELETE',
+                headers: {
+                    "Authorization": "Bearer " + "@token"
+                },
             success: function () {
                 // Xóa sản phẩm thành công, reload lại trang
                 $("#notification").removeClass("alert-danger").addClass("alert-success");

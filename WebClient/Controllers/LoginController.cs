@@ -76,7 +76,6 @@ namespace WebClient.Controllers
                 {
                     splipedName = userFullName;
                 }
-
                 var parseUserId = Int32.Parse(userId); 
                 
                 HttpContext.Session.SetString("userName", splipedName);
@@ -86,6 +85,7 @@ namespace WebClient.Controllers
                 
                 if (roleString == "Admin")
                 {
+
                     return Json(new { redirectUrl = Url.Action("User_Index", "Staff") });
                 }
                 else if(roleString == "Staff")
