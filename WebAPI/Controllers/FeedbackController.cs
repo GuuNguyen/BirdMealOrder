@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Models;
 using DataAccess.DAOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.FeedbackDTO;
@@ -15,6 +16,7 @@ namespace WebAPI.Controllers
         private IFeedbackRepository _feedbackRepository;
         public FeedbackController(IFeedbackRepository repo) => _feedbackRepository = repo;
         [HttpPost]
+        [Authorize]
         public IActionResult Create(CreateFeedbackDTO feedback)
         {
             if (OrderDetailDAO.GetOrderDetail(feedback.OrderDetailId) == null) return NotFound();

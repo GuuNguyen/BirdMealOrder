@@ -18,6 +18,12 @@ namespace WebClient.Controllers
         }
         public async Task<IActionResult> ReportFilter(DateTime startDate, DateTime endDate)
         {
+            if (HttpContext.Session.GetString("role") != "Staff")
+            {
+                return Redirect("/Login/Login");
+            }
+            string token = HttpContext.Session.GetString("token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await client.GetAsync(OrderDetailApiUrl);
 
             string strData = await response.Content.ReadAsStringAsync();
@@ -32,7 +38,7 @@ namespace WebClient.Controllers
             {
                 return RedirectToAction("Report_Index", "Staff");
             }
-            if(endDate == default(DateTime))
+            if (endDate == default(DateTime))
             {
                 endDate = DateTime.Now.Date;
             }

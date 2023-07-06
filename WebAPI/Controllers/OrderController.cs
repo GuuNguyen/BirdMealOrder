@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Enums;
 using BusinessObject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTOs.OrderDTO;
@@ -21,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateOrder(CreateOrderDTO orderDTO)
         {
             var isSuccess = _repo.CreateOrder(orderDTO);
@@ -28,6 +30,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult UpdateOrder(UpdateOrderDTO order)
         {
             var isSuccess = _repo.UpdateOrder(order);
@@ -35,6 +38,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult DeleteOrder(int id)
         {
             var isSuccess = _repo.DeleteOrder(id);
@@ -42,6 +46,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetOrderByUserId/{userId}")]
+        [Authorize]
         public IActionResult GetOrderByUserId(int userId)
         {
             return Ok(_repo.GetOrdersByUserId(userId));
@@ -54,19 +59,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetOrdersAndCheckHasReviewByUserId/{userId}")]
+        [Authorize]
         public IActionResult GetOrdersAndCheckHasReviewByUserId(int userId)
         {
             return Ok(_repo.GetOrdersAndCheckHasReviewByUserId(userId));
         }
 
         [HttpPut("ChangeOrderStatus")]
+        [Authorize]
         public IActionResult ChangeOrderStatus(ChangeOrderStatusDTO order)
         {
             var isSuccess = _repo.ChangeOrderStatus(order);
             return isSuccess ? Ok("Successfull updated!") : BadRequest("Fail update!");
         }
-        
+
         [HttpPut("DeleteChangeOrderStatus/{id}")]
+        [Authorize]
         public IActionResult DeleteChangeOrderStatus(int id)
         {
             var isSuccess = _repo.DeleteChangeOrderStatus(id);
