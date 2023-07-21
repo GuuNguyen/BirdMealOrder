@@ -33,7 +33,7 @@ namespace BusinessObject.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server =birdmealdb.clkqn1da5xgy.us-east-1.rds.amazonaws.com,1433; database =BirdMealOrderDB;uid=admin;pwd=SE150270;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("server =birdmealdb.clkqn1da5xgy.us-east-1.rds.amazonaws.com,1433; database =BirdMealOrderDB;uid=admin;pwd=SE150270;TrustServerCertificate=true;");
             }
         }
 
@@ -130,6 +130,8 @@ namespace BusinessObject.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.CompleteDate).HasColumnType("datetime");
+
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.ShipDate).HasColumnType("datetime");
@@ -176,7 +178,6 @@ namespace BusinessObject.Models
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_Order");
 
                 entity.HasOne(d => d.Product)

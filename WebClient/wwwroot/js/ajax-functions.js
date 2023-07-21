@@ -532,6 +532,10 @@ $(document).ready(function () {
                         productContainer.append(gridItemProduct);
                     }
                 }
+                $(document).on('click', '.button-atc', function () {
+                    var productCode = $(this).attr('data-code');
+                    addToCart(productCode, 1);
+                });
             },
             error: function (xhr, status, error) {
                 if (xhr.status === 404) {

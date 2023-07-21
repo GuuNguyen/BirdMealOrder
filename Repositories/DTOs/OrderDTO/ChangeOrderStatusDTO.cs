@@ -11,6 +11,7 @@ namespace Repositories.DTOs.OrderDTO
     {
         public int OrderId { get; set; }
         public DateTime? ShipDate { get; set; }
+        public DateTime? CompleteDate { get; set; }
         public OrderStatus Status { get; set; }
     }
 }
