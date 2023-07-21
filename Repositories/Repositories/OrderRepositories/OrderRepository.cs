@@ -106,7 +106,12 @@ namespace Repositories.Repositories.OrderRepositories
             if (check == null) return false;
             if (order.Status == OrderStatus.Processing)
             {
-                order.ShipDate = DateTime.Now.AddDays(1);
+                order.ShipDate = DateTime.Now;
+            }
+            else if(order.Status == OrderStatus.Completed)
+            {
+                order.ShipDate = check.ShipDate;
+                order.CompleteDate = DateTime.Now;
             }
             else if (order.Status == OrderStatus.Completed || order.Status == OrderStatus.Canceled)
             {
@@ -136,6 +141,7 @@ namespace Repositories.Repositories.OrderRepositories
             else
             {
                 order.ShipDate = new DateTime(1753, 1, 1);
+                order.CompleteDate = null;
             }
             var updateOrder = _mapper.Map(order, check);
             OrderDAO.ChangeOrderStatus(updateOrder);

@@ -35,7 +35,7 @@ namespace Repositories.Repositories.SortRepositories
                                   select new Meal
                                  {
                                      MealId = m.MealId,
-                                     MealCode = m.MealName,
+                                     MealCode = m.MealCode,
                                      MealDescription = m.MealDescription,
                                      MealImage = m.MealImage,
                                      MealName = m.MealName,

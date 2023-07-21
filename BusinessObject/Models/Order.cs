@@ -1,7 +1,6 @@
 ﻿using BusinessObject.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace BusinessObject.Models
 {
@@ -17,8 +16,10 @@ namespace BusinessObject.Models
         public int ShippingAddressId { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime? ShipDate { get; set; }
+        public DateTime? CompleteDate { get; set; }
         public decimal? TotalPrice { get; set; }
         public OrderStatus Status { get; set; }
+
         public virtual ShippingAddress ShippingAddress { get; set; } = null!;
         public virtual User User { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

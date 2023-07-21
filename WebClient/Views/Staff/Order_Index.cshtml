@@ -32,10 +32,10 @@
                         <p class="text-muted"></p>
 
                         <div class="table-responsive" style="height: 490px; overflow-y: scroll;">
-                            <table class="table text-nowrap">
-                                <thead>
+                            <table id="orderTable" class="table text-nowrap">
+                                <thead style=" position: sticky; top: 0;z-index: 1; background-color: lightgray;">
                                     <tr style="text-align: center">
-                                        <th style="font-size: 17px; font-weight:bold;">
+                                        <th style="font-size: 17px; font-weight:bold; cursor: pointer;">
                                             @Html.DisplayNameFor(model => model.OrderId)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold;">
@@ -48,13 +48,17 @@
                                             @Html.DisplayNameFor(model => model.ShipDate)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
+                                            @Html.DisplayNameFor(model => model.CompleteDate)
+                                        </th>
+                                        <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.TotalPrice)
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
                                             @Html.DisplayNameFor(model => model.ShippingAddress)
                                         </th>
-                                        <th style="font-size: 17px; font-weight:bold">
+                                        <th style="font-size: 17px; font-weight:bold; cursor: pointer;">
                                             @Html.DisplayNameFor(model => model.Status)
+                                            <i class="fa-solid fa-arrows-up-down"></i>
                                         </th>
                                         <th style="font-size: 17px; font-weight:bold">
                                             Save Status
@@ -89,7 +93,13 @@
                                                     }
                                             </td>
                                             <td>
-                                                    $@Html.DisplayFor(modelItem => item.TotalPrice)
+                                                    @if(item.CompleteDate != null)
+                                                    {
+                                                       @item.CompleteDate.Value.ToString("dd/MM/yyyy")
+                                                    }
+                                            </td>
+                                            <td>
+                                                $@Html.DisplayFor(modelItem => item.TotalPrice)
                                             </td>
                                             <td>
                                                     @Html.DisplayFor(modelItem => item.ShippingAddress.City)
@@ -112,6 +122,8 @@
                                                     {
                                                     <div type="text" style="text-align: center; color: #558b51; font-weight: bold" value="@item.Status" readonly>@item.Status</div>
                                                     <input type="hidden" name="OrderId-@item.OrderId" value="@item.OrderId" />
+                                                    @*<select style="text-align: center; color: orange; border: 2px solid" asp-for="@item.Status" class="form-control" asp-items="ViewBag.OrderStatus" onchange="updateStatusValue(this)" name="Status-@item.OrderId">
+                                                    </select>*@
                                                     }
                                                     @if (item.Status == BusinessObject.Enums.OrderStatus.Processing)
                                                     {
@@ -299,3 +311,33 @@
 
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const orderTable = document.getElementById("orderTable");
+        const rows = orderTable.tBodies[0].rows;
+        const statusOrder = ["Pending", "Processing", "Completed", "Canceled"];
+        let currentStatusIndex = -1;
+
+        // Function to get the displayed status value for a row
+        function getDisplayedStatus(row) {
+            const selectElement = row.querySelector("select[name^='Status-']");
+            return selectElement ? selectElement.value : row.cells[7].textContent.trim();
+        }
+
+        // Function to handle sorting by status
+        function sortTableByStatus() {
+            currentStatusIndex = (currentStatusIndex + 1) % (statusOrder.length + 1);
+
+            for (let i = 0; i < rows.length; i++) {
+                const rowStatus = getDisplayedStatus(rows[i]);
+                const shouldShowRow = currentStatusIndex === statusOrder.length || rowStatus === statusOrder[currentStatusIndex];
+                rows[i].style.display = shouldShowRow ? "" : "none";
+            }
+        }
+
+        // Call the sortTableByStatus function when the Status column header is clicked
+        const statusHeader = orderTable.tHead.rows[0].cells[7];
+        statusHeader.style.cursor = "pointer";
+        statusHeader.addEventListener("click", sortTableByStatus);
+    });
+</script>
