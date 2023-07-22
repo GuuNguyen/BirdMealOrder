@@ -37,7 +37,15 @@
                         <img src="~/Admin/plugins/images/logo-icon.png" alt="homepage" />
                     </b>
                     <span class="logo-text">
-                        <img src="~/Admin/plugins/images/logo-text.png" alt="homepage" />
+                       @* <img src="~/Admin/plugins/images/logo-text.png" alt="homepage" />*@
+                        @if(role == "Staff")
+                        {
+                           <h2 style= "font-size: 30px; color: black; margin-top: 13px;" class ="text-muted">Staff</h2> 
+                        }
+                        @if(role == "Admin")
+                        {
+                           <h2 style= "font-size: 30px; color: black; margin-top: 13px;" class ="text-muted">Admin</h2> 
+                        }
                     </span>
                 </a>
                 <a class="nav-toggler waves-effect waves-light text-dark d-block d-md-none"
